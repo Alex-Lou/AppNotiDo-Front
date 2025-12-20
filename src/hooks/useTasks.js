@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import api from '../services/api';
 import { useSearch } from './useSearch';
 
@@ -23,8 +24,8 @@ export const useTasks = (setUsername) => {
   // Fetch tasks
   const fetchTasks = async () => {
     try {
+
       const response = await api.get('/tasks');
-      console.log('Tasks from API', response.data); // ← pour voir si tags est là
       setTasks(response.data.content);
     } catch (error) {
       console.error('Erreur:', error);
@@ -53,15 +54,21 @@ export const useTasks = (setUsername) => {
 
   // Task operations
   const handleTaskCreated = async (taskData) => {
-    await api.post('/tasks', taskData);
-    fetchTasks();
+    try {
+      await api.post('/tasks', taskData);
+      toast.success('✅ Tâche créée avec succès !');
+      fetchTasks();
+    } catch (error) {
+      console.error('Erreur création tâche:', error);
+      toast.error('❌ Erreur lors de la création de la tâche');
+    }
   };
 
   const handleTaskUpdate = async (taskId, taskData) => {
     console.log('Updating task:', taskId, 'with data:', taskData);
     try {
       const response = await api.put(`/tasks/${taskId}`, taskData);
-      console.log('Update response:', response.data); // ← voir tags dans la réponse
+      console.log('Update response:', response.data);
 
       setTasks(prevTasks => 
         prevTasks.map(task => 
@@ -70,16 +77,24 @@ export const useTasks = (setUsername) => {
       );
 
       await fetchTasks();
+      // Pas de toast ici car déjà géré dans useTimer pour le timer
     } catch (error) {
       console.error('Error updating task:', error);
+      toast.error('❌ Erreur lors de la mise à jour');
       fetchTasks();
     }
   };
 
   const handleTaskDelete = async (taskId) => {
-    if (window.confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?')) {
+    if (!window.confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?')) return;
+    
+    try {
       await api.delete(`/tasks/${taskId}`);
+      toast.success('🗑️ Tâche supprimée');
       fetchTasks();
+    } catch (error) {
+      console.error('Erreur suppression:', error);
+      toast.error('❌ Erreur lors de la suppression');
     }
   };
 
@@ -104,10 +119,38 @@ export const useTasks = (setUsername) => {
     applyFilters();
   }, [tasks, statusFilter, priorityFilter, searchedTasks]);
 
+  const getUrgentTasks = () => {
+    const now = new Date();
+    return filteredTasks.filter(task => {
+      if (!task.dueDate || task.status === 'DONE') return false;
+      
+      const dueDate = new Date(task.dueDate);
+      const minutesRemaining = Math.floor((dueDate - now) / 60000);
+      
+      // Urgent si ≤ 5 minutes ou déjà échue
+      return minutesRemaining <= 5;
+    });
+  };
+
+  const getNonUrgentTasks = () => {
+    const now = new Date();
+    return filteredTasks.filter(task => {
+      if (!task.dueDate) return true; // Pas d'échéance = pas urgent
+      if (task.status === 'DONE') return true; // Terminé = afficher normalement
+      
+      const dueDate = new Date(task.dueDate);
+      const minutesRemaining = Math.floor((dueDate - now) / 60000);
+      
+      return minutesRemaining > 5;
+    });
+  };
+
   return {
     tasks,
     setTasks,
     filteredTasks,
+    urgentTasksInList: getUrgentTasks(),
+    nonUrgentTasks: getNonUrgentTasks(),
     loading,
     statusFilter,
     setStatusFilter,
@@ -123,6 +166,6 @@ export const useTasks = (setUsername) => {
     setSearchQuery,
     clearSearch,
     hasActiveSearch,
-    searchResultCount: resultCount,
+    searchResultCount: resultCount, // ← CORRIGÉ : utilise resultCount du hook useSearch
   };
 };

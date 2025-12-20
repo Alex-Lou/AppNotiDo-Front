@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Parisienne&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -16,4 +17,195 @@
 
 .animate-expand-search {
   animation: expandSearch 0.3s ease-out forwards;
+}
+
+/* ========================================
+   STYLES PERSONNALISÉS POUR SONNER TOASTS
+   ======================================== */
+
+/* Variables CSS pour les toasts */
+:root {
+  --toast-bg: rgb(255, 255, 255);
+  --toast-color: rgb(15, 23, 42);
+  --toast-border: rgb(226, 232, 240);
+}
+
+.dark {
+  --toast-bg: rgb(30, 41, 59);
+  --toast-color: rgb(248, 250, 252);
+  --toast-border: rgb(71, 85, 105);
+}
+
+/* Animation d'entrée personnalisée */
+[data-sonner-toast] {
+  animation: slideInRight 0.3s ease-out;
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Style pour les toasts SUCCESS */
+[data-sonner-toast][data-type="success"] {
+  background: linear-gradient(135deg, rgb(240, 253, 244) 0%, rgb(220, 252, 231) 100%) !important;
+  border: 2px solid rgb(134, 239, 172) !important;
+  color: rgb(22, 101, 52) !important;
+}
+
+.dark [data-sonner-toast][data-type="success"] {
+  background: linear-gradient(135deg, rgb(20, 83, 45) 0%, rgb(22, 101, 52) 100%) !important;
+  border: 2px solid rgb(34, 197, 94) !important;
+  color: rgb(220, 252, 231) !important;
+}
+
+/* Style pour les toasts ERROR */
+[data-sonner-toast][data-type="error"] {
+  background: linear-gradient(135deg, rgb(254, 242, 242) 0%, rgb(254, 226, 226) 100%) !important;
+  border: 2px solid rgb(252, 165, 165) !important;
+  color: rgb(127, 29, 29) !important;
+}
+
+.dark [data-sonner-toast][data-type="error"] {
+  background: linear-gradient(135deg, rgb(127, 29, 29) 0%, rgb(153, 27, 27) 100%) !important;
+  border: 2px solid rgb(239, 68, 68) !important;
+  color: rgb(254, 226, 226) !important;
+}
+
+/* Style pour les toasts INFO */
+[data-sonner-toast][data-type="info"] {
+  background: linear-gradient(135deg, rgb(240, 249, 255) 0%, rgb(224, 242, 254) 100%) !important;
+  border: 2px solid rgb(147, 197, 253) !important;
+  color: rgb(30, 64, 175) !important;
+}
+
+.dark [data-sonner-toast][data-type="info"] {
+  background: linear-gradient(135deg, rgb(30, 64, 175) 0%, rgb(37, 99, 235) 100%) !important;
+  border: 2px solid rgb(96, 165, 250) !important;
+  color: rgb(224, 242, 254) !important;
+}
+
+/* Style pour les toasts WARNING */
+[data-sonner-toast][data-type="warning"] {
+  background: linear-gradient(135deg, rgb(254, 252, 232) 0%, rgb(254, 243, 199) 100%) !important;
+  border: 2px solid rgb(253, 224, 71) !important;
+  color: rgb(120, 53, 15) !important;
+}
+
+.dark [data-sonner-toast][data-type="warning"] {
+  background: linear-gradient(135deg, rgb(120, 53, 15) 0%, rgb(146, 64, 14) 100%) !important;
+  border: 2px solid rgb(251, 191, 36) !important;
+  color: rgb(254, 243, 199) !important;
+}
+
+/* Animation au survol */
+[data-sonner-toast]:hover {
+  transform: scale(1.02);
+  transition: transform 0.2s ease-out;
+}
+
+/* Bouton de fermeture */
+[data-sonner-toast] [data-close-button] {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+[data-sonner-toast] [data-close-button]:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.dark [data-sonner-toast] [data-close-button] {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dark [data-sonner-toast] [data-close-button]:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Forcer la position des toasts en haut à droite */
+[data-sonner-toaster] {
+  top: 16px !important;
+  right: 16px !important;
+  left: auto !important;
+  bottom: auto !important;
+}
+
+/* Animation pulse subtile pour les tâches urgentes */
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.005);
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+/* Animation ping lent pour l'icône warning */
+@keyframes ping-slow {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.animate-ping-slow {
+  animation: ping-slow 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+
+
+/* ========================================
+   ANIMATION SHIMMER POUR SKELETONS
+   ======================================== */
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+
+/* Animation shimmer pour la barre de progression */
+@keyframes shimmer-bar {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer-bar {
+  animation: shimmer-bar 3s ease-in-out infinite;
 }

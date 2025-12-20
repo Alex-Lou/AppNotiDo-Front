@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { Toaster } from 'sonner';
 import Auth from './pages/Auth';
 import DashboardNew from './pages/DashboardNew';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -14,7 +15,6 @@ function App() {
         setUsername(event.newValue);
       }
     };
-
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
@@ -29,28 +29,45 @@ function App() {
   }, [username]);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/auth"
-          element={username ? <Navigate to="/dashboard" replace /> : <Auth setUsername={setUsername} />}
-        />
+    <>
+      {/* Toaster de Sonner - Affiche les toasts dans toute l'app */}
+      <Toaster 
+        position="top-right"  // ← Vérifie que c'est bien "top-right"
+        expand={true}
+        richColors
+        closeButton
+        duration={4000}
+        toastOptions={{
+          style: {
+            background: 'var(--toast-bg)',
+            color: 'var(--toast-color)',
+            border: '1px solid var(--toast-border)',
+          },
+          className: 'toast-custom',
+        }}
+      />
 
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <DashboardNew setUsername={setUsername} />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/"
-          element={<Navigate to={username ? '/dashboard' : '/auth'} replace />}
-        />
-      </Routes>
-    </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/auth"
+            element={username ? <Navigate to="/dashboard" replace /> : <Auth setUsername={setUsername} />}
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardNew setUsername={setUsername} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/"
+            element={<Navigate to={username ? '/dashboard' : '/auth'} replace />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 

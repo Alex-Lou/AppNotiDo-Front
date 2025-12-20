@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import { toast } from 'sonner';
+import api from '../services/api';
 import { 
   requestNotificationPermission, 
   sendBrowserNotification, 
@@ -42,11 +44,13 @@ export const useNotifications = (tasks, fetchTasks) => {
           notificationTitle = '🚨 Échéance imminente';
           notificationText = `${task.title} - C'est maintenant !`;
         } else {
-          const minutes = task.minutesRemaining ?? task.reminderMinutes;
+          // Utiliser actualThreshold pour afficher le bon temps
+          const timeRemaining = task.actualThreshold ?? task.minutesRemaining;
           notificationTitle = '🔔 Rappel de tâche';
-          notificationText = `${task.title} - Échéance dans ${minutes} min`;
+          notificationText = `${task.title} - Échéance dans ${timeRemaining} min`;
         }
 
+        // Notification in-app (toast)
         addInAppNotification({
           id: `notif-${(task.notificationKey || task.id)}-${Date.now()}`,
           taskId: task.id,
@@ -55,12 +59,15 @@ export const useNotifications = (tasks, fetchTasks) => {
           type: task.isStartReminder ? 'start' : task.isUrgent ? 'urgent' : 'reminder',
         });
 
+        // Notification navigateur
         if (notificationPermission === 'granted') {
           sendBrowserNotification(notificationTitle, notificationText);
         }
 
+        // Marquer comme notifié
         notifiedTaskIdsRef.current.add(task.notificationKey || task.id);
 
+        // Mettre à jour le backend si c'est une notification d'échéance
         if (task.minutesRemaining === 0 || task.isUrgent || task.notified === true) {
           try {
             await api.put(`/tasks/${task.id}`, { ...task, notified: true });
@@ -78,10 +85,10 @@ export const useNotifications = (tasks, fetchTasks) => {
     checkNotifications();
     const interval = setInterval(() => {
       checkNotifications();
-    }, 30000);
+    }, 30000); // Vérifier toutes les 30 secondes
 
     return () => clearInterval(interval);
-  }, [tasks, notificationPermission, notificationsEnabled]);
+  }, [tasks, notificationPermission, notificationsEnabled, fetchTasks]);
 
   const handleRequestNotificationPermission = async () => {
     const permission = await requestNotificationPermission();
@@ -92,10 +99,36 @@ export const useNotifications = (tasks, fetchTasks) => {
     const newState = !notificationsEnabled;
     setNotificationsEnabled(newState);
     localStorage.setItem('notificationsEnabled', newState);
+    
+    if (newState) {
+      toast.success('🔔 Notifications activées');
+    } else {
+      toast.info('🔕 Notifications désactivées');
+    }
   };
 
   const addInAppNotification = (notification) => {
     setInAppNotifications(prev => [...prev, notification]);
+    
+    // Afficher un toast selon le type
+    if (notification.type === 'urgent') {
+      toast.error(notification.message, {
+        duration: 8000,
+        icon: '🚨',
+      });
+    } else if (notification.type === 'start') {
+      toast.info(notification.message, {
+        duration: 8000,
+        icon: '⏰',
+      });
+    } else {
+      toast.warning(notification.message, {
+        duration: 8000,
+        icon: '🔔',
+      });
+    }
+    
+    // Auto-remove après 8 secondes
     setTimeout(() => {
       removeInAppNotification(notification.id);
     }, 8000);

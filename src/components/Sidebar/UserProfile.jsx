@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
-import { FaPencilAlt } from 'react-icons/fa';
+import { FaPencilAlt, FaCog } from 'react-icons/fa';
 import api from '../../services/api';
 
-function UserProfile({ username, displayName: initialDisplayName }) {
+function UserProfile({ username, displayName: initialDisplayName, onOpenProfileModal }) {
   const [displayName, setDisplayName] = useState(initialDisplayName || username);
   const [isEditing, setIsEditing] = useState(false);
   const [tempName, setTempName] = useState(displayName);
 
-  // si le parent change le displayName (après reload), on met à jour le state
   useEffect(() => {
     setDisplayName(initialDisplayName || username);
     setTempName(initialDisplayName || username);
@@ -36,7 +35,6 @@ function UserProfile({ username, displayName: initialDisplayName }) {
       const res = await api.patch('/users/profile', { displayName: value });
       setDisplayName(res.data.displayName || res.data.username);
     } catch (e) {
-      // option : log
     } finally {
       setIsEditing(false);
     }
@@ -71,14 +69,24 @@ function UserProfile({ username, displayName: initialDisplayName }) {
                 <p className="max-w-[9rem] truncate text-base font-bold text-slate-900 dark:text-amber-50">
                   {displayName}
                 </p>
-                <button
-                  type="button"
-                  onClick={startEdit}
-                  className="text-xs text-slate-600 transition hover:text-slate-900 dark:text-amber-300 dark:hover:text-amber-100"
-                  title="Modifier le nom d'affichage"
-                >
-                  <FaPencilAlt size={12} />
-                </button>
+                <div className="flex gap-1">
+                  <button
+                    type="button"
+                    onClick={startEdit}
+                    className="text-xs text-slate-600 transition hover:text-slate-900 dark:text-amber-300 dark:hover:text-amber-100"
+                    title="Modifier le nom d'affichage"
+                  >
+                    <FaPencilAlt size={12} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onOpenProfileModal}
+                    className="text-xs text-slate-600 transition hover:text-slate-900 dark:text-amber-300 dark:hover:text-amber-100"
+                    title="Gérer le profil complet"
+                  >
+                    <FaCog size={13} />
+                  </button>
+                </div>
               </>
             )}
           </div>

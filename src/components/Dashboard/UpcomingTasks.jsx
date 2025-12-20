@@ -23,7 +23,7 @@ function UpcomingTasks({ tasks, onTaskClick, onTaskDelete }) {
   };
 
   const handleDelete = async (e, taskId) => {
-    e.stopPropagation(); // Empêcher le clic de remonter au bouton parent
+    e.stopPropagation(); // Empêcher le clic de remonter au div parent
     if (window.confirm('Supprimer définitivement cette tâche échue ?')) {
       await onTaskDelete(taskId);
     }
@@ -56,9 +56,10 @@ function UpcomingTasks({ tasks, onTaskClick, onTaskDelete }) {
           
           return (
             <div key={task.id} className="relative">
-              <button
+              {/* Remplacé button par div avec cursor-pointer */}
+              <div
                 onClick={() => onTaskClick(task.id)}
-                className="group w-full rounded-xl border border-slate-200/60 bg-white/50 p-3 text-left transition hover:border-cyan-400/60 hover:bg-white/80 hover:shadow-md dark:border-stone-700/60 dark:bg-stone-900/30 dark:hover:border-amber-700/60 dark:hover:bg-stone-900/50"
+                className="group w-full cursor-pointer rounded-xl border border-slate-200/60 bg-white/50 p-3 text-left transition hover:border-cyan-400/60 hover:bg-white/80 hover:shadow-md dark:border-stone-700/60 dark:bg-stone-900/30 dark:hover:border-amber-700/60 dark:hover:bg-stone-900/50"
               >
                 <div className="mb-1.5 flex items-start justify-between gap-2">
                   <p className="line-clamp-2 text-sm font-semibold text-slate-900 dark:text-amber-50">
@@ -90,7 +91,7 @@ function UpcomingTasks({ tasks, onTaskClick, onTaskDelete }) {
                     </button>
                   </div>
                 )}
-              </button>
+              </div>
             </div>
           );
         })}

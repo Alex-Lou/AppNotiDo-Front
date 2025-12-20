@@ -14,7 +14,7 @@ export default {
           200: '#fed7aa',
           300: '#fdba74',
           400: '#fb923c',
-          500: '#f97316', // Orange principal
+          500: '#f97316',
           600: '#ea580c',
           700: '#c2410c',
           800: '#9a3412',
@@ -26,7 +26,7 @@ export default {
           200: '#fecaca',
           300: '#fca5a5',
           400: '#f87171',
-          500: '#ef4444', // Rouge
+          500: '#ef4444',
           600: '#dc2626',
           700: '#b91c1c',
           800: '#991b1b',
@@ -38,7 +38,7 @@ export default {
           200: '#e9d5ff',
           300: '#d8b4fe',
           400: '#c084fc',
-          500: '#a855f7', // Violet
+          500: '#a855f7',
           600: '#9333ea',
           700: '#7e22ce',
           800: '#6b21a8',
@@ -68,6 +68,7 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        script: ['Parisienne', 'cursive'],
       },
       boxShadow: {
         'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
@@ -76,6 +77,9 @@ export default {
       borderRadius: {
         'xl': '1rem',
         '2xl': '1.5rem',
+      },
+      transitionDuration: {
+        '2000': '2000ms',
       },
     },
   },

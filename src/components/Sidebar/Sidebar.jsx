@@ -18,6 +18,7 @@ function Sidebar({
   onLogout,
   onQuickViewClick,
   activeQuickView,
+  onOpenProfileModal,
 }) {
   const [showQuote, setShowQuote] = useState(() => {
     const saved = localStorage.getItem('showDailyQuote');
@@ -59,7 +60,6 @@ function Sidebar({
         dark:border-amber-900/60 dark:bg-gradient-to-b dark:from-amber-950/80 dark:via-stone-950/90 dark:to-slate-950/80
       "
     >
-      {/* Header */}
       <div className="mb-10">
         <div className="flex items-center gap-3">
           <img
@@ -76,23 +76,29 @@ function Sidebar({
             AppNotiDo
           </h1>
         </div>
-        <p className="mt-2 text-sm font-medium text-slate-800/90 dark:text-amber-200/80">
-          Organisez votre journée
-        </p>
+<p className="mt-2 text-xl font-script italic text-slate-800/90 dark:text-amber-200/80">
+  Organisez votre journée
+</p>
+<p className="mt-2 ml-[115px] text-xl font-script italic text-slate-800/90 dark:text-amber-200/80">
+  avec le rythme!
+</p>
+
+
+
       </div>
 
-      {/* User Profile and display name*/}
-      <UserProfile username={username} displayName={displayName} />
+      <UserProfile
+        username={username}
+        displayName={displayName}
+        onOpenProfileModal={onOpenProfileModal}
+      />
 
-      {/* Notification Permission */}
       {notificationPermission !== 'granted' && notificationsEnabled && (
         <NotificationPermission onRequestPermission={onRequestNotificationPermission} />
       )}
 
-      {/* Urgent Tasks Alert */}
       <UrgentTasks urgentTasks={urgentTasks} />
 
-      {/* Citation du jour (en haut si épinglée) */}
       {showQuote && isQuotePinned && (
         <DailyQuote
           isPinned={isQuotePinned}
@@ -101,13 +107,11 @@ function Sidebar({
         />
       )}
 
-      {/* Quick Views */}
       <QuickViews
         onViewClick={onQuickViewClick}
         activeView={activeQuickView}
       />
 
-      {/* Citation du jour (en bas si non épinglée) */}
       {showQuote && !isQuotePinned && (
         <div className="mt-auto">
           <DailyQuote
@@ -118,7 +122,6 @@ function Sidebar({
         </div>
       )}
 
-      {/* Bouton pour réafficher la citation si masquée */}
       {!showQuote && (
         <div className="mt-auto">
           <button
@@ -130,7 +133,6 @@ function Sidebar({
         </div>
       )}
 
-      {/* Actions (Notifications toggle, Theme, Logout) */}
       <div className={isQuotePinned || !showQuote ? 'mt-auto' : 'mt-6'}>
         <SidebarActions
           notificationsEnabled={notificationsEnabled}
