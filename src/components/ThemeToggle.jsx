@@ -7,13 +7,24 @@ function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
-      title={isDark ? "Mode clair" : "Mode sombre"}
+      className="
+        inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium
+        border border-slate-700/80 bg-slate-900/80 text-slate-200
+        shadow-sm backdrop-blur-sm transition-all duration-150
+        hover:border-sky-500/60 hover:bg-slate-800
+      "
+      title={isDark ? 'Passer en mode clair' : 'Passer en mode sombre'}
     >
       {isDark ? (
-        <FiSun className="w-5 h-5 text-yellow-500" />
+        <>
+          <FiSun className="h-4 w-4 text-amber-300" />
+          <span>Mode clair</span>
+        </>
       ) : (
-        <FiMoon className="w-5 h-5 text-gray-700" />
+        <>
+          <FiMoon className="h-4 w-4 text-sky-300" />
+          <span>Mode sombre</span>
+        </>
       )}
     </button>
   );

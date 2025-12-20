@@ -28,36 +28,31 @@ function DashboardNew({ setUsername }) {
   const notifiedTaskIdsRef = useRef(new Set());
   const navigate = useNavigate();
   const username = localStorage.getItem('username') || 'User';
-
-  // Drag & drop state
   const [draggedTaskId, setDraggedTaskId] = useState(null);
   const [dragOverTaskId, setDragOverTaskId] = useState(null);
 
-  // Permission notifications au montage
   useEffect(() => {
     if (typeof Notification !== 'undefined') {
       setNotificationPermission(Notification.permission);
     }
   }, []);
 
-  // Récupérer les tâches au chargement
   useEffect(() => {
     fetchTasks();
   }, []);
 
-  // Notifications planifiées
   useEffect(() => {
     if (tasks.length === 0 || !notificationsEnabled) return;
 
     const checkNotifications = async () => {
       const tasksToNotify = checkTasksForNotifications(tasks);
-
+      
       for (const task of tasksToNotify) {
         if (notifiedTaskIdsRef.current.has(task.notificationKey || task.id)) continue;
 
         let notificationText;
         let notificationTitle;
-
+        
         if (task.isStartReminder) {
           notificationTitle = '⏰ Temps de commencer';
           notificationText = `${task.title} (durée : ${task.estimatedDuration} min)`;
@@ -106,7 +101,6 @@ function DashboardNew({ setUsername }) {
     return () => clearInterval(interval);
   }, [tasks, notificationPermission, notificationsEnabled]);
 
-  // Filtres
   useEffect(() => {
     applyFilters();
   }, [tasks, statusFilter, priorityFilter]);
@@ -129,15 +123,12 @@ function DashboardNew({ setUsername }) {
 
   const applyFilters = () => {
     let filtered = [...tasks];
-
     if (statusFilter !== 'ALL') {
       filtered = filtered.filter(task => task.status === statusFilter);
     }
-
     if (priorityFilter !== 'ALL') {
       filtered = filtered.filter(task => task.priority === priorityFilter);
     }
-
     setFilteredTasks(filtered);
   };
 
@@ -210,7 +201,6 @@ function DashboardNew({ setUsername }) {
     return timeUntilDue > 0 && timeUntilDue < 3600000;
   });
 
-  // Handlers Drag & Drop
   const handleDragStart = (e, taskId) => {
     setDraggedTaskId(taskId);
     e.dataTransfer.effectAllowed = 'move';
@@ -254,38 +244,50 @@ function DashboardNew({ setUsername }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
-        <div className="text-xl font-medium text-gray-600 dark:text-gray-300">Chargement...</div>
+      <div className="min-h-screen bg-gradient-to-b from-cyan-300 via-teal-200 to-orange-300 text-slate-700 dark:bg-slate-950 dark:text-slate-100 flex items-center justify-center">
+        <div className="text-xl font-medium text-slate-700 dark:text-slate-300">
+          Chargement...
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-orange-50/30 to-purple-50/30 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div
+      className="
+        min-h-screen
+        bg-gradient-to-b
+        from-cyan-300 via-teal-200 to-orange-300
+        text-slate-700
+        dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 dark:text-amber-50
+      "
+    >
       {/* Notifications in-app */}
       {notificationsEnabled && (
         <div className="fixed left-6 bottom-6 z-50 space-y-3 max-w-sm">
           {inAppNotifications.map((notification) => (
             <div
               key={notification.id}
-              className="bg-white dark:bg-gray-800 border-l-4 border-blue-500 dark:border-blue-400 rounded-lg shadow-xl p-4 flex items-start gap-3 animate-slide-in-left"
+              className="relative flex items-start gap-3 rounded-2xl border border-cyan-300 bg-cyan-50 px-4 py-3 shadow-xl dark:border-amber-800 dark:bg-stone-950/95 dark:text-amber-50"
             >
-              <div className="flex-shrink-0 w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-                <FiBell className="text-blue-600 dark:text-blue-400" size={20} />
+              <div className="flex-shrink-0">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-100 dark:bg-amber-500/20">
+                  <FiBell className="text-cyan-600 dark:text-amber-300" size={18} />
+                </div>
               </div>
               <div className="flex-1">
-                <h4 className="font-bold text-gray-900 dark:text-white text-sm mb-1">
+                <h4 className="mb-1 text-xs font-semibold text-slate-700 dark:text-amber-50">
                   {notification.title}
                 </h4>
-                <p className="text-gray-600 dark:text-gray-300 text-xs">
+                <p className="text-[11px] text-slate-600 dark:text-amber-100/80">
                   {notification.message}
                 </p>
               </div>
               <button
                 onClick={() => removeInAppNotification(notification.id)}
-                className="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition"
+                className="flex-shrink-0 rounded-full p-1 text-cyan-500 transition hover:bg-cyan-100 hover:text-cyan-700 dark:text-amber-300/70 dark:hover:bg-amber-900/60 dark:hover:text-amber-50"
               >
-                <FiX size={18} />
+                <FiX size={14} />
               </button>
             </div>
           ))}
@@ -293,152 +295,187 @@ function DashboardNew({ setUsername }) {
       )}
 
       {/* Sidebar */}
-      <aside className="fixed left-0 top-0 h-full w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 p-6 flex flex-col">
+      <aside
+        className="
+          fixed left-0 top-0 z-20 flex h-full w-64 flex-col
+          border-r border-cyan-300/50
+          bg-gradient-to-b from-cyan-100 via-teal-100 to-orange-100
+          px-6 py-6
+          dark:border-amber-900 dark:from-amber-950 dark:via-stone-950 dark:to-slate-950
+        "
+      >
         <div className="mb-8">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
-            📝 AppNotiDo
-          </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Organisez votre journée</p>
+          <div className="flex items-center gap-2">
+            <span className="text-xl">📝</span>
+            <h1 className="bg-gradient-to-r from-cyan-600 via-teal-600 to-orange-500 bg-clip-text text-xl font-semibold text-transparent">
+              AppNotiDo
+            </h1>
+          </div>
+          <p className="mt-1 text-xs text-slate-700/80 dark:text-amber-200/80">
+            Organisez votre journée
+          </p>
         </div>
 
-        <div className="mb-8 p-4 bg-gradient-to-r from-primary-50 to-accent-50 dark:from-primary-900/30 dark:to-accent-900/30 rounded-xl">
+        <div className="mb-8 rounded-2xl border border-cyan-300 bg-gradient-to-r from-cyan-100 via-teal-100 to-orange-100 px-4 py-3 dark:border-amber-800 dark:from-amber-900 dark:via-rose-900/80 dark:to-stone-950">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-full flex items-center justify-center text-white font-bold">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500 via-teal-500 to-orange-500 text-sm font-bold text-white">
               {username.charAt(0).toUpperCase()}
             </div>
             <div>
-              <p className="font-semibold text-gray-800 dark:text-gray-200">{username}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Utilisateur actif</p>
+              <p className="text-sm font-semibold text-slate-800 dark:text-amber-50">
+                {username}
+              </p>
+              <p className="text-[11px] text-slate-700/80 dark:text-amber-200/80">
+                Utilisateur actif
+              </p>
             </div>
           </div>
         </div>
 
         {notificationPermission !== 'granted' && notificationsEnabled && (
-          <div className="mb-4 p-3 bg-orange-50 dark:bg-orange-900/30 border-2 border-orange-200 dark:border-orange-700 rounded-xl">
-            <div className="flex items-start gap-2 mb-2">
-              <FiBell className="text-orange-600 dark:text-orange-400 mt-0.5" />
+          <div className="mb-4 rounded-2xl border border-amber-300 bg-amber-100 px-3 py-3 text-amber-900 dark:border-amber-700 dark:bg-amber-900/70 dark:text-amber-50">
+            <div className="mb-2 flex items-start gap-2">
+              <FiBell className="mt-0.5 text-amber-600 dark:text-amber-300" />
               <div className="flex-1">
-                <p className="text-xs font-semibold text-orange-700 dark:text-orange-300 mb-1">
+                <p className="mb-1 text-xs font-semibold text-amber-900 dark:text-amber-100">
                   Activer les notifications
                 </p>
-                <p className="text-xs text-orange-600 dark:text-orange-400 mb-2">
-                  Recevez des alertes pour vos tâches
+                <p className="text-[11px] text-amber-800/90 dark:text-amber-200/90">
+                  Recevez des alertes pour vos tâches importantes.
                 </p>
-                <button
-                  onClick={handleRequestNotificationPermission}
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold py-2 px-3 rounded-lg transition"
-                >
-                  Autoriser
-                </button>
               </div>
             </div>
+            <button
+              onClick={handleRequestNotificationPermission}
+              className="w-full rounded-xl bg-amber-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-amber-400"
+            >
+              Autoriser
+            </button>
           </div>
         )}
 
         {urgentTasks.length > 0 && (
-          <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border-2 border-red-200 dark:border-red-700 rounded-xl">
-            <div className="flex items-center gap-2 mb-1">
-              <FiBell className="text-red-600 dark:text-red-400" />
-              <span className="text-sm font-bold text-red-700 dark:text-red-300">
+          <div className="mb-4 rounded-2xl border border-red-300 bg-red-100 px-3 py-3 text-red-900 dark:border-red-700 dark:bg-red-900/70 dark:text-red-50">
+            <div className="mb-1 flex items-center gap-2">
+              <FiBell className="text-red-600 dark:text-red-300" />
+              <span className="text-xs font-semibold">
                 {urgentTasks.length} tâche{urgentTasks.length > 1 ? 's' : ''} urgente{urgentTasks.length > 1 ? 's' : ''}
               </span>
             </div>
-            <p className="text-xs text-red-600 dark:text-red-400">
+            <p className="text-[11px] text-red-800/90 dark:text-red-100/90">
               Priorité HAUTE - Échéance &lt; 1h
             </p>
           </div>
         )}
 
-        <nav className="flex-1 space-y-2">
-          <button className="w-full flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-xl font-medium shadow-soft transition-all hover:shadow-lg">
-            <FiList /> Toutes les tâches
+        <nav className="mt-4 flex-1 space-y-2">
+          <button className="flex w-full items-center gap-3 rounded-xl bg-cyan-100 px-4 py-2.5 text-sm font-medium text-cyan-900 shadow-sm ring-1 ring-cyan-300 transition hover:bg-cyan-200 hover:ring-cyan-400 dark:bg-stone-950 dark:text-amber-50 dark:ring-amber-800/70 dark:hover:bg-stone-900 dark:hover:ring-amber-500/60">
+            <FiList className="text-cyan-700 dark:text-amber-300" /> Toutes les tâches
           </button>
         </nav>
 
-        <div className="mb-4">
+        <div className="mt-4 space-y-3">
           <button
             onClick={toggleNotifications}
-            className="w-full flex items-center justify-between px-4 py-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl transition"
+            className="flex w-full items-center justify-between rounded-xl bg-teal-100 px-4 py-2.5 text-xs text-teal-900 ring-1 ring-teal-300 transition hover:bg-teal-200 hover:ring-teal-400 dark:bg-stone-950 dark:text-amber-100 dark:ring-amber-900 dark:hover:bg-stone-900 dark:hover:ring-amber-500/60"
             title={notificationsEnabled ? 'Désactiver les notifications' : 'Activer les notifications'}
           >
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Notifications
-            </span>
-            <div className="flex items-center gap-2">
+            <span className="font-medium">Notifications</span>
+            <div className="flex items-center gap-1.5">
               {notificationsEnabled ? (
-                <FiBell className="text-blue-600 dark:text-blue-400" size={20} />
+                <FiBell className="text-teal-700 dark:text-amber-300" size={16} />
               ) : (
-                <FiBellOff className="text-gray-400 dark:text-gray-500" size={20} />
+                <FiBellOff className="text-teal-500 dark:text-stone-500" size={16} />
               )}
             </div>
           </button>
-        </div>
 
-        <div className="mb-4">
-          <ThemeToggle />
-        </div>
+          <div className="pointer-events-auto">
+            <ThemeToggle />
+          </div>
 
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-3 px-4 py-3 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition"
-        >
-          <FiLogOut /> Déconnexion
-        </button>
+          <button
+            onClick={handleLogout}
+            className="flex w-full items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-medium text-rose-700 transition hover:bg-rose-100 hover:text-rose-800 dark:text-amber-100 dark:hover:bg-red-900/60 dark:hover:text-red-100"
+          >
+            <FiLogOut /> Déconnexion
+          </button>
+        </div>
       </aside>
 
       {/* Contenu principal */}
-      <main className="ml-64 p-8">
+      <main className="ml-64 min-h-screen px-8 py-8">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-            Bonjour, {username} 👋
-          </h2>
-
-          <div className="grid grid-cols-4 gap-4 mb-8">
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-soft hover:shadow-soft-lg transition">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-gray-600 dark:text-gray-300 text-sm font-medium">Total</span>
-                <div className="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center">
-                  <FiList className="text-gray-600 dark:text-gray-300" />
-                </div>
-              </div>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.total}</p>
-            </div>
-
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 p-6 rounded-2xl shadow-soft hover:shadow-soft-lg transition">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-blue-700 dark:text-blue-300 text-sm font-medium">À faire</span>
-                <div className="w-10 h-10 bg-blue-200 dark:bg-blue-700 rounded-xl flex items-center justify-center">
-                  <FiClock className="text-blue-700 dark:text-blue-300" />
-                </div>
-              </div>
-              <p className="text-3xl font-bold text-blue-900 dark:text-blue-200">{stats.todo}</p>
-            </div>
-
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 p-6 rounded-2xl shadow-soft hover:shadow-soft-lg transition">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-purple-700 dark:text-purple-300 text-sm font-medium">En cours</span>
-                <div className="w-10 h-10 bg-purple-200 dark:bg-purple-700 rounded-xl flex items-center justifyCenter">
-                  <FiClock className="text-purple-700 dark:text-purple-300" />
-                </div>
-              </div>
-              <p className="text-3xl font-bold text-purple-900 dark:text-purple-200">{stats.inProgress}</p>
-            </div>
-
-            <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 p-6 rounded-2xl shadow-soft hover:shadow-soft-lg transition">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-green-700 dark:text-green-300 text-sm font-medium">Terminées</span>
-                <div className="w-10 h-10 bg-green-200 dark:bg-green-700 rounded-xl flex items-center justify-center">
-                  <FiCheck className="text-green-700 dark:text-green-300" />
-                </div>
-              </div>
-              <p className="text-3xl font-bold text-green-900 dark:text-green-200">{stats.done}</p>
+          <div className="mb-6 flex items-center justify-between">
+            <div>
+              <h2 className="text-3xl font-semibold text-slate-800 dark:text-amber-50">
+                Bonjour, {username} <span className="align-middle">👋</span>
+              </h2>
+              <p className="mt-1 text-sm text-slate-700/90 dark:text-amber-200/80">
+                Voici un aperçu de vos tâches pour aujourd'hui.
+              </p>
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
+          {/* Cartes de stats */}
+          <div className="mb-8 grid grid-cols-4 gap-4">
+            <div className="relative overflow-hidden rounded-2xl bg-slate-100 px-5 py-4 shadow-md ring-1 ring-slate-300 dark:bg-stone-950/90 dark:ring-stone-800">
+              <div className="pointer-events-none absolute -right-8 -top-8 h-16 w-16 rounded-full bg-slate-200 dark:bg-stone-800/60" />
+              <p className="text-xs font-medium text-slate-600 dark:text-amber-200/80">
+                Total
+              </p>
+              <p className="mt-2 text-3xl font-semibold text-slate-800 dark:text-amber-50">
+                {stats.total}
+              </p>
+              <p className="mt-1 text-[11px] uppercase tracking-wide text-slate-500 dark:text-stone-400">
+                Tâches enregistrées
+              </p>
+            </div>
+
+            <div className="relative overflow-hidden rounded-2xl bg-cyan-100 px-5 py-4 shadow-md ring-1 ring-cyan-300 dark:bg-amber-900/85 dark:ring-amber-700">
+              <div className="pointer-events-none absolute -right-10 -top-10 h-20 w-20 rounded-full bg-cyan-200 dark:bg-amber-700/60" />
+              <p className="text-xs font-medium text-cyan-800 dark:text-amber-100">
+                À faire
+              </p>
+              <p className="mt-2 text-3xl font-semibold text-cyan-900 dark:text-amber-50">
+                {stats.todo}
+              </p>
+              <p className="mt-1 text-[11px] uppercase tracking-wide text-cyan-700 dark:text-amber-200/80">
+                En attente
+              </p>
+            </div>
+
+            <div className="relative overflow-hidden rounded-2xl bg-orange-100 px-5 py-4 shadow-md ring-1 ring-orange-300 dark:bg-orange-900/85 dark:ring-orange-700">
+              <div className="pointer-events-none absolute -right-10 -top-10 h-20 w-20 rounded-full bg-orange-200 dark:bg-orange-700/60" />
+              <p className="text-xs font-medium text-orange-800 dark:text-orange-100">
+                En cours
+              </p>
+              <p className="mt-2 text-3xl font-semibold text-orange-900 dark:text-orange-50">
+                {stats.inProgress}
+              </p>
+              <p className="mt-1 text-[11px] uppercase tracking-wide text-orange-700 dark:text-orange-200/80">
+                En traitement
+              </p>
+            </div>
+
+            <div className="relative overflow-hidden rounded-2xl bg-teal-100 px-5 py-4 shadow-md ring-1 ring-teal-300 dark:bg-emerald-900/85 dark:ring-emerald-700">
+              <div className="pointer-events-none absolute -right-10 -top-10 h-20 w-20 rounded-full bg-teal-200 dark:bg-emerald-700/60" />
+              <p className="text-xs font-medium text-teal-800 dark:text-emerald-100">
+                Terminées
+              </p>
+              <p className="mt-2 text-3xl font-semibold text-teal-900 dark:text-emerald-50">
+                {stats.done}
+              </p>
+              <p className="mt-1 text-[11px] uppercase tracking-wide text-teal-700 dark:text-emerald-200/80">
+                Complétées
+              </p>
+            </div>
+          </div>
+
+          <div className="mb-6 flex items-center justify-between">
             <button
               onClick={() => setShowTaskForm(!showTaskForm)}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105"
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 via-teal-500 to-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition hover:shadow-xl hover:from-cyan-400 hover:via-teal-400 hover:to-orange-400"
             >
               <FiPlus /> Nouvelle tâche
             </button>
@@ -447,7 +484,7 @@ function DashboardNew({ setUsername }) {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:border-primary-500 transition"
+                className="rounded-xl border border-cyan-300 bg-cyan-50 px-4 py-2 text-xs text-slate-700 outline-none ring-cyan-400/60 transition focus:ring-2 dark:border-stone-700 dark:bg-stone-950 dark:text-amber-50"
               >
                 <option value="ALL">📋 Tous les statuts</option>
                 <option value="TODO">📝 À faire</option>
@@ -458,7 +495,7 @@ function DashboardNew({ setUsername }) {
               <select
                 value={priorityFilter}
                 onChange={(e) => setPriorityFilter(e.target.value)}
-                className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:border-primary-500 transition"
+                className="rounded-xl border border-orange-300 bg-orange-50 px-4 py-2 text-xs text-slate-700 outline-none ring-orange-400/60 transition focus:ring-2 dark:border-stone-700 dark:bg-stone-950 dark:text-amber-50"
               >
                 <option value="ALL">🎯 Toutes priorités</option>
                 <option value="LOW">🟢 Basse</option>
@@ -470,18 +507,18 @@ function DashboardNew({ setUsername }) {
         </div>
 
         {showTaskForm && (
-          <div className="mb-6">
+          <div className="mb-6 rounded-2xl border border-teal-300 bg-teal-50 p-4 shadow-md dark:border-stone-800 dark:bg-stone-950">
             <TaskForm onTaskCreated={handleTaskCreated} />
           </div>
         )}
 
-        {/* Liste des tâches avec drag & drop */}
-        <div className="space-y-3">
+        {/* Liste des tâches */}
+        <div className="space-y-3 pb-12">
           {filteredTasks.length === 0 ? (
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-soft p-12 text-center">
-              <p className="text-gray-500 dark:text-gray-400 text-lg">
-                {tasks.length === 0 
-                  ? "Aucune tâche pour le moment. Créez-en une ! 🚀" 
+            <div className="rounded-2xl border border-slate-300 bg-slate-100 p-10 text-center shadow-md dark:border-stone-800 dark:bg-stone-950">
+              <p className="text-sm text-slate-600 dark:text-stone-400">
+                {tasks.length === 0
+                  ? "Aucune tâche pour le moment. Créez-en une ! 🚀"
                   : "Aucune tâche ne correspond aux filtres sélectionnés."}
               </p>
             </div>

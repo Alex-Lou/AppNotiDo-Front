@@ -1,25 +1,41 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import api from '../services/api';
 
-const ThemeContext = createContext();
+const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
   const [isDark, setIsDark] = useState(() => {
+    if (typeof window === 'undefined') return false;
     const saved = localStorage.getItem('theme');
     return saved === 'dark';
   });
   const [isLoading, setIsLoading] = useState(true);
 
+  // Appliquer immédiatement le theme initial au DOM (évite FOUC)
+  useEffect(() => {
+    const root = document.documentElement;
+    if (isDark) {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+  }, []); // une fois au montage
+
   // Au montage, récupérer le thème depuis le backend si connecté
   useEffect(() => {
     const fetchTheme = async () => {
-      const username = localStorage.getItem('username'); // ✅ Changé : on vérifie username au lieu de token
+      const username = localStorage.getItem('username');
       if (username) {
         try {
           const response = await api.get('/auth/theme');
           const backendTheme = response.data.theme;
-          setIsDark(backendTheme === 'dark');
+          const nextIsDark = backendTheme === 'dark';
+          setIsDark(nextIsDark);
           localStorage.setItem('theme', backendTheme);
+
+          const root = document.documentElement;
+          if (nextIsDark) root.classList.add('dark');
+          else root.classList.remove('dark');
         } catch (error) {
           console.log('Erreur récupération thème, utilisation localStorage');
         }
@@ -30,13 +46,14 @@ export function ThemeProvider({ children }) {
     fetchTheme();
   }, []);
 
-  // Appliquer le thème au DOM
+  // Appliquer le thème au DOM à chaque changement
   useEffect(() => {
+    const root = document.documentElement;
     if (isDark) {
-      document.documentElement.classList.add('dark');
+      root.classList.add('dark');
       localStorage.setItem('theme', 'dark');
     } else {
-      document.documentElement.classList.remove('dark');
+      root.classList.remove('dark');
       localStorage.setItem('theme', 'light');
     }
   }, [isDark]);
@@ -45,11 +62,11 @@ export function ThemeProvider({ children }) {
     const newTheme = !isDark;
     setIsDark(newTheme);
 
-    const username = localStorage.getItem('username'); // ✅ Changé : on vérifie username au lieu de token
+    const username = localStorage.getItem('username');
     if (username) {
       try {
         await api.put('/auth/theme', {
-          theme: newTheme ? 'dark' : 'light'
+          theme: newTheme ? 'dark' : 'light',
         });
       } catch (error) {
         console.error('Erreur sauvegarde thème:', error);
