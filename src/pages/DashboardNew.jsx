@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TaskForm from '../components/TaskForm';
 import TaskItem from '../components/TaskItem';
@@ -20,8 +20,24 @@ function DashboardNew({ setUsername }) {
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [activeQuickView, setActiveQuickView] = useState(null);
+  const [displayName, setDisplayName] = useState(null);
+
   const navigate = useNavigate();
   const username = localStorage.getItem('username') || 'User';
+
+  // Charger le profil pour récupérer le displayName
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await api.get('/users/profile');
+        setDisplayName(res.data.displayName || res.data.username);
+      } catch (e) {
+        // fallback si erreur : on reste sur username
+        setDisplayName(username);
+      }
+    };
+    fetchProfile();
+  }, [username]);
 
   // Custom hooks
   const {
@@ -99,13 +115,9 @@ function DashboardNew({ setUsername }) {
   };
 
   const handleTaskClick = (taskId) => {
-    // Trouver l'élément TaskItem correspondant
     const taskElement = document.getElementById(`task-${taskId}`);
     if (taskElement) {
-      // Scroll vers la tâche
       taskElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      
-      // Ouvrir le mode édition après le scroll
       setTimeout(() => {
         setEditingTaskId(taskId);
       }, 500);
@@ -114,28 +126,25 @@ function DashboardNew({ setUsername }) {
 
   const handleStatsCardClick = (status) => {
     setStatusFilter(status);
-    setActiveQuickView(null); // Réinitialiser la vue rapide
+    setActiveQuickView(null);
   };
 
   const handleQuickViewClick = (viewId) => {
-    // Si on clique sur la même vue, on la désactive
     if (activeQuickView === viewId) {
       setActiveQuickView(null);
     } else {
       setActiveQuickView(viewId);
-      // Réinitialiser les filtres classiques
       setStatusFilter('ALL');
       setPriorityFilter('ALL');
       clearSearch();
     }
   };
 
-  // Déterminer quelles tâches afficher
-  const tasksToDisplay = activeQuickView 
+  const tasksToDisplay = activeQuickView
     ? getTasksByView(activeQuickView)
     : filteredTasks;
 
-  if (loading) {
+  if (loading || !displayName) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-cyan-200 via-teal-100 to-orange-200 text-slate-700 dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 dark:text-slate-100 flex items-center justify-center">
         <div className="text-2xl font-semibold text-slate-700 dark:text-amber-300">
@@ -157,6 +166,7 @@ function DashboardNew({ setUsername }) {
       {/* Sidebar Gauche */}
       <Sidebar
         username={username}
+        displayName={displayName}
         notificationPermission={notificationPermission}
         notificationsEnabled={notificationsEnabled}
         urgentTasks={urgentTasks}
@@ -167,8 +177,9 @@ function DashboardNew({ setUsername }) {
         activeQuickView={activeQuickView}
       />
 
+
       {/* Sidebar Droite */}
-      <RightSidebar 
+      <RightSidebar
         stats={stats}
         tasks={tasks}
         urgentCount={urgentTasks.length}
@@ -176,20 +187,20 @@ function DashboardNew({ setUsername }) {
         onTaskDelete={handleTaskDelete}
       />
 
-      {/* Main Content - Ajusté pour les deux sidebars */}
+      {/* Main Content */}
       <main className="ml-72 mr-80 min-h-screen px-10 py-10">
         <div className="mb-10">
           {/* Header */}
-          <DashboardHeader username={username} />
+          <DashboardHeader username={displayName} />
 
           {/* Stats Cards */}
-          <StatsCards 
+          <StatsCards
             stats={stats}
             onFilterClick={handleStatsCardClick}
             activeFilter={statusFilter}
           />
 
-          {/* Filters avec recherche et export */}
+          {/* Filters */}
           <TaskFilters
             statusFilter={statusFilter}
             setStatusFilter={setStatusFilter}
@@ -216,16 +227,29 @@ function DashboardNew({ setUsername }) {
         {/* Task List */}
         <div className="space-y-4 pb-12">
           {tasksToDisplay.length === 0 ? (
-            <EmptyState hasFilters={statusFilter !== 'ALL' || priorityFilter !== 'ALL' || hasActiveSearch || activeQuickView !== null} />
+            <EmptyState
+              hasFilters={
+                statusFilter !== 'ALL' ||
+                priorityFilter !== 'ALL' ||
+                hasActiveSearch ||
+                activeQuickView !== null
+              }
+            />
           ) : (
             tasksToDisplay.map((task) => (
-              <div key={task.id} id={`task-${task.id}`} onDragOver={(e) => e.preventDefault()}>
+              <div
+                key={task.id}
+                id={`task-${task.id}`}
+                onDragOver={(e) => e.preventDefault()}
+              >
                 <TaskItem
                   task={task}
                   onUpdate={handleTaskUpdate}
                   onDelete={handleTaskDelete}
                   onDragStart={handleDragStart}
-                  onDragEnter={(e, targetTaskId) => handleDragEnter(e, targetTaskId, tasksToDisplay)}
+                  onDragEnter={(e, targetTaskId) =>
+                    handleDragEnter(e, targetTaskId, tasksToDisplay)
+                  }
                   onDragEnd={() => handleDragEnd(tasksToDisplay)}
                   isDragging={draggedTaskId === task.id}
                   isDragOver={dragOverTaskId === task.id}

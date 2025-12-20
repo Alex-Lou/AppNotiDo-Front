@@ -19,7 +19,8 @@ function TaskItem({
   // Synchroniser l'état d'édition avec l'ID centralisé
   useEffect(() => {
     setIsEditing(editingTaskId === task.id);
-  }, [editingTaskId, task.id]);
+    setEditedTask({ ...task }); // garde aussi tags à jour quand la task change
+  }, [editingTaskId, task]);
 
   const priorityColors = {
     LOW: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-500/40',
@@ -174,6 +175,22 @@ function TaskItem({
             placeholder="Description"
             rows="3"
           />
+
+          {/* 🏷️ AJOUT : Champ Tags */}
+          <div>
+            <label className="mb-2 block text-sm font-bold text-slate-700 dark:text-amber-200">
+              🏷️ Tags
+            </label>
+            <input
+              type="text"
+              value={editedTask.tags || ''}
+              onChange={(e) =>
+                setEditedTask({ ...editedTask, tags: e.target.value })
+              }
+              className="w-full rounded-xl border-2 border-cyan-300/60 bg-white/90 px-4 py-3 text-sm font-medium text-slate-900 outline-none ring-cyan-500/60 focus:ring-2 dark:border-amber-700/60 dark:bg-slate-900/80 dark:text-amber-50 dark:ring-amber-500/60"
+              placeholder="dev, urgent, perso"
+            />
+          </div>
 
           <div>
             <label className="mb-2 block text-sm font-bold text-slate-700 dark:text-amber-200">
@@ -371,6 +388,20 @@ function TaskItem({
             <p className="mt-2 text-sm font-medium leading-relaxed text-slate-700 dark:text-amber-200/80">
               {task.description}
             </p>
+          )}
+
+          {/* 🏷️ AJOUT : affichage des tags */}
+          {task.tags && (
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {task.tags.split(',').map((tag) => (
+                <span
+                  key={tag.trim()}
+                  className="rounded-full bg-cyan-100/90 px-2.5 py-0.5 text-xs font-semibold text-cyan-800 dark:bg-amber-900/60 dark:text-amber-200"
+                >
+                  #{tag.trim()}
+                </span>
+              ))}
+            </div>
           )}
 
           <div className="mt-3 flex flex-wrap items-center gap-3">

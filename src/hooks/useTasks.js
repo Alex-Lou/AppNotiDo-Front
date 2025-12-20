@@ -11,7 +11,6 @@ export const useTasks = (setUsername) => {
   const [priorityFilter, setPriorityFilter] = useState('ALL');
   const navigate = useNavigate();
 
-  // Hook de recherche
   const {
     searchQuery,
     setSearchQuery,
@@ -25,6 +24,7 @@ export const useTasks = (setUsername) => {
   const fetchTasks = async () => {
     try {
       const response = await api.get('/tasks');
+      console.log('Tasks from API', response.data); // ← pour voir si tags est là
       setTasks(response.data.content);
     } catch (error) {
       console.error('Erreur:', error);
@@ -40,7 +40,6 @@ export const useTasks = (setUsername) => {
 
   // Apply filters AND search
   const applyFilters = () => {
-    // Commencer avec les tâches recherchées (ou toutes si pas de recherche)
     let filtered = [...searchedTasks];
     
     if (statusFilter !== 'ALL') {
@@ -62,20 +61,17 @@ export const useTasks = (setUsername) => {
     console.log('Updating task:', taskId, 'with data:', taskData);
     try {
       const response = await api.put(`/tasks/${taskId}`, taskData);
-      console.log('Update response:', response.data);
-      
-      // Mise à jour optimiste : on met à jour l'état local immédiatement
+      console.log('Update response:', response.data); // ← voir tags dans la réponse
+
       setTasks(prevTasks => 
         prevTasks.map(task => 
           task.id === taskId ? { ...task, ...taskData } : task
         )
       );
-      
-      // Rafraîchir quand même pour être sûr
+
       await fetchTasks();
     } catch (error) {
       console.error('Error updating task:', error);
-      // En cas d'erreur, on rafraîchit pour avoir l'état correct
       fetchTasks();
     }
   };
@@ -87,7 +83,6 @@ export const useTasks = (setUsername) => {
     }
   };
 
-  // Calculate stats
   const stats = {
     total: tasks.length,
     todo: tasks.filter(t => t.status === 'TODO').length,
@@ -95,14 +90,12 @@ export const useTasks = (setUsername) => {
     done: tasks.filter(t => t.status === 'DONE').length,
   };
 
-  // Get urgent tasks
   const urgentTasks = tasks.filter(task => {
     if (!task.dueDate || task.status === 'DONE' || task.priority !== 'HIGH') return false;
     const timeUntilDue = new Date(task.dueDate) - new Date();
     return timeUntilDue > 0 && timeUntilDue < 3600000;
   });
 
-  // Effects
   useEffect(() => {
     fetchTasks();
   }, []);

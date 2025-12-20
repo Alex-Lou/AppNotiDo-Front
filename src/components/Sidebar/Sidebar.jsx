@@ -5,9 +5,11 @@ import UrgentTasks from './UrgentTasks';
 import QuickViews from './QuickViews';
 import DailyQuote from './DailyQuote';
 import SidebarActions from './SidebarActions';
+import logonote from '../../assets/logonote.png';
 
 function Sidebar({
   username,
+  displayName,
   notificationPermission,
   notificationsEnabled,
   urgentTasks,
@@ -60,7 +62,16 @@ function Sidebar({
       {/* Header */}
       <div className="mb-10">
         <div className="flex items-center gap-3">
-          <span className="text-2xl">📝</span>
+          <img
+            src={logonote}
+            alt="AppNotiDo"
+            className="
+              h-9 w-9 rounded-2xl
+              shadow-md shadow-cyan-300/40 dark:shadow-amber-700/40
+              transition-transform duration-200 ease-out
+              hover:scale-105 hover:-rotate-2
+            "
+          />
           <h1 className="bg-gradient-to-r from-cyan-700 via-teal-700 to-orange-600 bg-clip-text text-2xl font-bold tracking-tight text-transparent dark:from-amber-500 dark:via-orange-500 dark:to-rose-500">
             AppNotiDo
           </h1>
@@ -70,8 +81,8 @@ function Sidebar({
         </p>
       </div>
 
-      {/* User Profile */}
-      <UserProfile username={username} />
+      {/* User Profile and display name*/}
+      <UserProfile username={username} displayName={displayName} />
 
       {/* Notification Permission */}
       {notificationPermission !== 'granted' && notificationsEnabled && (

@@ -1,11 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaPencilAlt } from 'react-icons/fa';
 import api from '../../services/api';
 
-function UserProfile({ username }) {
-  const [displayName, setDisplayName] = useState(username);
+function UserProfile({ username, displayName: initialDisplayName }) {
+  const [displayName, setDisplayName] = useState(initialDisplayName || username);
   const [isEditing, setIsEditing] = useState(false);
   const [tempName, setTempName] = useState(displayName);
+
+  // si le parent change le displayName (après reload), on met à jour le state
+  useEffect(() => {
+    setDisplayName(initialDisplayName || username);
+    setTempName(initialDisplayName || username);
+  }, [initialDisplayName, username]);
 
   const firstLetter = (displayName || username || '?').charAt(0).toUpperCase();
 
@@ -30,7 +36,7 @@ function UserProfile({ username }) {
       const res = await api.patch('/users/profile', { displayName: value });
       setDisplayName(res.data.displayName || res.data.username);
     } catch (e) {
-      // tu peux loguer si tu veux, mais on reste minimal
+      // option : log
     } finally {
       setIsEditing(false);
     }
