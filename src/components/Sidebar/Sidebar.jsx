@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react';
 import UserProfile from './UserProfile';
 import NotificationPermission from './NotificationPermission';
 import UrgentTasks from './UrgentTasks';
-import SidebarNav from './SidebarNav';
+import QuickViews from './QuickViews';
+import DailyQuote from './DailyQuote';
 import SidebarActions from './SidebarActions';
 
 function Sidebar({
@@ -12,7 +14,39 @@ function Sidebar({
   onRequestNotificationPermission,
   onToggleNotifications,
   onLogout,
+  onQuickViewClick,
+  activeQuickView,
 }) {
+  const [showQuote, setShowQuote] = useState(() => {
+    const saved = localStorage.getItem('showDailyQuote');
+    return saved === null ? true : saved === 'true';
+  });
+
+  const [isQuotePinned, setIsQuotePinned] = useState(() => {
+    const saved = localStorage.getItem('dailyQuotePinned');
+    return saved === 'true';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('showDailyQuote', showQuote);
+  }, [showQuote]);
+
+  useEffect(() => {
+    localStorage.setItem('dailyQuotePinned', isQuotePinned);
+  }, [isQuotePinned]);
+
+  const handleTogglePin = () => {
+    setIsQuotePinned(!isQuotePinned);
+  };
+
+  const handleHideQuote = () => {
+    setShowQuote(false);
+  };
+
+  const handleShowQuote = () => {
+    setShowQuote(true);
+  };
+
   return (
     <aside
       className="
@@ -47,15 +81,52 @@ function Sidebar({
       {/* Urgent Tasks Alert */}
       <UrgentTasks urgentTasks={urgentTasks} />
 
-      {/* Navigation */}
-      <SidebarNav />
+      {/* Citation du jour (en haut si épinglée) */}
+      {showQuote && isQuotePinned && (
+        <DailyQuote
+          isPinned={isQuotePinned}
+          onTogglePin={handleTogglePin}
+          onHide={handleHideQuote}
+        />
+      )}
+
+      {/* Quick Views */}
+      <QuickViews
+        onViewClick={onQuickViewClick}
+        activeView={activeQuickView}
+      />
+
+      {/* Citation du jour (en bas si non épinglée) */}
+      {showQuote && !isQuotePinned && (
+        <div className="mt-auto">
+          <DailyQuote
+            isPinned={isQuotePinned}
+            onTogglePin={handleTogglePin}
+            onHide={handleHideQuote}
+          />
+        </div>
+      )}
+
+      {/* Bouton pour réafficher la citation si masquée */}
+      {!showQuote && (
+        <div className="mt-auto">
+          <button
+            onClick={handleShowQuote}
+            className="w-full rounded-xl border-2 border-amber-400/60 bg-gradient-to-r from-amber-50 to-orange-50 px-4 py-2.5 text-sm font-semibold text-amber-700 transition hover:from-amber-100 hover:to-orange-100 dark:border-amber-700/70 dark:bg-gradient-to-r dark:from-amber-900/40 dark:to-orange-900/40 dark:text-amber-300 dark:hover:from-amber-900/60 dark:hover:to-orange-900/60"
+          >
+            💡 Afficher la citation
+          </button>
+        </div>
+      )}
 
       {/* Actions (Notifications toggle, Theme, Logout) */}
-      <SidebarActions
-        notificationsEnabled={notificationsEnabled}
-        onToggleNotifications={onToggleNotifications}
-        onLogout={onLogout}
-      />
+      <div className={isQuotePinned || !showQuote ? 'mt-auto' : 'mt-6'}>
+        <SidebarActions
+          notificationsEnabled={notificationsEnabled}
+          onToggleNotifications={onToggleNotifications}
+          onLogout={onLogout}
+        />
+      </div>
     </aside>
   );
 }

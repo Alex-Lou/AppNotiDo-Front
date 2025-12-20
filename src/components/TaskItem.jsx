@@ -1,9 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTrash, FaEdit, FaSave, FaTimes, FaClock, FaLock, FaLockOpen } from 'react-icons/fa';
 
-function TaskItem({ task, onUpdate, onDelete, onDragStart, onDragEnter, onDragEnd, isDragging, isDragOver }) {
+function TaskItem({ 
+  task, 
+  onUpdate, 
+  onDelete, 
+  onDragStart, 
+  onDragEnter, 
+  onDragEnd, 
+  isDragging, 
+  isDragOver,
+  editingTaskId,
+  onStartEditing
+}) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTask, setEditedTask] = useState({ ...task });
+
+  // Synchroniser l'état d'édition avec l'ID centralisé
+  useEffect(() => {
+    setIsEditing(editingTaskId === task.id);
+  }, [editingTaskId, task.id]);
 
   const priorityColors = {
     LOW: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-500/40',
@@ -51,6 +67,42 @@ function TaskItem({ task, onUpdate, onDelete, onDragStart, onDragEnter, onDragEn
     return mins > 0 ? `${hours}h ${mins}min` : `${hours}h`;
   };
 
+  // Calculer la progression de la tâche basée sur la durée estimée
+  const calculateProgress = () => {
+    if (!task.dueDate || !task.estimatedDuration) return null;
+
+    const now = new Date();
+    const dueDate = new Date(task.dueDate);
+    const startDate = new Date(dueDate.getTime() - task.estimatedDuration * 60 * 1000);
+
+    // Si on n'a pas encore atteint l'heure de début
+    if (now < startDate) {
+      return { percentage: 0, color: 'from-cyan-500 to-teal-500 dark:from-cyan-600 dark:to-teal-600', status: 'not-started' };
+    }
+
+    // Si on a dépassé l'échéance
+    if (now > dueDate) {
+      return { percentage: 100, color: 'from-rose-500 to-orange-500 dark:from-rose-600 dark:to-orange-600', status: 'overdue' };
+    }
+
+    // Calculer le pourcentage de temps écoulé
+    const totalDuration = dueDate - startDate;
+    const elapsed = now - startDate;
+    const percentage = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
+
+    // Déterminer la couleur en fonction du pourcentage
+    let color;
+    if (percentage < 50) {
+      color = 'from-emerald-500 to-teal-500 dark:from-emerald-600 dark:to-teal-600'; // Vert
+    } else if (percentage < 80) {
+      color = 'from-amber-500 to-orange-500 dark:from-amber-600 dark:to-orange-600'; // Orange
+    } else {
+      color = 'from-orange-500 to-rose-500 dark:from-orange-600 dark:to-rose-600'; // Rouge
+    }
+
+    return { percentage, color, status: 'in-progress' };
+  };
+
   const handleDateChange = (e) => {
     const newDate = e.target.value;
     
@@ -79,11 +131,13 @@ function TaskItem({ task, onUpdate, onDelete, onDragStart, onDragEnter, onDragEn
   const handleSave = async () => {
     await onUpdate(task.id, editedTask);
     setIsEditing(false);
+    onStartEditing(null);
   };
 
   const handleCancel = () => {
     setEditedTask({ ...task });
     setIsEditing(false);
+    onStartEditing(null);
   };
 
   const handleToggleLock = async (e) => {
@@ -223,6 +277,7 @@ function TaskItem({ task, onUpdate, onDelete, onDragStart, onDragEnter, onDragEn
 
   const dateInfo = task.dueDate ? formatDate(task.dueDate) : null;
   const isLocked = task.locked || false;
+  const progressInfo = calculateProgress();
 
   return (
     <div
@@ -287,7 +342,7 @@ function TaskItem({ task, onUpdate, onDelete, onDragStart, onDragEnter, onDragEn
           onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
-            setIsEditing(true);
+            onStartEditing(task.id);
           }}
           className="rounded-full bg-white/90 p-2 text-cyan-600 shadow-lg transition hover:bg-cyan-500 hover:text-white hover:scale-110 dark:bg-amber-900/80 dark:text-amber-300 dark:hover:bg-amber-600 dark:hover:text-white"
           title="Modifier"
@@ -342,7 +397,25 @@ function TaskItem({ task, onUpdate, onDelete, onDragStart, onDragEnter, onDragEn
             </span>
           </div>
 
-          {dateInfo && (
+          {/* Barre de progression basée sur la durée estimée */}
+          {progressInfo && (
+            <div className="mt-4">
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100 shadow-inner dark:bg-slate-800/60">
+                <div
+                  className={`h-full rounded-full bg-gradient-to-r shadow-sm transition-all duration-500 ${progressInfo.color}`}
+                  style={{ width: `${progressInfo.percentage}%` }}
+                />
+              </div>
+              <p className="mt-1.5 text-xs font-medium text-slate-600 dark:text-amber-300/70">
+                {progressInfo.status === 'not-started' && 'Pas encore commencée'}
+                {progressInfo.status === 'in-progress' && `Progression: ${Math.round(progressInfo.percentage)}%`}
+                {progressInfo.status === 'overdue' && 'Temps dépassé'}
+              </p>
+            </div>
+          )}
+
+          {/* Ancienne barre pour les tâches sans durée estimée mais avec échéance */}
+          {!progressInfo && dateInfo && (
             <div className="mt-4">
               <div className="h-1 w-full overflow-hidden rounded-full bg-slate-100 shadow-inner dark:bg-slate-800/60">
                 <div

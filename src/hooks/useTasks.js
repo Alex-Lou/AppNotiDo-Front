@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import { useSearch } from './useSearch';
 
 export const useTasks = (setUsername) => {
   const [tasks, setTasks] = useState([]);
@@ -9,6 +10,16 @@ export const useTasks = (setUsername) => {
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [priorityFilter, setPriorityFilter] = useState('ALL');
   const navigate = useNavigate();
+
+  // Hook de recherche
+  const {
+    searchQuery,
+    setSearchQuery,
+    searchedTasks,
+    clearSearch,
+    hasActiveSearch,
+    resultCount,
+  } = useSearch(tasks);
 
   // Fetch tasks
   const fetchTasks = async () => {
@@ -27,9 +38,11 @@ export const useTasks = (setUsername) => {
     }
   };
 
-  // Apply filters
+  // Apply filters AND search
   const applyFilters = () => {
-    let filtered = [...tasks];
+    // Commencer avec les tâches recherchées (ou toutes si pas de recherche)
+    let filtered = [...searchedTasks];
+    
     if (statusFilter !== 'ALL') {
       filtered = filtered.filter(task => task.status === statusFilter);
     }
@@ -96,7 +109,7 @@ export const useTasks = (setUsername) => {
 
   useEffect(() => {
     applyFilters();
-  }, [tasks, statusFilter, priorityFilter]);
+  }, [tasks, statusFilter, priorityFilter, searchedTasks]);
 
   return {
     tasks,
@@ -113,5 +126,10 @@ export const useTasks = (setUsername) => {
     handleTaskCreated,
     handleTaskUpdate,
     handleTaskDelete,
+    searchQuery,
+    setSearchQuery,
+    clearSearch,
+    hasActiveSearch,
+    searchResultCount: resultCount,
   };
 };
