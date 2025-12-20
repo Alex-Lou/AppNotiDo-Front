@@ -1,0 +1,116 @@
+import { useState, useEffect, useRef } from 'react';
+import { 
+  requestNotificationPermission, 
+  sendBrowserNotification, 
+  checkTasksForNotifications 
+} from '../services/notificationService';
+
+export const useNotifications = (tasks, fetchTasks) => {
+  const [notificationPermission, setNotificationPermission] = useState(
+    typeof Notification !== 'undefined' ? Notification.permission : 'default'
+  );
+  const [notificationsEnabled, setNotificationsEnabled] = useState(
+    localStorage.getItem('notificationsEnabled') !== 'false'
+  );
+  const [inAppNotifications, setInAppNotifications] = useState([]);
+  const notifiedTaskIdsRef = useRef(new Set());
+
+  // Update permission state
+  useEffect(() => {
+    if (typeof Notification !== 'undefined') {
+      setNotificationPermission(Notification.permission);
+    }
+  }, []);
+
+  // Check for notifications
+  useEffect(() => {
+    if (tasks.length === 0 || !notificationsEnabled) return;
+
+    const checkNotifications = async () => {
+      const tasksToNotify = checkTasksForNotifications(tasks);
+      
+      for (const task of tasksToNotify) {
+        if (notifiedTaskIdsRef.current.has(task.notificationKey || task.id)) continue;
+
+        let notificationText;
+        let notificationTitle;
+        
+        if (task.isStartReminder) {
+          notificationTitle = '⏰ Temps de commencer';
+          notificationText = `${task.title} (durée : ${task.estimatedDuration} min)`;
+        } else if (task.isUrgent) {
+          notificationTitle = '🚨 Échéance imminente';
+          notificationText = `${task.title} - C'est maintenant !`;
+        } else {
+          const minutes = task.minutesRemaining ?? task.reminderMinutes;
+          notificationTitle = '🔔 Rappel de tâche';
+          notificationText = `${task.title} - Échéance dans ${minutes} min`;
+        }
+
+        addInAppNotification({
+          id: `notif-${(task.notificationKey || task.id)}-${Date.now()}`,
+          taskId: task.id,
+          title: notificationTitle,
+          message: notificationText,
+          type: task.isStartReminder ? 'start' : task.isUrgent ? 'urgent' : 'reminder',
+        });
+
+        if (notificationPermission === 'granted') {
+          sendBrowserNotification(notificationTitle, notificationText);
+        }
+
+        notifiedTaskIdsRef.current.add(task.notificationKey || task.id);
+
+        if (task.minutesRemaining === 0 || task.isUrgent || task.notified === true) {
+          try {
+            await api.put(`/tasks/${task.id}`, { ...task, notified: true });
+          } catch (error) {
+            console.error('Erreur lors de la mise à jour de la notification:', error);
+          }
+        }
+      }
+
+      if (tasksToNotify.length > 0) {
+        fetchTasks();
+      }
+    };
+
+    checkNotifications();
+    const interval = setInterval(() => {
+      checkNotifications();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [tasks, notificationPermission, notificationsEnabled]);
+
+  const handleRequestNotificationPermission = async () => {
+    const permission = await requestNotificationPermission();
+    setNotificationPermission(permission);
+  };
+
+  const toggleNotifications = () => {
+    const newState = !notificationsEnabled;
+    setNotificationsEnabled(newState);
+    localStorage.setItem('notificationsEnabled', newState);
+  };
+
+  const addInAppNotification = (notification) => {
+    setInAppNotifications(prev => [...prev, notification]);
+    setTimeout(() => {
+      removeInAppNotification(notification.id);
+    }, 8000);
+  };
+
+  const removeInAppNotification = (notificationId) => {
+    setInAppNotifications(prev => prev.filter(n => n.id !== notificationId));
+  };
+
+  return {
+    notificationPermission,
+    notificationsEnabled,
+    inAppNotifications,
+    handleRequestNotificationPermission,
+    toggleNotifications,
+    removeInAppNotification,
+  };
+};
