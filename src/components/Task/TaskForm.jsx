@@ -1,9 +1,10 @@
 // src/components/Task/TaskForm.jsx
+import { FiX } from 'react-icons/fi';
 import { useTaskForm } from '../../hooks/useTaskForm';
 import FormField from '../FormField';
 import { INPUT_CLASSES, FORM_CONTAINER, FORM_TITLE, BUTTON_SUBMIT } from '../../constants/styles';
 
-function TaskForm({ onTaskCreated }) {
+function TaskForm({ onTaskCreated, onClose }) {
   const { values, handleChange, reset, isSubmitting, setIsSubmitting, prepareTaskData } = useTaskForm();
 
   const handleSubmit = async (e) => {
@@ -23,7 +24,21 @@ function TaskForm({ onTaskCreated }) {
 
   return (
     <form onSubmit={handleSubmit} className={FORM_CONTAINER}>
-      <h3 className={FORM_TITLE}>➕ Nouvelle Tâche</h3>
+      {/* En-tête avec titre et bouton fermer */}
+      <div className="flex items-center justify-between mb-6">
+        <h3 className={FORM_TITLE}>➕ Nouvelle Tâche</h3>
+        
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:text-slate-500 dark:hover:text-slate-300 dark:hover:bg-slate-800 transition-all duration-200 group"
+            title="Fermer"
+          >
+            <FiX className="w-5 h-5 group-hover:scale-110 transition-transform" />
+          </button>
+        )}
+      </div>
 
       <div className="space-y-4">
         {/* Titre */}

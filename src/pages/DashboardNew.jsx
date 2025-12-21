@@ -26,6 +26,10 @@ function DashboardNew({ setUsername }) {
     return <DashboardSkeleton />;
   }
 
+  const handleNewTask = () => {
+    dashboard.setShowTaskForm(true);
+  };
+
   return (
     <DashboardLayout
       notifications={
@@ -74,7 +78,7 @@ function DashboardNew({ setUsername }) {
           setStatusFilter={dashboard.setStatusFilter}
           priorityFilter={dashboard.priorityFilter}
           setPriorityFilter={dashboard.setPriorityFilter}
-          onNewTask={() => dashboard.setShowTaskForm(!dashboard.showTaskForm)}
+          onNewTask={handleNewTask}
           searchQuery={dashboard.searchQuery}
           onSearchChange={dashboard.setSearchQuery}
           onClearSearch={dashboard.clearSearch}
@@ -87,7 +91,10 @@ function DashboardNew({ setUsername }) {
 
       {dashboard.showTaskForm && (
         <div className={DASHBOARD_TASK_FORM_CONTAINER}>
-          <TaskForm onTaskCreated={dashboard.onTaskCreated} />
+          <TaskForm 
+            onTaskCreated={dashboard.onTaskCreated}
+            onClose={() => dashboard.setShowTaskForm(false)}
+          />
         </div>
       )}
 
@@ -108,7 +115,10 @@ function DashboardNew({ setUsername }) {
         />
 
         {dashboard.normalToDisplay.length === 0 && dashboard.urgentToDisplay.length === 0 ? (
-          <EmptyState hasFilters={dashboard.hasFilters} />
+          <EmptyState 
+            hasFilters={dashboard.hasFilters} 
+            onNewTask={handleNewTask}
+          />
         ) : (
           <TaskList
             tasks={dashboard.normalToDisplay}
