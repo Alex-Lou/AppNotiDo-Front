@@ -242,7 +242,7 @@ export const STAT_CARD_VARIANTS = {
 };
 
 // ==========================================
-// TASK FILTERS - RESPONSIVE
+// TASK FILTERS - RESPONSIVE REDESIGN
 // ==========================================
 
 export const TASK_FILTERS_CONTAINER = `
@@ -252,7 +252,7 @@ export const TASK_FILTERS_CONTAINER = `
 
 export const FILTERS_ROW_TOP = `
   flex flex-col gap-3
-  sm:flex-row sm:items-center sm:justify-between
+  sm:flex-row sm:items-center sm:gap-4
 `;
 
 export const FILTERS_ROW_BOTTOM = `
@@ -265,11 +265,13 @@ export const FILTERS_GROUP = `
   sm:flex-row sm:items-center sm:gap-3
   w-full
   sm:w-auto
+  sm:flex-1
 `;
 
 export const NEW_TASK_BUTTON = `
   w-full
   sm:w-auto
+  sm:flex-shrink-0
   inline-flex items-center justify-center gap-2 sm:gap-3 rounded-xl 
   bg-gradient-to-r from-cyan-500 via-teal-500 to-orange-500 
   px-5 py-3 sm:px-7 sm:py-3.5 
@@ -278,6 +280,11 @@ export const NEW_TASK_BUTTON = `
   dark:from-amber-600 dark:via-orange-600 dark:to-rose-600 
   dark:hover:from-amber-500 dark:hover:via-orange-500 dark:hover:to-rose-500
   whitespace-nowrap
+`;
+
+export const SEARCH_CONTAINER = `
+  w-full
+  sm:flex-1
 `;
 
 export const SEARCH_INPUT = `
@@ -295,7 +302,7 @@ export const SEARCH_INPUT = `
 export const SELECT_BASE = `
   w-full
   sm:w-auto
-  sm:min-w-[140px]
+  sm:min-w-[180px]
   rounded-xl border-2 
   px-3 py-2.5 
   sm:px-5 sm:py-3
@@ -310,7 +317,7 @@ export const SELECT_STATUS = "border-cyan-400/70 bg-gradient-to-br from-cyan-50 
 
 export const SELECT_PRIORITY = "border-orange-400/70 bg-gradient-to-br from-orange-50 to-amber-50 text-slate-800 ring-orange-400/60 hover:border-orange-500 dark:border-stone-700/70 dark:bg-gradient-to-br dark:from-stone-900/80 dark:to-slate-900/80 dark:text-amber-50 dark:ring-amber-700/60 dark:hover:border-stone-600";
 
-export const SEARCH_COMPACT_BUTTON = "group flex items-center gap-2 rounded-xl border-2 border-cyan-400/70 bg-gradient-to-r from-white to-cyan-50/50 px-3 py-2.5 sm:px-4 sm:py-3 shadow-md transition-all hover:border-cyan-500 hover:shadow-lg dark:border-stone-700/70 dark:bg-gradient-to-r dark:from-stone-900/80 dark:to-slate-900/80 dark:hover:border-stone-600 w-full sm:w-auto";
+export const SEARCH_COMPACT_BUTTON = "group flex items-center gap-2 rounded-xl border-2 border-cyan-400/70 bg-gradient-to-r from-white to-cyan-50/50 px-3 py-2.5 sm:px-4 sm:py-3 shadow-md transition-all hover:border-cyan-500 hover:shadow-lg dark:border-stone-700/70 dark:bg-gradient-to-r dark:from-stone-900/80 dark:to-slate-900/80 dark:hover:border-stone-600 w-full cursor-pointer";
 
 export const SEARCH_COUNT_BADGE = "rounded-full bg-cyan-500 px-2 py-0.5 sm:px-2.5 sm:py-1 text-xs font-bold text-white dark:bg-amber-600";
 
@@ -324,7 +331,20 @@ export const SEARCH_RESULTS_INFO = "mt-2 sm:mt-3 text-sm font-medium text-slate-
 // EXPORT BUTTON
 // ==========================================
 
-export const EXPORT_BUTTON = "inline-flex items-center gap-2 rounded-xl border-2 border-emerald-400/70 bg-gradient-to-r from-emerald-50 to-teal-50 px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-bold text-emerald-800 shadow-md transition hover:border-emerald-500 hover:from-emerald-100 hover:to-teal-100 hover:shadow-lg dark:border-emerald-700/70 dark:bg-gradient-to-r dark:from-emerald-900/60 dark:to-teal-900/60 dark:text-emerald-200 dark:hover:border-emerald-600 dark:hover:from-emerald-900/80 dark:hover:to-teal-900/80 relative z-10";
+export const EXPORT_BUTTON = `
+  w-full
+  sm:w-auto
+  sm:flex-shrink-0
+  inline-flex items-center justify-center gap-2 rounded-xl border-2 border-emerald-400/70 
+  bg-gradient-to-r from-emerald-50 to-teal-50 
+  px-4 py-2.5 sm:px-5 sm:py-3 
+  text-xs sm:text-sm font-bold text-emerald-800 shadow-md 
+  transition hover:border-emerald-500 hover:from-emerald-100 hover:to-teal-100 hover:shadow-lg 
+  dark:border-emerald-700/70 dark:bg-gradient-to-r dark:from-emerald-900/60 dark:to-teal-900/60 
+  dark:text-emerald-200 dark:hover:border-emerald-600 dark:hover:from-emerald-900/80 dark:hover:to-teal-900/80 
+  relative z-10
+`;
+
 export const EXPORT_DROPDOWN = "absolute right-0 top-full z-[100] mt-2 w-44 sm:w-48 overflow-hidden rounded-xl border-2 border-slate-200/60 bg-white shadow-xl dark:border-stone-700/60 dark:bg-stone-900/95";
 export const EXPORT_OPTION_BASE = "flex w-full items-center gap-2 sm:gap-3 px-3 py-2.5 sm:px-4 sm:py-3 text-xs sm:text-sm font-medium text-slate-700 transition dark:text-amber-100";
 export const EXPORT_OPTION_CSV = "hover:bg-gradient-to-r hover:from-emerald-50 hover:to-teal-50 dark:hover:from-emerald-900/40 dark:hover:to-teal-900/40";

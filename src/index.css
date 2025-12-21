@@ -1,11 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Parisienne&display=swap');
 
-@font-face {
-  font-family: 'NovaQuinta_PERSONAL_USE_ONLY';
-  src: url('./assets/fonts/NovaQuinta_PERSONAL_USE_ONLY.otf') format('opentype');
-  font-weight: 400;
-  font-display: swap;
-}
 
 @tailwind base;
 @tailwind components;
@@ -391,4 +385,186 @@
     margin-left: 0 !important;
     margin-right: 0 !important;
   }
+}
+
+
+/* ==========================================
+   CUSTOM SCROLLBAR - DESIGN PRO
+   ========================================== */
+
+/* Pour Webkit (Chrome, Safari, Edge) - TOUTES LES SCROLLBARS */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: linear-gradient(to bottom, 
+    rgb(207, 250, 254) 0%,
+    rgb(165, 243, 252) 50%,
+    rgb(254, 215, 170) 100%
+  );
+  border-radius: 10px;
+  margin: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, 
+    rgb(6, 182, 212) 0%,
+    rgb(20, 184, 166) 50%,
+    rgb(251, 146, 60) 100%
+  );
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, 
+    rgb(8, 145, 178) 0%,
+    rgb(13, 148, 136) 50%,
+    rgb(234, 88, 12) 100%
+  );
+  border: 1px solid transparent;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(to bottom, 
+    rgb(14, 116, 144) 0%,
+    rgb(15, 118, 110) 50%,
+    rgb(194, 65, 12) 100%
+  );
+}
+
+/* Scrollbar coins arrondis */
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Dark Mode Scrollbar - TOUTES */
+.dark ::-webkit-scrollbar-track {
+  background: linear-gradient(to bottom, 
+    rgb(28, 25, 23) 0%,
+    rgb(41, 37, 36) 50%,
+    rgb(23, 23, 23) 100%
+  );
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, 
+    rgb(217, 119, 6) 0%,
+    rgb(234, 88, 12) 50%,
+    rgb(225, 29, 72) 100%
+  );
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, 
+    rgb(245, 158, 11) 0%,
+    rgb(251, 146, 60) 50%,
+    rgb(244, 63, 94) 100%
+  );
+}
+
+.dark ::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(to bottom, 
+    rgb(252, 211, 77) 0%,
+    rgb(253, 186, 116) 50%,
+    rgb(251, 113, 133) 100%
+  );
+}
+
+/* Pour Firefox - TOUTES */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(6, 182, 212) rgb(207, 250, 254);
+}
+
+.dark * {
+  scrollbar-color: rgb(217, 119, 6) rgb(28, 25, 23);
+}
+
+/* Scrollbar pour les sidebars (plus fine) */
+aside::-webkit-scrollbar {
+  width: 8px;
+}
+
+aside::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+}
+
+/* Scrollbar pour le main content (scrollbar principale à droite) */
+main::-webkit-scrollbar {
+  width: 12px;
+}
+
+main::-webkit-scrollbar-track {
+  background: linear-gradient(to bottom, 
+    rgb(207, 250, 254) 0%,
+    rgb(165, 243, 252) 50%,
+    rgb(254, 215, 170) 100%
+  );
+  border-radius: 10px;
+  margin: 4px;
+}
+
+main::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, 
+    rgb(6, 182, 212) 0%,
+    rgb(20, 184, 166) 50%,
+    rgb(251, 146, 60) 100%
+  );
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+main::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, 
+    rgb(8, 145, 178) 0%,
+    rgb(13, 148, 136) 50%,
+    rgb(234, 88, 12) 100%
+  );
+}
+
+main::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(to bottom, 
+    rgb(14, 116, 144) 0%,
+    rgb(15, 118, 110) 50%,
+    rgb(194, 65, 12) 100%
+  );
+}
+
+/* Dark mode pour main */
+.dark main::-webkit-scrollbar-track {
+  background: linear-gradient(to bottom, 
+    rgb(28, 25, 23) 0%,
+    rgb(41, 37, 36) 50%,
+    rgb(23, 23, 23) 100%
+  );
+}
+
+.dark main::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, 
+    rgb(217, 119, 6) 0%,
+    rgb(234, 88, 12) 50%,
+    rgb(225, 29, 72) 100%
+  );
+}
+
+.dark main::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, 
+    rgb(245, 158, 11) 0%,
+    rgb(251, 146, 60) 50%,
+    rgb(244, 63, 94) 100%
+  );
+}
+
+.dark main::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(to bottom, 
+    rgb(252, 211, 77) 0%,
+    rgb(253, 186, 116) 50%,
+    rgb(251, 113, 133) 100%
+  );
 }
