@@ -1,6 +1,4 @@
 // src/pages/DashboardNew.jsx
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import TaskForm from '../components/Task/TaskForm';
 import Sidebar from '../components/Sidebar/Sidebar';
 import RightSidebar from '../components/Dashboard/RightSidebar';
@@ -14,219 +12,123 @@ import TaskList from '../components/Dashboard/TaskList';
 import DashboardLayout from '../components/Dashboard/DashboardLayout';
 import ProfileModal from '../components/Skeleton/ProfileModal';
 import DashboardSkeleton from '../components/Skeleton/DashboardSkeleton';
-import { useTasks } from '../hooks/useTasks';
-import { useNotifications } from '../hooks/useNotifications';
-import { useDragAndDrop } from '../hooks/useDragAndDrop';
-import { useExport } from '../hooks/useExport';
-import { useQuickViews } from '../hooks/useQuickViews';
-import { useDashboardLogic } from '../hooks/useDashboardLogic';
-import { useUrgentTasks } from '../hooks/useUrgentTasks';
-import api from '../services/api';
+import { useDashboard } from '../hooks/useDashboard';
+import {
+  DASHBOARD_HEADER_SECTION,
+  DASHBOARD_TASK_FORM_CONTAINER,
+  DASHBOARD_TASKS_SECTION
+} from '../constants/styles';
 
 function DashboardNew({ setUsername }) {
-  const [showTaskForm, setShowTaskForm] = useState(false);
-  const [editingTaskId, setEditingTaskId] = useState(null);
-  const [activeQuickView, setActiveQuickView] = useState(null);
+  const dashboard = useDashboard(setUsername);
 
-  const navigate = useNavigate();
-  const username = localStorage.getItem('username') || 'User';
-
-  const { displayName, profileEmail, isProfileModalOpen, setIsProfileModalOpen } = useDashboardLogic(username);
-
-  const {
-    tasks,
-    setTasks,
-    filteredTasks,
-    loading,
-    statusFilter,
-    setStatusFilter,
-    priorityFilter,
-    setPriorityFilter,
-    stats,
-    urgentTasks: allUrgentTasks,
-    fetchTasks,
-    handleTaskCreated,
-    handleTaskUpdate,
-    handleTaskDelete,
-    searchQuery,
-    setSearchQuery,
-    clearSearch,
-    hasActiveSearch,
-    searchResultCount,
-  } = useTasks(setUsername);
-
-  const {
-    notificationPermission,
-    notificationsEnabled,
-    inAppNotifications,
-    handleRequestNotificationPermission,
-    toggleNotifications,
-    removeInAppNotification,
-  } = useNotifications(tasks, fetchTasks);
-
-  const {
-    draggedTaskId,
-    dragOverTaskId,
-    handleDragStart,
-    handleDragEnter,
-    handleDragEnd,
-  } = useDragAndDrop(tasks, setTasks);
-
-  const { exportToCSV, exportToPDF } = useExport();
-  const { getTasksByView } = useQuickViews(tasks);
-
-  const baseTasksToDisplay = activeQuickView ? getTasksByView(activeQuickView) : filteredTasks;
-  const { urgentTasks: urgentToDisplay, normalTasks: normalToDisplay } = useUrgentTasks(baseTasksToDisplay);
-
-  const handleLogout = async () => {
-    try {
-      await api.post('/auth/logout');
-    } catch (error) {
-      console.error('Erreur logout:', error);
-    }
-    localStorage.clear();
-    if (setUsername) setUsername(null);
-    navigate('/auth');
-  };
-
-  const onTaskCreated = async (taskData) => {
-    await handleTaskCreated(taskData);
-    setShowTaskForm(false);
-  };
-
-  const handleTaskClick = (taskId) => {
-    const taskElement = document.getElementById(`task-${taskId}`);
-    if (taskElement) {
-      taskElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      setTimeout(() => setEditingTaskId(taskId), 500);
-    }
-  };
-
-  const handleStatsCardClick = (status) => {
-    setStatusFilter(status);
-    setActiveQuickView(null);
-  };
-
-  const handleQuickViewClick = (viewId) => {
-    if (activeQuickView === viewId) {
-      setActiveQuickView(null);
-    } else {
-      setActiveQuickView(viewId);
-      setStatusFilter('ALL');
-      setPriorityFilter('ALL');
-      clearSearch();
-    }
-  };
-
-  if (loading || !displayName) {
+  if (dashboard.loading || !dashboard.displayName) {
     return <DashboardSkeleton />;
   }
-
-  const hasFilters = statusFilter !== 'ALL' || priorityFilter !== 'ALL' || hasActiveSearch || activeQuickView !== null;
 
   return (
     <DashboardLayout
       notifications={
         <InAppNotifications
-          notifications={inAppNotifications}
-          onRemove={removeInAppNotification}
-          enabled={notificationsEnabled}
+          notifications={dashboard.inAppNotifications}
+          onRemove={dashboard.removeInAppNotification}
+          enabled={dashboard.notificationsEnabled}
         />
       }
       sidebar={
         <Sidebar
-          username={username}
-          displayName={displayName}
-          notificationPermission={notificationPermission}
-          notificationsEnabled={notificationsEnabled}
-          urgentTasks={allUrgentTasks}
-          onRequestNotificationPermission={handleRequestNotificationPermission}
-          onToggleNotifications={toggleNotifications}
-          onLogout={handleLogout}
-          onQuickViewClick={handleQuickViewClick}
-          activeQuickView={activeQuickView}
-          onOpenProfileModal={() => setIsProfileModalOpen(true)}
+          username={dashboard.username}
+          displayName={dashboard.displayName}
+          notificationPermission={dashboard.notificationPermission}
+          notificationsEnabled={dashboard.notificationsEnabled}
+          urgentTasks={dashboard.allUrgentTasks}
+          onRequestNotificationPermission={dashboard.handleRequestNotificationPermission}
+          onToggleNotifications={dashboard.toggleNotifications}
+          onLogout={dashboard.handleLogout}
+          onQuickViewClick={dashboard.handleQuickViewClick}
+          activeQuickView={dashboard.activeQuickView}
+          onOpenProfileModal={() => dashboard.setIsProfileModalOpen(true)}
         />
       }
       rightSidebar={
         <RightSidebar
-          stats={stats}
-          tasks={tasks}
-          urgentCount={allUrgentTasks.length}
-          onTaskClick={handleTaskClick}
-          onTaskDelete={handleTaskDelete}
+          stats={dashboard.stats}
+          tasks={dashboard.tasks}
+          urgentCount={dashboard.allUrgentTasks.length}
+          onTaskClick={dashboard.handleTaskClick}
+          onTaskDelete={dashboard.handleTaskDelete}
         />
       }
     >
-      <div className="mb-10">
-        <DashboardHeader username={displayName} />
+      <div className={DASHBOARD_HEADER_SECTION}>
+        <DashboardHeader username={dashboard.displayName} />
 
         <StatsCards
-          stats={stats}
-          onFilterClick={handleStatsCardClick}
-          activeFilter={statusFilter}
+          stats={dashboard.stats}
+          onFilterClick={dashboard.handleStatsCardClick}
+          activeFilter={dashboard.statusFilter}
         />
 
         <TaskFilters
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-          priorityFilter={priorityFilter}
-          setPriorityFilter={setPriorityFilter}
-          onNewTask={() => setShowTaskForm(!showTaskForm)}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          onClearSearch={clearSearch}
-          searchResultCount={searchResultCount}
-          totalCount={tasks.length}
-          onExportCSV={() => exportToCSV(filteredTasks, 'taches_appnotido')}
-          onExportPDF={() => exportToPDF(filteredTasks, stats, username, 'rapport_appnotido')}
+          statusFilter={dashboard.statusFilter}
+          setStatusFilter={dashboard.setStatusFilter}
+          priorityFilter={dashboard.priorityFilter}
+          setPriorityFilter={dashboard.setPriorityFilter}
+          onNewTask={() => dashboard.setShowTaskForm(!dashboard.showTaskForm)}
+          searchQuery={dashboard.searchQuery}
+          onSearchChange={dashboard.setSearchQuery}
+          onClearSearch={dashboard.clearSearch}
+          searchResultCount={dashboard.searchResultCount}
+          totalCount={dashboard.tasks.length}
+          onExportCSV={dashboard.exportToCSV}
+          onExportPDF={dashboard.exportToPDF}
         />
       </div>
 
-      {showTaskForm && (
-        <div className="mb-8 rounded-2xl border-2 border-teal-400/60 bg-gradient-to-br from-teal-50 to-cyan-50 p-6 shadow-lg dark:border-stone-800/70 dark:bg-gradient-to-br dark:from-stone-900/80 dark:to-slate-900/80">
-          <TaskForm onTaskCreated={onTaskCreated} />
+      {dashboard.showTaskForm && (
+        <div className={DASHBOARD_TASK_FORM_CONTAINER}>
+          <TaskForm onTaskCreated={dashboard.onTaskCreated} />
         </div>
       )}
 
-      <div className="space-y-4 pb-12">
+      <div className={DASHBOARD_TASKS_SECTION}>
         <UrgentTasksSection
-          urgentTasks={urgentToDisplay}
-          draggedTaskId={draggedTaskId}
-          dragOverTaskId={dragOverTaskId}
-          editingTaskId={editingTaskId}
-          onTaskUpdate={handleTaskUpdate}
-          onTaskDelete={handleTaskDelete}
-          onDragStart={handleDragStart}
-          onDragEnter={handleDragEnter}
-          onDragEnd={handleDragEnd}
-          onStartEditing={setEditingTaskId}
-          setTasks={setTasks}
-          fetchTasks={fetchTasks}
+          urgentTasks={dashboard.urgentToDisplay}
+          draggedTaskId={dashboard.draggedTaskId}
+          dragOverTaskId={dashboard.dragOverTaskId}
+          editingTaskId={dashboard.editingTaskId}
+          onTaskUpdate={dashboard.handleTaskUpdate}
+          onTaskDelete={dashboard.handleTaskDelete}
+          onDragStart={dashboard.handleDragStart}
+          onDragEnter={dashboard.handleDragEnter}
+          onDragEnd={dashboard.handleDragEnd}
+          onStartEditing={dashboard.setEditingTaskId}
+          setTasks={dashboard.setTasks}
+          fetchTasks={dashboard.fetchTasks}
         />
 
-        {normalToDisplay.length === 0 && urgentToDisplay.length === 0 ? (
-          <EmptyState hasFilters={hasFilters} />
+        {dashboard.normalToDisplay.length === 0 && dashboard.urgentToDisplay.length === 0 ? (
+          <EmptyState hasFilters={dashboard.hasFilters} />
         ) : (
           <TaskList
-            tasks={normalToDisplay}
-            draggedTaskId={draggedTaskId}
-            dragOverTaskId={dragOverTaskId}
-            editingTaskId={editingTaskId}
-            onTaskUpdate={handleTaskUpdate}
-            onTaskDelete={handleTaskDelete}
-            onDragStart={handleDragStart}
-            onDragEnter={handleDragEnter}
-            onDragEnd={handleDragEnd}
-            onStartEditing={setEditingTaskId}
+            tasks={dashboard.normalToDisplay}
+            draggedTaskId={dashboard.draggedTaskId}
+            dragOverTaskId={dashboard.dragOverTaskId}
+            editingTaskId={dashboard.editingTaskId}
+            onTaskUpdate={dashboard.handleTaskUpdate}
+            onTaskDelete={dashboard.handleTaskDelete}
+            onDragStart={dashboard.handleDragStart}
+            onDragEnter={dashboard.handleDragEnter}
+            onDragEnd={dashboard.handleDragEnd}
+            onStartEditing={dashboard.setEditingTaskId}
           />
         )}
       </div>
 
-      {isProfileModalOpen && (
+      {dashboard.isProfileModalOpen && (
         <ProfileModal
-          onClose={() => setIsProfileModalOpen(false)}
-          initialEmail={profileEmail}
+          onClose={() => dashboard.setIsProfileModalOpen(false)}
+          initialEmail={dashboard.profileEmail}
         />
       )}
     </DashboardLayout>

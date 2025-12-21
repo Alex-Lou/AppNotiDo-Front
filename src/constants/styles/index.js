@@ -1,9 +1,672 @@
 // src/constants/styles/index.js
 
-// Réexporter tout depuis les sous-fichiers
-export * from './common';
-export * from './dashboard';
-export * from './task';
-export * from './sidebar';
-export * from './skeleton';
-export * from './auth';
+// ==========================================
+// RESPONSIVE UTILITIES & BREAKPOINTS
+// ==========================================
+
+export const BREAKPOINTS = {
+  mobile: '640px',
+  tablet: '768px',
+  desktop: '1024px',
+  desktopLg: '1280px',
+};
+
+export const HIDE_ON_MOBILE = "hidden sm:block";
+export const HIDE_ON_TABLET = "hidden lg:block";
+export const SHOW_ON_MOBILE = "block sm:hidden";
+export const SHOW_ON_TABLET = "block lg:hidden";
+
+// ==========================================
+// DASHBOARD LAYOUT - RESPONSIVE
+// ==========================================
+
+export const DASHBOARD_LAYOUT_CONTAINER = `
+  min-h-screen bg-gradient-to-br from-cyan-200 via-teal-100 to-orange-200 
+  text-slate-700 
+  dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 
+  dark:text-amber-50
+`;
+
+export const DASHBOARD_LAYOUT_MAIN = `
+  min-h-screen px-4 py-6 transition-all duration-300
+  sm:px-6 sm:py-8
+  md:ml-0 md:mr-0 md:px-8
+  xl:ml-72 xl:mr-80 xl:px-10 xl:py-10
+`;
+
+// ==========================================
+// SIDEBARS - RESPONSIVE
+// ==========================================
+
+export const SIDEBAR_CONTAINER = `
+  fixed left-0 top-0 z-[60] flex h-full w-72 flex-col 
+  border-r-2 border-cyan-300/60 
+  bg-gradient-to-b from-cyan-200 via-teal-200 to-orange-200 
+  px-5 py-5 
+  dark:border-amber-900/60 
+  dark:bg-gradient-to-b dark:from-amber-950/80 dark:via-stone-950/90 dark:to-slate-950/80
+  transition-transform duration-300 ease-in-out
+  sm:px-6 sm:py-6
+  xl:px-7 xl:py-7
+  overflow-y-auto
+`;
+
+export const SIDEBAR_OVERLAY = `
+  fixed inset-0 z-[55] bg-black/50 backdrop-blur-sm
+  transition-opacity duration-300
+  xl:hidden
+`;
+
+export const RIGHT_SIDEBAR = `
+  fixed right-0 top-0 z-[65] h-full w-80 overflow-y-auto 
+  border-l-2 border-cyan-300/60 
+  bg-gradient-to-b from-cyan-100/30 via-teal-100/20 to-orange-100/30 
+  px-4 py-6
+  dark:border-amber-900/60 
+  dark:bg-gradient-to-b dark:from-slate-950/60 dark:via-stone-950/50 dark:to-slate-950/60
+  transition-transform duration-300 ease-in-out
+  translate-x-full
+  xl:translate-x-0
+  sm:px-5 sm:py-8
+  xl:px-6 xl:py-10
+`;
+
+// ==========================================
+// HAMBURGER & TOGGLE BUTTONS
+// ==========================================
+
+export const HAMBURGER_BUTTON = `
+  fixed left-4 top-4 z-[70] flex h-12 w-12 items-center justify-center 
+  rounded-xl bg-gradient-to-br from-cyan-500 to-teal-500 
+  shadow-lg transition-all hover:scale-105 active:scale-95
+  dark:from-amber-600 dark:to-orange-600
+  xl:hidden
+`;
+
+export const TOGGLE_RIGHT_SIDEBAR_BUTTON = `
+  fixed right-4 top-4 z-[70] flex h-12 w-12 items-center justify-center 
+  rounded-xl bg-gradient-to-br from-orange-500 to-rose-500 
+  shadow-lg transition-all hover:scale-105 active:scale-95
+  dark:from-rose-600 dark:to-red-600
+  xl:hidden
+`;
+
+export const HAMBURGER_ICON = "text-white text-xl";
+
+// ==========================================
+// SIDEBAR HEADER - RESPONSIVE
+// ==========================================
+
+export const SIDEBAR_HEADER = "mb-8 sm:mb-10";
+export const SIDEBAR_LOGO_CONTAINER = "flex items-center gap-3 sm:gap-3 lg:gap-3"; // ← Augmente le gap
+
+export const SIDEBAR_LOGO = `
+  h-8 w-8 rounded-2xl shadow-md shadow-cyan-300/40 
+  sm:h-9 sm:w-9
+  dark:shadow-amber-700/40 transition-transform duration-200 ease-out 
+  hover:scale-105 hover:-rotate-2
+  ml-12 lg:ml-0
+`;
+
+export const SIDEBAR_TITLE = `
+  bg-gradient-to-r from-cyan-700 via-teal-700 to-orange-600 
+  bg-clip-text text-xl font-bold tracking-tight text-transparent
+  sm:text-2xl
+  dark:from-amber-500 dark:via-orange-500 dark:to-rose-500
+`;
+
+export const SIDEBAR_SUBTITLE = "mt-2 text-base sm:text-xl font-script italic text-slate-800/90 dark:text-amber-200/80";
+
+
+// ==========================================
+// DASHBOARD HEADER - RESPONSIVE
+// ==========================================
+
+export const DASHBOARD_HEADER_CONTAINER = "mb-6 sm:mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4";
+
+export const DASHBOARD_HEADER_TITLE = `
+  text-2xl font-bold tracking-tight text-slate-800 dark:text-amber-50
+  text-center
+  sm:text-left sm:text-3xl
+  lg:text-4xl
+  lg:ml-0
+`;
+
+export const DASHBOARD_HEADER_SUBTITLE = `
+  mt-1 sm:mt-2 text-sm font-medium text-slate-700/90 dark:text-amber-200/80
+  sm:text-base
+`;
+
+export const DASHBOARD_HEADER_SECTION = "mb-8 sm:mb-10";
+
+// ==========================================
+// STATS CARDS - RESPONSIVE FINAL
+// ==========================================
+
+export const STATS_GRID = `
+  grid gap-2 mb-6
+  grid-cols-2
+  sm:grid-cols-2
+  lg:grid-cols-4
+  sm:gap-4
+  sm:mb-8
+`;
+
+export const STAT_CARD_BASE = `
+  relative overflow-hidden rounded-2xl 
+  px-2 py-4
+  sm:px-5 sm:py-5
+  lg:px-6 lg:py-5
+  text-center
+  shadow-lg ring-2 transition-all 
+  hover:scale-[1.02] hover:shadow-xl
+  min-h-[120px]
+  sm:min-h-[130px]
+  flex flex-col items-center justify-center
+`;
+
+export const STAT_CARD_HALO = "pointer-events-none absolute -right-8 -top-8 h-14 w-14 sm:-right-10 sm:-top-10 sm:h-20 sm:w-20 lg:h-24 lg:w-24 rounded-full";
+
+export const STAT_CARD_LABEL = `
+  text-[8.5px] leading-[1.1]
+  sm:text-xs sm:leading-normal
+  lg:text-sm 
+  font-bold uppercase 
+  tracking-[0.02em]
+  sm:tracking-wide
+  w-full
+  max-w-full
+  overflow-hidden
+  text-ellipsis
+`;
+
+export const STAT_CARD_VALUE = `
+  mt-2 text-2xl
+  sm:mt-2 sm:text-3xl 
+  lg:mt-3 lg:text-4xl 
+  font-bold
+`;
+
+export const STAT_CARD_SUBTITLE = `
+  mt-1 text-[7.5px] leading-[1.1]
+  sm:mt-1.5 sm:text-xs sm:leading-normal
+  lg:mt-2 
+  font-bold uppercase 
+  tracking-[0.02em]
+  sm:tracking-wider
+  w-full
+  max-w-full
+  overflow-hidden
+  text-ellipsis
+  whitespace-nowrap
+`;
+
+
+export const STAT_CARD_VARIANTS = {
+  ALL: {
+    bg: "bg-gradient-to-br from-slate-100 to-slate-200 dark:bg-gradient-to-br dark:from-stone-900/80 dark:to-slate-900/80",
+    halo: "bg-gradient-to-br from-slate-200 to-slate-300 dark:bg-gradient-to-br dark:from-stone-800/60 dark:to-slate-800/60",
+    ringActive: "ring-slate-500 dark:ring-stone-600",
+    ringInactive: "ring-slate-400/50 dark:ring-stone-700/70",
+    label: "text-slate-700 dark:text-amber-200/80",
+    value: "text-slate-900 dark:text-amber-50",
+    subtitle: "text-slate-600 dark:text-amber-300/70"
+  },
+  TODO: {
+    bg: "bg-gradient-to-br from-cyan-100 to-teal-200 dark:bg-gradient-to-br dark:from-cyan-900/70 dark:to-teal-900/70",
+    halo: "bg-gradient-to-br from-cyan-200 to-teal-300 dark:bg-gradient-to-br dark:from-cyan-800/60 dark:to-teal-800/60",
+    ringActive: "ring-cyan-500 dark:ring-cyan-700",
+    ringInactive: "ring-cyan-400/60 dark:ring-cyan-800/70",
+    label: "text-cyan-900 dark:text-cyan-200",
+    value: "text-cyan-900 dark:text-cyan-50",
+    subtitle: "text-cyan-800 dark:text-cyan-300/80"
+  },
+  IN_PROGRESS: {
+    bg: "bg-gradient-to-br from-orange-100 to-orange-200 dark:bg-gradient-to-br dark:from-orange-900/70 dark:to-amber-900/70",
+    halo: "bg-gradient-to-br from-orange-200 to-orange-300 dark:bg-gradient-to-br dark:from-orange-800/60 dark:to-amber-800/60",
+    ringActive: "ring-orange-500 dark:ring-orange-700",
+    ringInactive: "ring-orange-400/60 dark:ring-orange-800/70",
+    label: "text-orange-900 dark:text-orange-200",
+    value: "text-orange-900 dark:text-orange-50",
+    subtitle: "text-orange-800 dark:text-orange-300/80"
+  },
+  DONE: {
+    bg: "bg-gradient-to-br from-teal-100 to-emerald-200 dark:bg-gradient-to-br dark:from-teal-900/70 dark:to-emerald-900/70",
+    halo: "bg-gradient-to-br from-teal-200 to-emerald-300 dark:bg-gradient-to-br dark:from-teal-800/60 dark:to-emerald-800/60",
+    ringActive: "ring-teal-500 dark:ring-teal-700",
+    ringInactive: "ring-teal-400/60 dark:ring-teal-800/70",
+    label: "text-teal-900 dark:text-teal-200",
+    value: "text-teal-900 dark:text-teal-50",
+    subtitle: "text-teal-800 dark:text-teal-300/80"
+  }
+};
+
+// ==========================================
+// TASK FILTERS - RESPONSIVE
+// ==========================================
+
+export const TASK_FILTERS_CONTAINER = `
+  mb-4 sm:mb-6 flex flex-col gap-3
+  sm:gap-4
+`;
+
+export const FILTERS_ROW_TOP = `
+  flex flex-col gap-3
+  sm:flex-row sm:items-center sm:justify-between
+`;
+
+export const FILTERS_ROW_BOTTOM = `
+  flex flex-col gap-2
+  sm:flex-row sm:items-center sm:gap-3
+`;
+
+export const FILTERS_GROUP = `
+  flex flex-col gap-2
+  sm:flex-row sm:items-center sm:gap-3
+  w-full
+  sm:w-auto
+`;
+
+export const NEW_TASK_BUTTON = `
+  w-full
+  sm:w-auto
+  inline-flex items-center justify-center gap-2 sm:gap-3 rounded-xl 
+  bg-gradient-to-r from-cyan-500 via-teal-500 to-orange-500 
+  px-5 py-3 sm:px-7 sm:py-3.5 
+  text-sm sm:text-base font-bold text-white shadow-lg 
+  transition hover:shadow-xl hover:from-cyan-400 hover:via-teal-400 hover:to-orange-400 
+  dark:from-amber-600 dark:via-orange-600 dark:to-rose-600 
+  dark:hover:from-amber-500 dark:hover:via-orange-500 dark:hover:to-rose-500
+  whitespace-nowrap
+`;
+
+export const SEARCH_INPUT = `
+  w-full rounded-xl border-2 border-cyan-400/70 
+  bg-gradient-to-r from-white to-cyan-50/30 
+  py-2.5 pl-10 pr-16
+  sm:py-3 sm:pl-12 sm:pr-24
+  text-sm font-medium
+  text-slate-800 placeholder-slate-500 shadow-md outline-none 
+  ring-cyan-400/60 transition focus:border-cyan-500 focus:ring-2 
+  dark:border-stone-700/70 dark:bg-gradient-to-r dark:from-stone-900/80 dark:to-slate-900/80 
+  dark:text-amber-50 dark:placeholder-amber-300/50 dark:ring-amber-700/60 dark:focus:border-stone-600
+`;
+
+export const SELECT_BASE = `
+  w-full
+  sm:w-auto
+  sm:min-w-[140px]
+  rounded-xl border-2 
+  px-3 py-2.5 
+  sm:px-5 sm:py-3
+  text-xs sm:text-sm font-bold shadow-md outline-none transition focus:ring-2 
+  [&>option]:bg-white [&>option]:text-slate-800 
+  dark:[&>option]:bg-stone-800 dark:[&>option]:text-amber-50
+  appearance-none
+  cursor-pointer
+`;
+
+export const SELECT_STATUS = "border-cyan-400/70 bg-gradient-to-br from-cyan-50 to-teal-50 text-slate-800 ring-cyan-400/60 hover:border-cyan-500 dark:border-stone-700/70 dark:bg-gradient-to-br dark:from-stone-900/80 dark:to-slate-900/80 dark:text-amber-50 dark:ring-amber-700/60 dark:hover:border-stone-600";
+
+export const SELECT_PRIORITY = "border-orange-400/70 bg-gradient-to-br from-orange-50 to-amber-50 text-slate-800 ring-orange-400/60 hover:border-orange-500 dark:border-stone-700/70 dark:bg-gradient-to-br dark:from-stone-900/80 dark:to-slate-900/80 dark:text-amber-50 dark:ring-amber-700/60 dark:hover:border-stone-600";
+
+export const SEARCH_COMPACT_BUTTON = "group flex items-center gap-2 rounded-xl border-2 border-cyan-400/70 bg-gradient-to-r from-white to-cyan-50/50 px-3 py-2.5 sm:px-4 sm:py-3 shadow-md transition-all hover:border-cyan-500 hover:shadow-lg dark:border-stone-700/70 dark:bg-gradient-to-r dark:from-stone-900/80 dark:to-slate-900/80 dark:hover:border-stone-600 w-full sm:w-auto";
+
+export const SEARCH_COUNT_BADGE = "rounded-full bg-cyan-500 px-2 py-0.5 sm:px-2.5 sm:py-1 text-xs font-bold text-white dark:bg-amber-600";
+
+export const SEARCH_CLEAR_BUTTON = "absolute inset-y-0 right-2 sm:right-3 flex items-center justify-center rounded-lg p-1.5 text-slate-500 transition hover:bg-slate-200 hover:text-slate-700 dark:text-amber-400 dark:hover:bg-stone-800 dark:hover:text-amber-300";
+
+export const SEARCH_NO_RESULTS = "mt-2 sm:mt-3 text-sm font-medium text-rose-600 dark:text-rose-400";
+
+export const SEARCH_RESULTS_INFO = "mt-2 sm:mt-3 text-sm font-medium text-slate-600 dark:text-amber-300/80";
+
+// ==========================================
+// EXPORT BUTTON
+// ==========================================
+
+export const EXPORT_BUTTON = "inline-flex items-center gap-2 rounded-xl border-2 border-emerald-400/70 bg-gradient-to-r from-emerald-50 to-teal-50 px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-bold text-emerald-800 shadow-md transition hover:border-emerald-500 hover:from-emerald-100 hover:to-teal-100 hover:shadow-lg dark:border-emerald-700/70 dark:bg-gradient-to-r dark:from-emerald-900/60 dark:to-teal-900/60 dark:text-emerald-200 dark:hover:border-emerald-600 dark:hover:from-emerald-900/80 dark:hover:to-teal-900/80 relative z-10";
+export const EXPORT_DROPDOWN = "absolute right-0 top-full z-[100] mt-2 w-44 sm:w-48 overflow-hidden rounded-xl border-2 border-slate-200/60 bg-white shadow-xl dark:border-stone-700/60 dark:bg-stone-900/95";
+export const EXPORT_OPTION_BASE = "flex w-full items-center gap-2 sm:gap-3 px-3 py-2.5 sm:px-4 sm:py-3 text-xs sm:text-sm font-medium text-slate-700 transition dark:text-amber-100";
+export const EXPORT_OPTION_CSV = "hover:bg-gradient-to-r hover:from-emerald-50 hover:to-teal-50 dark:hover:from-emerald-900/40 dark:hover:to-teal-900/40";
+export const EXPORT_OPTION_PDF = "hover:bg-gradient-to-r hover:from-rose-50 hover:to-orange-50 dark:hover:from-rose-900/40 dark:hover:to-orange-900/40";
+export const EXPORT_ICON_CONTAINER = "flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg";
+export const EXPORT_ICON_CSV = "bg-gradient-to-br from-emerald-100 to-teal-100 dark:from-emerald-800/50 dark:to-teal-800/50";
+export const EXPORT_ICON_PDF = "bg-gradient-to-br from-rose-100 to-orange-100 dark:from-rose-800/50 dark:to-orange-800/50";
+export const EXPORT_OPTION_TITLE = "font-bold";
+export const EXPORT_OPTION_SUBTITLE = "text-xs text-slate-500 dark:text-amber-300/60";
+export const EXPORT_SEPARATOR = "mx-2 sm:mx-3 my-1 border-t border-slate-200 dark:border-stone-700";
+
+// ==========================================
+// URGENT SECTION - RESPONSIVE
+// ==========================================
+
+export const URGENT_HEADER_BUTTON = `
+  group w-full mb-3 sm:mb-4 flex items-center justify-between gap-2 sm:gap-3 
+  rounded-xl border-2 border-rose-400/60 
+  bg-gradient-to-r from-rose-100 via-orange-100 to-red-100 
+  px-4 py-2.5 sm:px-5 sm:py-3
+  shadow-lg transition-all hover:shadow-xl 
+  dark:border-rose-800/70 
+  dark:bg-gradient-to-r dark:from-rose-950/60 dark:via-red-950/70 dark:to-orange-950/60
+`;
+
+export const URGENT_TASKS_CONTAINER = `
+  space-y-3 rounded-2xl border-2 border-rose-400/60 
+  bg-gradient-to-br from-rose-50/80 via-orange-50/60 to-red-50/80 
+  p-4 shadow-xl
+  sm:space-y-4 sm:p-5
+  lg:p-6
+  dark:border-rose-800/70 dark:bg-gradient-to-br 
+  dark:from-rose-950/40 dark:via-red-950/50 dark:to-orange-950/40
+`;
+
+export const URGENT_COUNT_BADGE = "flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-rose-600 text-xs sm:text-sm font-bold text-white shadow-md dark:bg-rose-700";
+export const URGENT_TITLE = "text-sm sm:text-base font-bold text-rose-700 dark:text-rose-400 flex items-center gap-2";
+export const URGENT_SUBTITLE = "text-xs font-medium text-rose-600/80 dark:text-rose-300/70";
+
+// ==========================================
+// TASK CARDS - RESPONSIVE
+// ==========================================
+
+export const TASK_CARD_BASE = `
+  group relative overflow-hidden rounded-2xl border-2 
+  px-4 py-4 
+  sm:px-5 sm:py-5
+  lg:px-6 lg:py-5
+  shadow-lg transition-all duration-200 ease-out
+`;
+
+export const TASK_CARD_GRADIENT = "bg-gradient-to-br from-white via-cyan-50/30 to-orange-50/30 dark:bg-gradient-to-br dark:from-amber-950/30 dark:via-stone-950/40 dark:to-slate-950/30";
+export const TASK_CARD_BORDER = "border-cyan-300/70 dark:border-amber-900/60";
+export const TASK_CARD_HOVER = "hover:shadow-xl hover:border-cyan-400 hover:from-cyan-50/40 hover:to-orange-50/40 hover:-translate-y-0.5 hover:scale-[1.01] dark:hover:border-amber-800/80 dark:hover:from-amber-950/40 dark:hover:to-slate-950/40 dark:hover:shadow-xl";
+
+export const TASK_HALO = "pointer-events-none absolute -right-10 -top-10 sm:-right-12 sm:-top-12 h-24 w-24 sm:h-28 sm:w-28 rounded-full bg-gradient-to-br from-cyan-200/40 via-teal-200/40 to-orange-200/40 dark:bg-gradient-to-br dark:from-amber-900/30 dark:via-orange-900/30 dark:to-rose-900/30";
+export const TASK_DRAG_HANDLE = "pointer-events-none absolute inset-x-4 top-2 sm:inset-x-6 sm:top-3 flex justify-center";
+export const TASK_DRAG_BAR = "h-1.5 w-10 sm:h-2 sm:w-12 rounded-full bg-gradient-to-r from-cyan-300 via-teal-300 to-orange-300 opacity-60 transition-opacity group-hover:opacity-100 dark:bg-gradient-to-r dark:from-amber-700/60 dark:via-orange-700/60 dark:to-rose-700/60 dark:opacity-70 dark:group-hover:opacity-100";
+export const TASK_LOCKED_BADGE = "absolute left-3 top-3 sm:left-4 sm:top-4 flex items-center gap-1.5 rounded-full bg-amber-500/20 px-2.5 py-0.5 sm:px-3 sm:py-1 backdrop-blur-sm dark:bg-amber-600/20 text-xs";
+export const TASK_ACTIONS_CONTAINER = `
+  absolute right-3 top-3 sm:right-4 sm:top-4 
+  flex gap-1.5 sm:gap-2 
+  opacity-100 translate-y-0
+  sm:opacity-0 sm:translate-y-1
+  transition-all duration-150 
+  sm:group-hover:opacity-100 sm:group-hover:translate-y-0
+`;
+export const TASK_ACTION_BUTTON = "rounded-full bg-white/90 p-1.5 sm:p-2 shadow-lg transition-transform duration-150 hover:scale-110 active:scale-95";
+export const TASK_CONTENT = "mt-4 sm:mt-5 flex flex-col sm:flex-row sm:justify-between gap-3 sm:gap-4";
+export const TASK_TITLE = "text-sm sm:text-base font-bold leading-snug text-slate-900 dark:text-amber-50";
+export const TASK_DESCRIPTION = "mt-1.5 sm:mt-2 text-xs sm:text-sm font-medium leading-relaxed text-slate-700 dark:text-amber-200/80";
+export const TASK_DATE_INFO = "inline-flex items-center gap-1.5 text-xs font-bold";
+export const TASK_DURATION_BADGE = "inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-cyan-100 to-teal-100 px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs font-bold text-cyan-800 shadow-sm dark:bg-gradient-to-r dark:from-amber-900/60 dark:to-orange-900/60 dark:text-amber-200";
+export const TASK_BADGES_CONTAINER = "mt-2 sm:mt-3 flex flex-wrap gap-2 sm:gap-2.5 text-xs";
+export const TASK_BADGE = "inline-flex items-center gap-1.5 sm:gap-2 rounded-full px-3 py-1 sm:px-4 sm:py-1.5 font-bold shadow-sm text-xs";
+export const TASK_BADGE_COMPONENT = "inline-flex items-center gap-1.5 sm:gap-2 rounded-full px-3 py-1 sm:px-4 sm:py-1.5 font-bold shadow-sm text-xs";
+export const TASK_BADGE_DOT = "h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-current/80";
+export const TASK_TAGS_CONTAINER = "mt-1.5 sm:mt-2 flex flex-wrap gap-1.5";
+export const TASK_TAG_BADGE = "rounded-full bg-cyan-100/90 px-2 py-0.5 sm:px-2.5 text-xs font-semibold text-cyan-800 dark:bg-amber-900/60 dark:text-amber-200";
+
+// Task Timer
+export const TASK_TIMER_CONTAINER = "mt-3 sm:mt-4 rounded-xl border-2 border-cyan-300/60 bg-white/80 p-3 sm:p-4 dark:border-amber-700/60 dark:bg-slate-900/60";
+export const TASK_TIMER_LABEL = "text-xs font-semibold text-slate-600 dark:text-amber-300/80 mb-1";
+export const TASK_TIMER_TIME = "text-base sm:text-lg font-bold text-cyan-700 dark:text-amber-400";
+export const TASK_TIMER_FLEX_CONTAINER = "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3";
+export const TASK_TIMER_INFO = "flex-1";
+export const TASK_TIMER_BUTTONS = "flex flex-wrap gap-2";
+export const TASK_TIMER_START_BUTTON = "inline-flex items-center gap-1.5 sm:gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-bold text-white shadow-md transition-all hover:from-emerald-400 hover:to-teal-400 hover:scale-105 active:scale-95 dark:from-emerald-600 dark:to-teal-600";
+export const TASK_TIMER_PAUSE_BUTTON = "inline-flex items-center gap-1.5 sm:gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-bold text-white shadow-md transition-all hover:from-amber-400 hover:to-orange-400 hover:scale-105 active:scale-95";
+export const TASK_TIMER_STOP_BUTTON = "inline-flex items-center gap-1.5 sm:gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-red-500 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-bold text-white shadow-md transition-all hover:from-rose-400 hover:to-red-400 hover:scale-105 active:scale-95";
+export const TASK_TIMER_PROGRESS_BAR_CONTAINER = "mt-2 sm:mt-3";
+export const TASK_TIMER_PROGRESS_BAR = "h-1.5 sm:h-2 w-full overflow-hidden rounded-full bg-slate-100 shadow-inner dark:bg-slate-800/60";
+export const TASK_TIMER_PROGRESS_FILL_NORMAL = "h-full rounded-full transition-all duration-500 bg-gradient-to-r from-emerald-500 to-teal-500 dark:from-emerald-600 dark:to-teal-600";
+export const TASK_TIMER_PROGRESS_FILL_OVERTIME = "h-full rounded-full transition-all duration-500 bg-gradient-to-r from-rose-500 to-red-500 dark:from-rose-600 dark:to-red-600";
+export const TASK_TIMER_PROGRESS_TEXT_NORMAL = "text-xs font-medium mt-1 text-slate-500 dark:text-slate-400";
+export const TASK_TIMER_PROGRESS_TEXT_OVERTIME = "text-xs font-medium mt-1 text-rose-600 dark:text-rose-400";
+export const TASK_TIME_SPENT = "mt-2 sm:mt-3 rounded-lg bg-emerald-50/80 px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs dark:bg-emerald-900/20";
+export const TASK_PROGRESS_CONTAINER = "mt-3 sm:mt-4";
+export const TASK_PROGRESS_BAR = "h-1.5 w-full overflow-hidden rounded-full bg-slate-100 shadow-inner dark:bg-slate-800/60";
+export const TASK_PROGRESS_FILL = "h-full rounded-full bg-gradient-to-r shadow-sm transition-all duration-500";
+export const TASK_PROGRESS_TEXT = "mt-1.5 text-xs font-medium text-slate-600 dark:text-amber-300/70";
+export const TASK_PROGRESS_BAR_THIN = "h-1 w-full overflow-hidden rounded-full bg-slate-100 shadow-inner dark:bg-slate-800/60";
+export const TASK_PROGRESS_FILL_NO_TRANSITION = "h-full rounded-full shadow-sm";
+
+// Task Form
+export const EDIT_FORM_CONTAINER = "relative overflow-hidden rounded-2xl border-2 border-cyan-400/60 bg-gradient-to-br from-cyan-50 via-teal-50 to-orange-50 px-4 py-4 sm:px-6 sm:py-5 shadow-lg transition-transform duration-200 ease-out hover:-translate-y-0.5 hover:scale-[1.01] dark:border-amber-800/70 dark:bg-gradient-to-br dark:from-amber-950/40 dark:via-stone-950/60 dark:to-slate-950/40";
+export const DECORATIVE_HALO = "pointer-events-none absolute -right-12 -top-12 sm:-right-16 sm:-top-16 h-32 w-32 sm:h-40 sm:w-40 rounded-full bg-gradient-to-br from-cyan-200/40 via-teal-200/40 to-orange-200/40 dark:bg-gradient-to-br dark:from-amber-900/20 dark:via-orange-900/20 dark:to-rose-900/20";
+export const FORM_CONTAINER = "bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6 mb-4 sm:mb-6";
+export const FORM_TITLE = "text-base sm:text-lg font-bold mb-3 sm:mb-4 text-gray-900 dark:text-white";
+
+// ==========================================
+// RIGHT SIDEBAR COMPONENTS - RESPONSIVE
+// ==========================================
+
+export const DAY_SUMMARY_CONTAINER = "rounded-2xl border-2 border-cyan-300/60 bg-gradient-to-br from-white via-cyan-50/30 to-orange-50/30 p-4 sm:p-5 shadow-lg dark:border-amber-900/60 dark:bg-gradient-to-br dark:from-amber-950/30 dark:via-stone-950/40 dark:to-slate-950/30";
+export const DAY_SUMMARY_DATE_ICON = "text-cyan-600 dark:text-amber-400";
+export const DAY_SUMMARY_DATE_TEXT = "text-sm sm:text-base font-bold capitalize text-slate-900 dark:text-amber-50";
+export const PROGRESS_LABEL = "text-xs sm:text-sm font-semibold text-slate-700 dark:text-amber-200";
+export const PROGRESS_PERCENTAGE = "text-xs sm:text-sm font-bold text-cyan-600 dark:text-amber-400";
+export const PROGRESS_BAR_BG = "h-2 sm:h-2.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800";
+export const PROGRESS_BAR_FILL = "h-full rounded-full bg-gradient-to-r from-cyan-500 to-teal-500 transition-all duration-500 dark:from-amber-500 dark:to-orange-500";
+export const MINI_STAT_CARD = "flex items-center gap-2 rounded-xl p-2.5 sm:p-3";
+export const MINI_STAT_SUCCESS = "bg-gradient-to-br from-cyan-100/50 to-teal-100/50 dark:from-cyan-900/20 dark:to-teal-900/20";
+export const MINI_STAT_WARNING = "bg-gradient-to-br from-orange-100/50 to-amber-100/50 dark:from-orange-900/20 dark:to-amber-900/20";
+export const MINI_STAT_LABEL = "text-xs font-medium text-slate-600 dark:text-amber-300/70";
+export const MINI_STAT_VALUE = "text-base sm:text-lg font-bold text-slate-900 dark:text-amber-50";
+export const URGENT_ALERT = "mt-3 sm:mt-4 flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-100 to-orange-100 p-2.5 sm:p-3 dark:from-rose-900/30 dark:to-orange-900/30";
+export const URGENT_ALERT_TEXT = "text-xs sm:text-sm font-bold text-rose-800 dark:text-rose-300";
+
+export const UPCOMING_CONTAINER = "rounded-2xl border-2 border-cyan-300/60 bg-gradient-to-br from-white via-cyan-50/30 to-orange-50/30 p-4 sm:p-5 shadow-lg dark:border-amber-900/60 dark:bg-gradient-to-br dark:from-amber-950/30 dark:via-stone-950/40 dark:to-slate-950/30";
+export const UPCOMING_TITLE = "mb-3 sm:mb-4 flex items-center gap-2 text-sm sm:text-base font-bold text-slate-900 dark:text-amber-50";
+export const UPCOMING_EMPTY = "text-xs sm:text-sm text-slate-600 dark:text-amber-300/70";
+export const UPCOMING_TASK_ITEM = "group w-full cursor-pointer rounded-xl border border-slate-200/60 bg-white/50 p-2.5 sm:p-3 text-left transition hover:border-cyan-400/60 hover:bg-white/80 hover:shadow-md dark:border-stone-700/60 dark:bg-stone-900/30 dark:hover:border-amber-700/60 dark:hover:bg-stone-900/50";
+export const UPCOMING_TASK_TITLE = "line-clamp-2 text-xs sm:text-sm font-semibold text-slate-900 dark:text-amber-50";
+export const UPCOMING_TASK_TIME = "text-xs font-bold";
+export const UPCOMING_TASK_PRIORITY = "text-xs font-medium text-slate-500 dark:text-amber-300/60";
+export const UPCOMING_DELETE_BUTTON = "flex items-center gap-1.5 rounded-lg bg-rose-500/10 px-2 py-1 sm:px-2.5 sm:py-1.5 text-xs font-semibold text-rose-600 transition hover:bg-rose-500 hover:text-white dark:bg-rose-900/20 dark:text-rose-400 dark:hover:bg-rose-600 dark:hover:text-white";
+
+export const ACTIVITY_CONTAINER = UPCOMING_CONTAINER;
+export const ACTIVITY_TITLE = UPCOMING_TITLE;
+export const ACTIVITY_EMPTY = UPCOMING_EMPTY;
+export const ACTIVITY_ITEM = "flex w-full items-start gap-2 sm:gap-3 rounded-xl border border-slate-200/60 bg-white/50 p-2.5 sm:p-3 text-left transition hover:border-cyan-400/60 hover:bg-white/80 hover:shadow-md dark:border-stone-700/60 dark:bg-stone-900/30 dark:hover:border-amber-700/60 dark:hover:bg-stone-900/50";
+export const ACTIVITY_ICON_CONTAINER = "mt-0.5 flex h-6 w-6 sm:h-7 sm:w-7 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-cyan-100 to-teal-100 dark:from-cyan-900/40 dark:to-teal-900/40";
+export const ACTIVITY_TITLE_TEXT = "truncate text-xs sm:text-sm font-semibold text-slate-900 dark:text-amber-50";
+export const ACTIVITY_TYPE_TEXT = "font-medium text-slate-600 dark:text-amber-300/70 text-xs";
+export const ACTIVITY_TIME_TEXT = "text-slate-500 dark:text-amber-300/50 text-xs";
+
+// ==========================================
+// SIDEBAR COMPONENTS - RESPONSIVE
+// ==========================================
+
+export const USER_PROFILE_SIDEBAR_CONTAINER = "mb-6 sm:mb-8 rounded-2xl border-2 border-cyan-400/60 bg-gradient-to-br from-cyan-100 via-teal-100 to-orange-100 px-4 py-3 sm:px-5 sm:py-4 shadow-md dark:border-amber-800/70 dark:bg-gradient-to-br dark:from-amber-900/60 dark:via-stone-900/70 dark:to-slate-900/60";
+export const USER_PROFILE_SIDEBAR_FLEX = "flex items-center gap-2 sm:gap-3";
+export const USER_PROFILE_SIDEBAR_AVATAR = "flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500 via-teal-500 to-orange-500 text-sm sm:text-base font-bold text-white shadow-md dark:from-amber-600 dark:via-orange-600 dark:to-rose-600";
+export const USER_PROFILE_SIDEBAR_INFO = "flex flex-col";
+export const USER_PROFILE_SIDEBAR_NAME_ROW = "flex items-center gap-1.5 sm:gap-2";
+export const USER_PROFILE_SIDEBAR_INPUT = "w-28 sm:w-36 rounded-md border border-cyan-400/70 bg-white/80 px-1.5 py-0.5 sm:px-2 text-xs sm:text-sm font-semibold text-slate-900 shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 dark:border-amber-700/70 dark:bg-stone-900/80 dark:text-amber-50 dark:focus:border-amber-500 dark:focus:ring-amber-500";
+export const USER_PROFILE_SIDEBAR_NAME = "max-w-[7rem] sm:max-w-[9rem] truncate text-sm sm:text-base font-bold text-slate-900 dark:text-amber-50";
+export const USER_PROFILE_SIDEBAR_BUTTONS = "flex gap-1";
+export const USER_PROFILE_SIDEBAR_BUTTON = "text-xs text-slate-600 transition hover:text-slate-900 dark:text-amber-300 dark:hover:text-amber-100";
+export const USER_PROFILE_SIDEBAR_STATUS = "text-xs font-medium text-slate-800/80 dark:text-amber-200/70";
+
+export const URGENT_TASKS_SIDEBAR_CONTAINER = "mb-4 sm:mb-5 rounded-2xl border-2 border-red-400/60 bg-gradient-to-br from-red-100 to-orange-100 px-3 py-3 sm:px-4 sm:py-4 text-red-900 shadow-md dark:border-red-700/70 dark:bg-gradient-to-br dark:from-red-900/70 dark:to-orange-900/70 dark:text-red-100";
+export const URGENT_TASKS_SIDEBAR_HEADER = "mb-1.5 flex items-center gap-2";
+export const URGENT_TASKS_SIDEBAR_ICON = "text-red-700 dark:text-red-300";
+export const URGENT_TASKS_SIDEBAR_TITLE = "text-xs sm:text-sm font-bold";
+export const URGENT_TASKS_SIDEBAR_DESCRIPTION = "text-xs font-medium leading-relaxed text-red-800/90 dark:text-red-200/80";
+
+export const NOTIFICATION_PERMISSION_CONTAINER = "mb-4 sm:mb-5 rounded-2xl border-2 border-amber-400/60 bg-gradient-to-br from-amber-100 to-orange-100 px-3 py-3 sm:px-4 sm:py-4 text-amber-900 shadow-md dark:border-amber-700/70 dark:bg-gradient-to-br dark:from-amber-900/70 dark:to-orange-900/70 dark:text-amber-50";
+export const NOTIFICATION_PERMISSION_HEADER = "mb-2 sm:mb-3 flex items-start gap-2";
+export const NOTIFICATION_PERMISSION_ICON = "mt-0.5 text-amber-700 dark:text-amber-300";
+export const NOTIFICATION_PERMISSION_TITLE = "mb-1.5 text-xs sm:text-sm font-bold text-amber-900 dark:text-amber-100";
+export const NOTIFICATION_PERMISSION_DESCRIPTION = "text-xs leading-relaxed text-amber-800/90 dark:text-amber-200/80";
+export const NOTIFICATION_PERMISSION_BUTTON = "w-full rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-bold text-white shadow-md transition hover:from-amber-400 hover:to-orange-400 dark:from-amber-600 dark:to-orange-600 dark:hover:from-amber-500 dark:hover:to-orange-500";
+
+export const QUICK_VIEWS_NAV = "mt-3 sm:mt-4 space-y-1.5 sm:space-y-2";
+export const QUICK_VIEWS_TITLE = "mb-2 sm:mb-3 px-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-amber-300/70";
+export const QUICK_VIEW_BUTTON_BASE = "flex w-full items-center gap-2 sm:gap-3 rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 text-xs sm:text-sm font-semibold transition-all duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/70 dark:focus-visible:ring-amber-500/70";
+export const QUICK_VIEW_BUTTON_ACTIVE = "bg-gradient-to-r from-cyan-100 to-teal-100 text-cyan-900 shadow-md ring-2 ring-cyan-400/70 dark:bg-gradient-to-r dark:from-amber-900/60 dark:to-stone-900/60 dark:text-amber-50 dark:ring-amber-800/70 translate-x-0.5";
+export const QUICK_VIEW_BUTTON_INACTIVE = "text-slate-700 hover:bg-slate-100/70 hover:translate-x-0.5 dark:text-amber-200/80 dark:hover:bg-stone-800/60";
+export const QUICK_VIEW_ICON_CONTAINER_BASE = "flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-white/80 shadow-sm dark:bg-stone-900/80 transition-transform duration-150";
+export const QUICK_VIEW_ICON_CONTAINER_ACTIVE = "scale-105";
+export const QUICK_VIEW_ICON_CONTAINER_INACTIVE = "scale-100";
+
+export const QUOTE_CONTAINER = "relative mt-4 sm:mt-6 rounded-2xl border-2 border-amber-400/60 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 p-3 sm:p-4 shadow-lg dark:border-amber-700/70 dark:bg-gradient-to-br dark:from-amber-900/40 dark:via-orange-900/40 dark:to-rose-900/40";
+export const QUOTE_HEADER = "mb-2 sm:mb-3 flex items-center justify-between";
+export const QUOTE_LABEL = "text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300";
+export const QUOTE_ACTIONS = "flex gap-1";
+export const QUOTE_BUTTON_BASE = "rounded-lg p-1 sm:p-1.5 transition";
+export const QUOTE_BUTTON_DEFAULT = "text-amber-600 hover:bg-amber-100 dark:text-amber-400 dark:hover:bg-amber-900/40";
+export const QUOTE_BUTTON_PINNED = "bg-amber-200 text-amber-700 dark:bg-amber-800/60 dark:text-amber-300";
+export const QUOTE_TEXT = "mb-1.5 sm:mb-2 text-xs sm:text-sm font-medium italic leading-relaxed text-amber-900 dark:text-amber-100";
+export const QUOTE_AUTHOR = "text-right text-xs font-bold text-amber-700 dark:text-amber-300";
+
+export const SHOW_QUOTE_BUTTON = "w-full rounded-xl border-2 border-amber-400/60 bg-gradient-to-r from-amber-50 to-orange-50 px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-semibold text-amber-700 transition hover:from-amber-100 hover:to-orange-100 dark:border-amber-700/70 dark:bg-gradient-to-r dark:from-amber-900/40 dark:to-orange-900/40 dark:text-amber-300 dark:hover:from-amber-900/60 dark:hover:to-orange-900/60";
+
+export const SIDEBAR_ACTIONS_CONTAINER = "mt-4 sm:mt-6 space-y-2 sm:space-y-3";
+export const SIDEBAR_NOTIFICATIONS_BUTTON = "flex w-full items-center justify-between rounded-xl bg-gradient-to-r from-teal-100 to-emerald-100 px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-bold text-teal-900 shadow-md ring-2 ring-teal-400/70 transition hover:from-teal-200 hover:to-emerald-200 hover:shadow-lg dark:bg-gradient-to-r dark:from-teal-900/60 dark:to-emerald-900/60 dark:text-amber-100 dark:ring-teal-800/70 dark:hover:from-teal-900/80 dark:hover:to-emerald-900/80";
+export const SIDEBAR_LOGOUT_BUTTON = "flex w-full items-center gap-2 rounded-xl px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-bold text-rose-700 transition hover:bg-gradient-to-r hover:from-rose-100 hover:to-orange-100 hover:shadow-md dark:text-rose-300 dark:hover:bg-gradient-to-r dark:hover:from-rose-900/60 dark:hover:to-orange-900/60";
+
+export const SIDEBAR_NAV = "mt-3 sm:mt-4 flex-1 space-y-2 sm:space-y-3";
+export const SIDEBAR_NAV_BUTTON = "flex w-full items-center gap-2 sm:gap-3 rounded-xl bg-gradient-to-r from-cyan-100 to-teal-100 px-4 py-3 sm:px-5 sm:py-3.5 text-sm sm:text-base font-bold text-cyan-900 shadow-md ring-2 ring-cyan-400/70 transition hover:from-cyan-200 hover:to-teal-200 hover:shadow-lg dark:bg-gradient-to-r dark:from-amber-900/60 dark:to-stone-900/60 dark:text-amber-50 dark:ring-amber-800/70 dark:hover:from-amber-900/80 dark:hover:to-stone-900/80";
+// ==========================================
+// IN-APP NOTIFICATIONS - RESPONSIVE
+// ==========================================
+
+export const NOTIFICATIONS_CONTAINER = `
+  fixed left-4 bottom-4 z-50 space-y-2 sm:space-y-3 
+  max-w-[calc(100vw-2rem)]
+  sm:max-w-sm
+  sm:left-6 sm:bottom-6
+`;
+
+export const NOTIFICATION_ITEM = `
+  relative flex items-start gap-2 sm:gap-3 rounded-2xl border-2 
+  border-cyan-400/50 bg-gradient-to-br from-cyan-100 to-teal-100 
+  px-4 py-3 
+  sm:px-5 sm:py-4
+  shadow-xl backdrop-blur-sm 
+  dark:border-amber-800/70 dark:bg-gradient-to-br 
+  dark:from-amber-950/80 dark:to-stone-950/80 dark:text-amber-50
+`;
+
+export const NOTIFICATION_ICON_CONTAINER = "flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-gradient-to-br from-cyan-200 to-teal-200 dark:bg-gradient-to-br dark:from-amber-900/60 dark:to-orange-900/60";
+export const NOTIFICATION_TITLE = "mb-1 sm:mb-1.5 text-xs sm:text-sm font-bold text-slate-800 dark:text-amber-50";
+export const NOTIFICATION_MESSAGE = "text-xs leading-relaxed text-slate-700 dark:text-amber-100/80";
+export const NOTIFICATION_CLOSE_BUTTON = "flex-shrink-0 rounded-full p-1 sm:p-1.5 text-cyan-600 transition hover:bg-cyan-200 hover:text-cyan-800 dark:text-amber-300/70 dark:hover:bg-amber-900/60 dark:hover:text-amber-50";
+
+// ==========================================
+// EMPTY STATE & MISC - RESPONSIVE
+// ==========================================
+
+export const EMPTY_STATE_CONTAINER = "rounded-2xl border-2 border-slate-400/50 bg-gradient-to-br from-slate-100 to-slate-200 p-8 sm:p-12 text-center shadow-lg dark:border-stone-800/70 dark:bg-gradient-to-br dark:from-stone-900/80 dark:to-slate-900/80";
+export const EMPTY_STATE_TEXT = "text-sm sm:text-base font-semibold text-slate-700 dark:text-amber-300/80";
+
+export const SECTION_DIVIDER = "my-6 sm:my-8 flex items-center gap-3 sm:gap-4";
+export const DIVIDER_LINE = "h-0.5 flex-1 bg-gradient-to-r from-transparent via-slate-300 to-transparent dark:via-slate-700";
+export const DIVIDER_TEXT = "text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400";
+
+export const DASHBOARD_TASK_FORM_CONTAINER = "mb-6 sm:mb-8 rounded-2xl border-2 border-teal-400/60 bg-gradient-to-br from-teal-50 to-cyan-50 p-4 sm:p-6 shadow-lg dark:border-stone-800/70 dark:bg-gradient-to-br dark:from-stone-900/80 dark:to-slate-900/80";
+export const DASHBOARD_TASKS_SECTION = "space-y-3 sm:space-y-4 pb-8 sm:pb-12";
+
+// ==========================================
+// SKELETON LOADER - RESPONSIVE
+// ==========================================
+
+export const DASHBOARD_SKELETON_CONTAINER = DASHBOARD_LAYOUT_CONTAINER;
+export const DASHBOARD_SKELETON_SIDEBAR = SIDEBAR_CONTAINER;
+export const DASHBOARD_SKELETON_SIDEBAR_HEADER = SIDEBAR_HEADER;
+export const DASHBOARD_SKELETON_MAIN = DASHBOARD_LAYOUT_MAIN;
+export const DASHBOARD_SKELETON_HEADER = DASHBOARD_HEADER_SECTION;
+export const DASHBOARD_SKELETON_STATS_GRID = STATS_GRID;
+export const DASHBOARD_SKELETON_TASK_LIST = "space-y-3 sm:space-y-4";
+export const DASHBOARD_SKELETON_RIGHT_SIDEBAR = RIGHT_SIDEBAR;
+
+export const SKELETON_BASE = "bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 dark:from-slate-800 dark:via-slate-700 dark:to-slate-800";
+export const SKELETON_ANIMATION = "animate-shimmer bg-[length:200%_100%]";
+export const SKELETON_ROUNDED = "rounded-lg";
+export const SKELETON_CIRCLE = "rounded-full";
+export const SKELETON_ROUNDED_XL = "rounded-xl";
+export const SKELETON_ROUNDED_2XL = "rounded-2xl";
+
+export const TASK_ITEM_SKELETON_CONTAINER = TASK_CARD_BASE + " " + TASK_CARD_GRADIENT + " " + TASK_CARD_BORDER;
+export const TASK_ITEM_SKELETON_HALO = TASK_HALO;
+export const TASK_ITEM_SKELETON_DRAG_HANDLE_CONTAINER = TASK_DRAG_HANDLE;
+export const TASK_ITEM_SKELETON_DRAG_HANDLE = TASK_DRAG_BAR;
+export const TASK_ITEM_SKELETON_CONTENT = "mt-4 sm:mt-5 flex flex-col sm:flex-row sm:justify-between gap-3 sm:gap-4";
+export const TASK_ITEM_SKELETON_MAIN = "flex-1 space-y-2 sm:space-y-3";
+export const TASK_ITEM_SKELETON_TAGS = "flex gap-1.5 sm:gap-2";
+export const TASK_ITEM_SKELETON_DATE_DURATION = "flex gap-2 sm:gap-3";
+export const TASK_ITEM_SKELETON_BADGES = "flex gap-1.5 sm:gap-2";
+
+// ==========================================
+// PROFILE MODAL - RESPONSIVE
+// ==========================================
+
+export const PROFILE_MODAL_OVERLAY = "fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm px-4";
+export const PROFILE_MODAL_CONTAINER = "relative w-full max-w-lg sm:max-w-xl rounded-2xl border border-cyan-300/70 bg-gradient-to-br from-cyan-50 via-teal-50 to-orange-50 p-5 sm:p-6 shadow-2xl dark:border-amber-800/70 dark:bg-gradient-to-br dark:from-slate-950/90 dark:via-stone-950/90 dark:to-amber-950/80";
+export const PROFILE_MODAL_CLOSE_BUTTON = "absolute right-3 top-3 sm:right-4 sm:top-4 text-slate-500 transition hover:text-slate-800 dark:text-amber-300 dark:hover:text-amber-100";
+export const PROFILE_MODAL_TITLE = "mb-1 text-lg sm:text-xl font-bold text-slate-900 dark:text-amber-50";
+export const PROFILE_MODAL_SUBTITLE = "mb-3 sm:mb-4 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-amber-300/70";
+export const PROFILE_MODAL_SECTIONS = "space-y-4 sm:space-y-6";
+export const PROFILE_MODAL_SECTION = "rounded-xl border border-cyan-200/70 bg-white/70 p-3 sm:p-4 shadow-sm dark:border-amber-800/60 dark:bg-stone-950/70";
+export const PROFILE_MODAL_SECTION_TITLE = "mb-1.5 sm:mb-2 text-xs sm:text-sm font-semibold text-slate-900 dark:text-amber-50";
+export const PROFILE_MODAL_SECTION_DESCRIPTION = "mb-2 sm:mb-3 text-xs text-slate-500 dark:text-amber-200/70";
+export const PROFILE_MODAL_INPUT_CONTAINER = "space-y-1.5 sm:space-y-2";
+export const PROFILE_MODAL_LABEL = "block text-xs font-medium text-slate-700 dark:text-amber-200";
+export const PROFILE_MODAL_INPUT = "w-full rounded-lg border border-cyan-300/70 bg-white/90 px-2.5 py-1.5 sm:px-3 text-xs sm:text-sm text-slate-900 shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 dark:border-amber-700/70 dark:bg-slate-900/80 dark:text-amber-50 dark:focus:border-amber-500 dark:focus:ring-amber-500";
+export const PROFILE_MODAL_INPUT_MT = "mt-1 w-full rounded-lg border border-cyan-300/70 bg-white/90 px-2.5 py-1.5 sm:px-3 text-xs sm:text-sm text-slate-900 shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 dark:border-amber-700/70 dark:bg-slate-900/80 dark:text-amber-50 dark:focus:border-amber-500 dark:focus:ring-amber-500";
+export const PROFILE_MODAL_BUTTON_CONTAINER = "mt-2 sm:mt-3 flex justify-end";
+export const PROFILE_MODAL_SAVE_BUTTON = "rounded-lg bg-gradient-to-r from-cyan-500 to-teal-500 px-3 py-1.5 sm:px-4 text-xs font-semibold text-white shadow-sm transition hover:from-cyan-600 hover:to-teal-600 disabled:cursor-not-allowed disabled:opacity-60 dark:from-amber-600 dark:to-orange-600 dark:hover:from-amber-700 dark:hover:to-orange-700";
+export const PROFILE_MODAL_PASSWORD_BUTTON = "rounded-lg bg-gradient-to-r from-teal-500 to-emerald-500 px-3 py-1.5 sm:px-4 text-xs font-semibold text-white shadow-sm transition hover:from-teal-600 hover:to-emerald-600 disabled:cursor-not-allowed disabled:opacity-60 dark:from-emerald-600 dark:to-teal-600 dark:hover:from-emerald-700 dark:hover:to-teal-700";
+export const PROFILE_MODAL_PASSWORD_INPUTS = "space-y-2 sm:space-y-3";
+export const PROFILE_MODAL_DANGER_ZONE = "rounded-xl border border-red-200/70 bg-red-50/80 p-3 sm:p-4 shadow-sm dark:border-red-800/70 dark:bg-red-950/60";
+export const PROFILE_MODAL_DANGER_TITLE = "mb-1.5 sm:mb-2 text-xs sm:text-sm font-semibold text-red-800 dark:text-red-200";
+export const PROFILE_MODAL_DANGER_DESCRIPTION = "mb-2 sm:mb-3 text-xs text-red-700/90 dark:text-red-200/80";
+export const PROFILE_MODAL_DELETE_BUTTON = "rounded-lg border border-red-500/70 bg-gradient-to-r from-red-600 to-rose-600 px-3 py-1.5 sm:px-4 text-xs font-semibold text-red-50 shadow-sm transition hover:from-red-700 hover:to-rose-700 disabled:cursor-not-allowed disabled:opacity-60 dark:border-red-500/80 dark:from-red-700 dark:to-rose-700 dark:hover:from-red-800 dark:hover:to-rose-800";
+
+// ==========================================
+// AUTH PAGE - RESPONSIVE
+// ==========================================
+
+export const AUTH_CONTAINER = "min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center p-4";
+export const AUTH_CARD = "bg-white rounded-lg shadow-2xl p-6 sm:p-8 w-full max-w-md";
+export const AUTH_TITLE = "text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-2";
+export const AUTH_SUBTITLE = "text-center text-gray-600 mb-6 sm:mb-8 text-sm sm:text-base";
+export const AUTH_TABS_CONTAINER = "flex mb-4 sm:mb-6 border-b border-gray-200";
+export const AUTH_TAB_BASE = "flex-1 pb-2 sm:pb-3 text-center font-semibold transition text-sm sm:text-base";
+export const AUTH_TAB_ACTIVE = "border-b-2 border-blue-600 text-blue-600";
+export const AUTH_TAB_INACTIVE = "text-gray-500 hover:text-gray-700";
+export const AUTH_ERROR_BOX = "bg-red-100 border border-red-400 text-red-700 px-3 py-2 sm:px-4 sm:py-3 rounded mb-3 sm:mb-4 text-xs sm:text-sm";
+export const AUTH_FORM = "space-y-3 sm:space-y-4";
+export const AUTH_LABEL = "block text-gray-700 font-semibold mb-1.5 sm:mb-2 text-sm";
+export const AUTH_INPUT = "w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base";
+export const AUTH_SUBMIT_BUTTON = "w-full bg-blue-600 text-white font-bold py-2.5 sm:py-3 rounded-lg hover:bg-blue-700 transition duration-200 disabled:opacity-50 text-sm sm:text-base";
+
+// ==========================================
+// COMMON COMPONENTS - RESPONSIVE
+// ==========================================
+
+export const INPUT_BASE = "w-full rounded-xl border-2 px-3 py-2.5 sm:px-4 sm:py-3 text-xs sm:text-sm font-medium outline-none transition-shadow duration-150 focus:ring-2 focus:shadow-md";
+export const INPUT_LIGHT = "border-cyan-300/60 bg-white/90 text-slate-900 ring-cyan-500/60";
+export const INPUT_DARK = "dark:border-amber-700/60 dark:bg-slate-900/80 dark:text-amber-50 dark:ring-amber-500/60";
+export const INPUT_CLASSES = `${INPUT_BASE} ${INPUT_LIGHT} ${INPUT_DARK}`;
+
+export const LABEL_CLASSES = "mb-1.5 sm:mb-2 block text-xs sm:text-sm font-bold text-slate-700 dark:text-amber-200";
+
+export const BUTTON_BASE = "inline-flex items-center gap-1.5 sm:gap-2 rounded-xl px-4 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-bold shadow-md transition-transform duration-150 active:scale-95";
+export const BUTTON_PRIMARY = `${BUTTON_BASE} bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:from-emerald-400 hover:to-teal-400 dark:from-emerald-600 dark:to-teal-600 dark:hover:from-emerald-500 dark:hover:to-teal-500`;
+export const BUTTON_SECONDARY = `${BUTTON_BASE} bg-slate-200 text-slate-800 hover:bg-slate-300 dark:bg-slate-700 dark:text-amber-100 dark:hover:bg-slate-600`;
+export const BUTTON_SUBMIT = "w-full bg-blue-600 text-white font-bold py-2.5 sm:py-3 rounded-lg hover:bg-blue-700 transition duration-200 disabled:opacity-50 text-sm sm:text-base";
+
+export const ICON_BUTTON_BASE = "flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full transition-all hover:scale-110";
+export const ICON_BUTTON_DANGER = "bg-rose-700/20 text-rose-700 hover:bg-rose-600 hover:text-white dark:bg-rose-800/30 dark:text-rose-400 dark:hover:bg-rose-700 dark:hover:text-white";
+export const ICON_BUTTON_PRIMARY = "bg-blue-700/20 text-blue-700 hover:bg-blue-600 hover:text-white dark:bg-blue-800/30 dark:text-blue-400 dark:hover:bg-blue-700";
+export const ICON_BUTTON_SUCCESS = "bg-emerald-700/20 text-emerald-700 hover:bg-emerald-600 hover:text-white dark:bg-emerald-800/30 dark:text-emerald-400 dark:hover:bg-emerald-700";
+
+export const CARD_CONTAINER = "rounded-2xl border-2 border-cyan-300/60 bg-gradient-to-br from-white via-cyan-50/30 to-orange-50/30 p-4 sm:p-5 shadow-lg dark:border-amber-900/60 dark:bg-gradient-to-br dark:from-amber-950/30 dark:via-stone-950/40 dark:to-slate-950/30";
+
+export const FORM_FIELD_CONTAINER = "";
+export const FORM_FIELD_LABEL = "block text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5 sm:mb-2";
+
+export const THEME_TOGGLE_BUTTON = "inline-flex items-center gap-1.5 sm:gap-2 rounded-xl px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-medium border border-slate-700/80 bg-slate-900/80 text-slate-200 shadow-sm backdrop-blur-sm transition-all duration-150 hover:border-sky-500/60 hover:bg-slate-800";
+export const THEME_TOGGLE_ICON_LIGHT = "h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-300";
+export const THEME_TOGGLE_ICON_DARK = "h-3.5 w-3.5 sm:h-4 sm:w-4 text-sky-300";

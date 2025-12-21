@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Parisienne&display=swap');
 
-
 @font-face {
   font-family: 'NovaQuinta_PERSONAL_USE_ONLY';
   src: url('./assets/fonts/NovaQuinta_PERSONAL_USE_ONLY.otf') format('opentype');
@@ -8,11 +7,13 @@
   font-display: swap;
 }
 
-
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ========================================
+   ANIMATIONS GÉNÉRALES
+   ======================================== */
 
 /* Animation de la barre de recherche */
 @keyframes expandSearch {
@@ -28,6 +29,70 @@
 
 .animate-expand-search {
   animation: expandSearch 0.3s ease-out forwards;
+}
+
+/* Animation pulse subtile pour les tâches urgentes */
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.005);
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+/* Animation ping lent pour l'icône warning */
+@keyframes ping-slow {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.animate-ping-slow {
+  animation: ping-slow 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Animation shimmer pour skeletons */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* Animation shimmer pour la barre de progression */
+@keyframes shimmer-bar {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer-bar {
+  animation: shimmer-bar 3s ease-in-out infinite;
 }
 
 /* ========================================
@@ -143,80 +208,187 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* Forcer la position des toasts en haut à droite */
+/* Position des toasts - Desktop par défaut */
 [data-sonner-toaster] {
   top: 16px !important;
   right: 16px !important;
   left: auto !important;
   bottom: auto !important;
+  z-index: 9999 !important;
 }
-
-/* Animation pulse subtile pour les tâches urgentes */
-@keyframes pulse-subtle {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.95;
-    transform: scale(1.005);
-  }
-}
-
-.animate-pulse-subtle {
-  animation: pulse-subtle 2s ease-in-out infinite;
-}
-
-/* Animation ping lent pour l'icône warning */
-@keyframes ping-slow {
-  0% {
-    transform: scale(1);
-    opacity: 0.7;
-  }
-  50% {
-    transform: scale(1.5);
-    opacity: 0.3;
-  }
-  100% {
-    transform: scale(2);
-    opacity: 0;
-  }
-}
-
-.animate-ping-slow {
-  animation: ping-slow 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-
-
 
 /* ========================================
-   ANIMATION SHIMMER POUR SKELETONS
+   RESPONSIVE DESIGN
    ======================================== */
 
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
+/* Mobile - Smartphones (< 640px) */
+@media (max-width: 640px) {
+  /* Toasts sur mobile */
+  [data-sonner-toaster] {
+    top: 8px !important;
+    right: 8px !important;
+    left: 8px !important;
+    width: calc(100% - 16px) !important;
+    max-width: 100% !important;
   }
-  100% {
-    background-position: 200% 0;
+  
+  [data-sonner-toast] {
+    font-size: 0.875rem !important;
+    padding: 10px 12px !important;
+    max-width: 100% !important;
+  }
+  
+  /* Réduire l'effet hover sur mobile */
+  [data-sonner-toast]:hover {
+    transform: scale(1.01);
+  }
+  
+  /* Réduire les animations sur mobile pour meilleures performances */
+  .animate-pulse-subtle {
+    animation: pulse-subtle 3s ease-in-out infinite;
+  }
+  
+  .animate-ping-slow {
+    animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  /* Optimisation des animations shimmer sur mobile */
+  .animate-shimmer,
+  .animate-shimmer-bar {
+    animation-duration: 2.5s;
   }
 }
 
-.animate-shimmer {
-  animation: shimmer 2s ease-in-out infinite;
+/* Tablette - Portrait (641px - 768px) */
+@media (min-width: 641px) and (max-width: 768px) {
+  [data-sonner-toaster] {
+    top: 12px !important;
+    right: 12px !important;
+    left: auto !important;
+    max-width: 400px !important;
+  }
+  
+  [data-sonner-toast] {
+    font-size: 0.9375rem !important;
+  }
+}
+
+/* Tablette - Landscape (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  [data-sonner-toaster] {
+    top: 16px !important;
+    right: 16px !important;
+    max-width: 420px !important;
+  }
+}
+
+/* Desktop petit (1025px - 1280px) */
+@media (min-width: 1025px) and (max-width: 1280px) {
+  [data-sonner-toaster] {
+    max-width: 450px !important;
+  }
+}
+
+/* Desktop large (> 1280px) */
+@media (min-width: 1281px) {
+  [data-sonner-toaster] {
+    max-width: 480px !important;
+  }
+}
+
+/* ========================================
+   UTILITAIRES RESPONSIVE
+   ======================================== */
+
+/* Réduction du motion pour les utilisateurs qui le préfèrent */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .animate-pulse-subtle,
+  .animate-ping-slow,
+  .animate-shimmer,
+  .animate-shimmer-bar,
+  .animate-expand-search {
+    animation: none !important;
+  }
+}
+
+/* Mode sombre amélioré */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --toast-bg: rgb(30, 41, 59);
+    --toast-color: rgb(248, 250, 252);
+    --toast-border: rgb(71, 85, 105);
+  }
+}
+
+/* Optimisation pour les écrans haute résolution */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  [data-sonner-toast] {
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.2);
+  }
 }
 
 
-/* Animation shimmer pour la barre de progression */
-@keyframes shimmer-bar {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
+/* Fix pour iPhone SE - Titre centré sur mobile */
+@media (max-width: 640px) {
+  /* Compenser le burger menu */
+  [class*="DASHBOARD_HEADER_TITLE"] {
+    padding-left: 48px; /* Largeur du burger (12) + marge (4) */
   }
 }
 
-.animate-shimmer-bar {
-  animation: shimmer-bar 3s ease-in-out infinite;
+/* Fix titre mobile - Compensation des burgers */
+@media (max-width: 1024px) {
+  /* Cible le titre du dashboard sur mobile/tablette */
+  [class*="DASHBOARD_HEADER_TITLE"],
+  .dashboard-header-title {
+    margin-left: 60px !important;
+    margin-right: 60px !important;
+  }
+}
+
+/* Enlever les marges sur desktop */
+@media (min-width: 1024px) {
+  [class*="DASHBOARD_HEADER_TITLE"],
+  .dashboard-header-title {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* Fix titre Dashboard - Compensation burgers sur mobile/tablette */
+@media (max-width: 1023px) {
+  .dashboard-title-responsive {
+    margin-left: 3.5rem !important;
+    margin-right: 3.5rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dashboard-title-responsive {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* Fix titre Dashboard - Compensation burgers sur mobile/tablette/iPad Pro */
+@media (max-width: 1279px) {
+  .dashboard-title-responsive {
+    margin-left: 3.5rem !important;
+    margin-right: 3.5rem !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .dashboard-title-responsive {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
 }

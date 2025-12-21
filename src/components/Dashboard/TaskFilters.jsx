@@ -4,6 +4,10 @@ import { FiPlus, FiSearch, FiX } from 'react-icons/fi';
 import ExportButton from './ExportButton';
 import FilterSelect from '../ui/FilterSelect';
 import { 
+  TASK_FILTERS_CONTAINER,
+  FILTERS_ROW_TOP,
+  FILTERS_ROW_BOTTOM,
+  FILTERS_GROUP,
   NEW_TASK_BUTTON,
   SEARCH_COMPACT_BUTTON,
   SEARCH_INPUT,
@@ -60,17 +64,17 @@ function TaskFilters({
   };
 
   return (
-    <div className="mb-8">
-      <div className="flex items-center justify-between gap-4">
+    <div className={TASK_FILTERS_CONTAINER}>
+      {/* LIGNE 1 : Bouton nouvelle tâche + Recherche */}
+      <div className={FILTERS_ROW_TOP}>
         {/* Bouton Nouvelle tâche */}
         <button onClick={onNewTask} className={NEW_TASK_BUTTON}>
           <FiPlus size={20} /> 
           <span>Nouvelle tâche</span>
         </button>
 
-        {/* Zone flexible - Recherche + Export + Filtres */}
-        <div className="flex flex-1 items-center justify-end gap-4">
-          {/* Recherche compacte ou étendue */}
+        {/* Recherche compacte ou étendue */}
+        <div className="w-full sm:flex-1 sm:max-w-md">
           {!isSearchExpanded ? (
             <button onClick={handleExpandSearch} className={SEARCH_COMPACT_BUTTON}>
               <FiSearch className="h-5 w-5 text-cyan-600 transition-transform group-hover:scale-110 dark:text-amber-400" />
@@ -79,10 +83,10 @@ function TaskFilters({
               </span>
             </button>
           ) : (
-            <div className="flex-1 animate-expand-search">
+            <div className="animate-expand-search">
               <div className="relative">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                  <FiSearch className="h-5 w-5 text-cyan-600 dark:text-amber-400" />
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 sm:pl-4">
+                  <FiSearch className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-600 dark:text-amber-400" />
                 </div>
                 
                 <input
@@ -91,13 +95,13 @@ function TaskFilters({
                   onChange={(e) => onSearchChange(e.target.value)}
                   onBlur={handleCollapseSearch}
                   autoFocus
-                  placeholder="Rechercher par titre ou description..."
+                  placeholder="Rechercher..."
                   className={SEARCH_INPUT}
                 />
 
                 {hasSearch && (
                   <>
-                    <div className="absolute inset-y-0 right-14 flex items-center">
+                    <div className="absolute inset-y-0 right-12 sm:right-14 flex items-center">
                       <span className={SEARCH_COUNT_BADGE}>
                         {searchResultCount} / {totalCount}
                       </span>
@@ -111,21 +115,20 @@ function TaskFilters({
                       className={SEARCH_CLEAR_BUTTON}
                       title="Effacer la recherche"
                     >
-                      <FiX size={20} />
+                      <FiX size={18} className="sm:w-5 sm:h-5" />
                     </button>
                   </>
                 )}
               </div>
             </div>
           )}
+        </div>
+      </div>
 
-          {/* Bouton Export */}
-          <ExportButton 
-            onExportCSV={onExportCSV}
-            onExportPDF={onExportPDF}
-          />
-
-          {/* Filtres */}
+      {/* LIGNE 2 : Filtres + Export */}
+      <div className={FILTERS_ROW_BOTTOM}>
+        {/* Filtres */}
+        <div className={FILTERS_GROUP}>
           <FilterSelect
             variant="status"
             value={statusFilter}
@@ -140,6 +143,12 @@ function TaskFilters({
             options={priorityOptions}
           />
         </div>
+
+        {/* Bouton Export */}
+        <ExportButton 
+          onExportCSV={onExportCSV}
+          onExportPDF={onExportPDF}
+        />
       </div>
 
       {/* Messages de recherche en dessous */}

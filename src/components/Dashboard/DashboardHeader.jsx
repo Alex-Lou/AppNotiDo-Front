@@ -4,8 +4,8 @@ import { DASHBOARD_HEADER_CONTAINER, DASHBOARD_HEADER_TITLE, DASHBOARD_HEADER_SU
 function DashboardHeader({ username }) {
   return (
     <div className={DASHBOARD_HEADER_CONTAINER}>
-      <div>
-        <h2 className={DASHBOARD_HEADER_TITLE}>
+      <div className="w-full">
+        <h2 className={`${DASHBOARD_HEADER_TITLE} dashboard-title-responsive`}>
           Bonjour, {username} <span className="align-middle">👋</span>
         </h2>
         <p className={DASHBOARD_HEADER_SUBTITLE}>
