@@ -1,89 +1,47 @@
+// src/components/Dashboard/StatsCards.jsx
+import StatCard from '../ui/StatCard';
+
+const cardsConfig = [
+  {
+    type: 'ALL',
+    label: 'Total',
+    statKey: 'total',
+    subtitle: 'Tâches enregistrées'
+  },
+  {
+    type: 'TODO',
+    label: 'À faire',
+    statKey: 'todo',
+    subtitle: 'En attente'
+  },
+  {
+    type: 'IN_PROGRESS',
+    label: 'En cours',
+    statKey: 'inProgress',
+    subtitle: 'En traitement'
+  },
+  {
+    type: 'DONE',
+    label: 'Terminées',
+    statKey: 'done',
+    subtitle: 'Complétées'
+  }
+];
+
 function StatsCards({ stats, onFilterClick, activeFilter }) {
   return (
     <div className="mb-10 grid grid-cols-4 gap-5">
-      {/* Carte Total */}
-      <button
-        onClick={() => onFilterClick('ALL')}
-        className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 px-6 py-5 text-left shadow-lg ring-2 transition-all hover:scale-[1.02] hover:shadow-xl dark:bg-gradient-to-br dark:from-stone-900/80 dark:to-slate-900/80 ${
-          activeFilter === 'ALL'
-            ? 'ring-slate-500 dark:ring-stone-600'
-            : 'ring-slate-400/50 dark:ring-stone-700/70'
-        }`}
-      >
-        <div className="pointer-events-none absolute -right-8 -top-8 h-20 w-20 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 dark:bg-gradient-to-br dark:from-stone-800/60 dark:to-slate-800/60" />
-        <p className="text-sm font-bold uppercase tracking-wide text-slate-700 dark:text-amber-200/80">
-          Total
-        </p>
-        <p className="mt-3 text-4xl font-bold text-slate-900 dark:text-amber-50">
-          {stats.total}
-        </p>
-        <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-amber-300/70">
-          Tâches enregistrées
-        </p>
-      </button>
-
-      {/* Carte À faire */}
-      <button
-        onClick={() => onFilterClick('TODO')}
-        className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-100 to-teal-200 px-6 py-5 text-left shadow-lg ring-2 transition-all hover:scale-[1.02] hover:shadow-xl dark:bg-gradient-to-br dark:from-cyan-900/70 dark:to-teal-900/70 ${
-          activeFilter === 'TODO'
-            ? 'ring-cyan-500 dark:ring-cyan-700'
-            : 'ring-cyan-400/60 dark:ring-cyan-800/70'
-        }`}
-      >
-        <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-gradient-to-br from-cyan-200 to-teal-300 dark:bg-gradient-to-br dark:from-cyan-800/60 dark:to-teal-800/60" />
-        <p className="text-sm font-bold uppercase tracking-wide text-cyan-900 dark:text-cyan-200">
-          À faire
-        </p>
-        <p className="mt-3 text-4xl font-bold text-cyan-900 dark:text-cyan-50">
-          {stats.todo}
-        </p>
-        <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-cyan-800 dark:text-cyan-300/80">
-          En attente
-        </p>
-      </button>
-
-      {/* Carte En cours */}
-      <button
-        onClick={() => onFilterClick('IN_PROGRESS')}
-        className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-100 to-orange-200 px-6 py-5 text-left shadow-lg ring-2 transition-all hover:scale-[1.02] hover:shadow-xl dark:bg-gradient-to-br dark:from-orange-900/70 dark:to-amber-900/70 ${
-          activeFilter === 'IN_PROGRESS'
-            ? 'ring-orange-500 dark:ring-orange-700'
-            : 'ring-orange-400/60 dark:ring-orange-800/70'
-        }`}
-      >
-        <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-gradient-to-br from-orange-200 to-orange-300 dark:bg-gradient-to-br dark:from-orange-800/60 dark:to-amber-800/60" />
-        <p className="text-sm font-bold uppercase tracking-wide text-orange-900 dark:text-orange-200">
-          En cours
-        </p>
-        <p className="mt-3 text-4xl font-bold text-orange-900 dark:text-orange-50">
-          {stats.inProgress}
-        </p>
-        <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-orange-800 dark:text-orange-300/80">
-          En traitement
-        </p>
-      </button>
-
-      {/* Carte Terminées */}
-      <button
-        onClick={() => onFilterClick('DONE')}
-        className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-teal-100 to-emerald-200 px-6 py-5 text-left shadow-lg ring-2 transition-all hover:scale-[1.02] hover:shadow-xl dark:bg-gradient-to-br dark:from-teal-900/70 dark:to-emerald-900/70 ${
-          activeFilter === 'DONE'
-            ? 'ring-teal-500 dark:ring-teal-700'
-            : 'ring-teal-400/60 dark:ring-teal-800/70'
-        }`}
-      >
-        <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-gradient-to-br from-teal-200 to-emerald-300 dark:bg-gradient-to-br dark:from-teal-800/60 dark:to-emerald-800/60" />
-        <p className="text-sm font-bold uppercase tracking-wide text-teal-900 dark:text-teal-200">
-          Terminées
-        </p>
-        <p className="mt-3 text-4xl font-bold text-teal-900 dark:text-teal-50">
-          {stats.done}
-        </p>
-        <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-teal-800 dark:text-teal-300/80">
-          Complétées
-        </p>
-      </button>
+      {cardsConfig.map(card => (
+        <StatCard
+          key={card.type}
+          type={card.type}
+          label={card.label}
+          value={stats[card.statKey]}
+          subtitle={card.subtitle}
+          onClick={() => onFilterClick(card.type)}
+          isActive={activeFilter === card.type}
+        />
+      ))}
     </div>
   );
 }

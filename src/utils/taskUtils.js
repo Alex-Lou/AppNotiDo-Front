@@ -1,16 +1,40 @@
-// utils/taskUtils.js
+// src/utils/taskUtils.js
+
 export const formatDate = (dateString) => {
   if (!dateString) return null;
+  
   const date = new Date(dateString);
   const now = new Date();
-  const diff = date - now;
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
   
-  if (diff < 0) return { text: 'Échue', color: 'text-rose-500 dark:text-rose-400', emoji: '🔴', isOverdue: true };
-  if (days === 0) return { text: "Aujourd'hui", color: 'text-amber-500 dark:text-amber-300', emoji: '⚠️', isOverdue: false };
-  if (days === 1) return { text: 'Demain', color: 'text-amber-500 dark:text-amber-300', emoji: '⏰', isOverdue: false };
-  if (days <= 7) return { text: `Dans ${days} jours`, color: 'text-sky-600 dark:text-sky-300', emoji: '📅', isOverdue: false };
-  return { text: date.toLocaleDateString('fr-FR'), color: 'text-slate-500 dark:text-slate-400', emoji: '📅', isOverdue: false };
+  // Normaliser les dates à minuit pour comparer uniquement le jour
+  const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const nowOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  
+  const diffTime = dateOnly - nowOnly;
+  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+  
+  // Si la date est passée (même avec l'heure)
+  if (date < now) {
+    return { text: 'Échue', color: 'text-rose-500 dark:text-rose-400', emoji: '🔴', isOverdue: true };
+  }
+  
+  // Comparaison basée sur le jour calendaire
+  if (diffDays === 0) {
+    return { text: "Aujourd'hui", color: 'text-amber-500 dark:text-amber-300', emoji: '⚠️', isOverdue: false };
+  }
+  if (diffDays === 1) {
+    return { text: 'Demain', color: 'text-amber-500 dark:text-amber-300', emoji: '⏰', isOverdue: false };
+  }
+  if (diffDays > 1 && diffDays <= 7) {
+    return { text: `Dans ${diffDays} jours`, color: 'text-sky-600 dark:text-sky-300', emoji: '📅', isOverdue: false };
+  }
+  
+  return { 
+    text: date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }), 
+    color: 'text-slate-500 dark:text-slate-400', 
+    emoji: '📅', 
+    isOverdue: false 
+  };
 };
 
 export const formatDuration = (minutes) => {

@@ -1,17 +1,26 @@
+// src/components/Skeleton/Skeleton.jsx
+import {
+  SKELETON_BASE,
+  SKELETON_ANIMATION,
+  SKELETON_ROUNDED,
+  SKELETON_CIRCLE,
+  SKELETON_ROUNDED_XL,
+  SKELETON_ROUNDED_2XL
+} from '../../constants/styles';
+
 function Skeleton({ className = '', variant = 'rounded', animate = true }) {
-  const baseClasses = 'bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 dark:from-slate-800 dark:via-slate-700 dark:to-slate-800';
-  const animationClass = animate ? 'animate-shimmer bg-[length:200%_100%]' : '';
+  const animationClass = animate ? SKELETON_ANIMATION : '';
   
   const variants = {
-    rounded: 'rounded-lg',
-    circle: 'rounded-full',
-    'rounded-xl': 'rounded-xl',
-    'rounded-2xl': 'rounded-2xl',
+    rounded: SKELETON_ROUNDED,
+    circle: SKELETON_CIRCLE,
+    'rounded-xl': SKELETON_ROUNDED_XL,
+    'rounded-2xl': SKELETON_ROUNDED_2XL,
   };
 
   return (
     <div 
-      className={`${baseClasses} ${animationClass} ${variants[variant]} ${className}`}
+      className={`${SKELETON_BASE} ${animationClass} ${variants[variant]} ${className}`}
       aria-hidden="true"
     />
   );

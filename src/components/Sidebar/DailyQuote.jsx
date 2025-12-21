@@ -1,5 +1,15 @@
+// src/components/Sidebar/DailyQuote.jsx
 import { useState } from 'react';
-import { FiX, FiEyeOff, FiRefreshCw } from 'react-icons/fi';
+import { FiEyeOff, FiRefreshCw } from 'react-icons/fi';
+import QuoteActionButton from '../ui/QuoteActionButton';
+import { 
+  QUOTE_CONTAINER, 
+  QUOTE_HEADER, 
+  QUOTE_LABEL, 
+  QUOTE_ACTIONS,
+  QUOTE_TEXT,
+  QUOTE_AUTHOR
+} from '../../constants/styles';
 
 const quotes = [
   { text: "Le succès c'est d'aller d'échec en échec sans perdre son enthousiasme.", author: "Winston Churchill" },
@@ -42,46 +52,37 @@ function DailyQuote({ isPinned, onTogglePin, onHide }) {
   };
 
   return (
-    <div className="relative mt-6 rounded-2xl border-2 border-amber-400/60 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 p-4 shadow-lg dark:border-amber-700/70 dark:bg-gradient-to-br dark:from-amber-900/40 dark:via-orange-900/40 dark:to-rose-900/40">
+    <div className={QUOTE_CONTAINER}>
       {/* Actions */}
-      <div className="mb-3 flex items-center justify-between">
-        <span className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300">
+      <div className={QUOTE_HEADER}>
+        <span className={QUOTE_LABEL}>
           💡 Citation du jour
         </span>
-        <div className="flex gap-1">
-          <button
+        <div className={QUOTE_ACTIONS}>
+          <QuoteActionButton
+            icon={FiRefreshCw}
             onClick={handleRefresh}
-            className="rounded-lg p-1.5 text-amber-600 transition hover:bg-amber-100 dark:text-amber-400 dark:hover:bg-amber-900/40"
             title="Nouvelle citation"
-          >
-            <FiRefreshCw size={14} />
-          </button>
-          <button
+          />
+          <QuoteActionButton
+            emoji="📌"
             onClick={onTogglePin}
-            className={`rounded-lg p-1.5 transition ${
-              isPinned
-                ? 'bg-amber-200 text-amber-700 dark:bg-amber-800/60 dark:text-amber-300'
-                : 'text-amber-600 hover:bg-amber-100 dark:text-amber-400 dark:hover:bg-amber-900/40'
-            }`}
             title={isPinned ? 'Dépingler' : 'Épingler'}
-          >
-            📌
-          </button>
-          <button
+            isPinned={isPinned}
+          />
+          <QuoteActionButton
+            icon={FiEyeOff}
             onClick={onHide}
-            className="rounded-lg p-1.5 text-amber-600 transition hover:bg-amber-100 dark:text-amber-400 dark:hover:bg-amber-900/40"
             title="Masquer"
-          >
-            <FiEyeOff size={14} />
-          </button>
+          />
         </div>
       </div>
 
       {/* Citation */}
-      <blockquote className="mb-2 text-sm font-medium italic leading-relaxed text-amber-900 dark:text-amber-100">
+      <blockquote className={QUOTE_TEXT}>
         "{currentQuote.text}"
       </blockquote>
-      <p className="text-right text-xs font-bold text-amber-700 dark:text-amber-300">
+      <p className={QUOTE_AUTHOR}>
         — {currentQuote.author}
       </p>
     </div>

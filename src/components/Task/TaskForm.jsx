@@ -1,11 +1,10 @@
-// components/TaskForm.jsx
+// src/components/Task/TaskForm.jsx
 import { useTaskForm } from '../../hooks/useTaskForm';
 import FormField from '../FormField';
+import { INPUT_CLASSES, FORM_CONTAINER, FORM_TITLE, BUTTON_SUBMIT } from '../../constants/styles';
 
 function TaskForm({ onTaskCreated }) {
   const { values, handleChange, reset, isSubmitting, setIsSubmitting, prepareTaskData } = useTaskForm();
-
-  const inputClasses = "w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,8 +22,8 @@ function TaskForm({ onTaskCreated }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-      <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">➕ Nouvelle Tâche</h3>
+    <form onSubmit={handleSubmit} className={FORM_CONTAINER}>
+      <h3 className={FORM_TITLE}>➕ Nouvelle Tâche</h3>
 
       <div className="space-y-4">
         {/* Titre */}
@@ -33,7 +32,7 @@ function TaskForm({ onTaskCreated }) {
             type="text"
             value={values.title}
             onChange={(e) => handleChange('title', e.target.value)}
-            className={inputClasses}
+            className={INPUT_CLASSES}
             placeholder="Ex: Acheter du lait"
             required
           />
@@ -44,7 +43,7 @@ function TaskForm({ onTaskCreated }) {
           <textarea
             value={values.description}
             onChange={(e) => handleChange('description', e.target.value)}
-            className={inputClasses}
+            className={INPUT_CLASSES}
             placeholder="Détails de la tâche..."
             rows="3"
           />
@@ -56,7 +55,7 @@ function TaskForm({ onTaskCreated }) {
             type="datetime-local"
             value={values.dueDate}
             onChange={(e) => handleChange('dueDate', e.target.value)}
-            className={inputClasses}
+            className={INPUT_CLASSES}
           />
         </FormField>
 
@@ -67,7 +66,7 @@ function TaskForm({ onTaskCreated }) {
               type="number"
               value={values.estimatedDuration}
               onChange={(e) => handleChange('estimatedDuration', e.target.value)}
-              className={inputClasses}
+              className={INPUT_CLASSES}
               placeholder="Ex: 60"
               min="1"
             />
@@ -77,7 +76,7 @@ function TaskForm({ onTaskCreated }) {
             <select
               value={values.reminderMinutes}
               onChange={(e) => handleChange('reminderMinutes', e.target.value)}
-              className={inputClasses}
+              className={INPUT_CLASSES}
             >
               <option value="5">5 minutes</option>
               <option value="15">15 minutes</option>
@@ -93,7 +92,7 @@ function TaskForm({ onTaskCreated }) {
             <select
               value={values.priority}
               onChange={(e) => handleChange('priority', e.target.value)}
-              className={inputClasses}
+              className={INPUT_CLASSES}
             >
               <option value="LOW">🟢 Basse</option>
               <option value="MEDIUM">🟡 Moyenne</option>
@@ -105,7 +104,7 @@ function TaskForm({ onTaskCreated }) {
             <select
               value={values.status}
               onChange={(e) => handleChange('status', e.target.value)}
-              className={inputClasses}
+              className={INPUT_CLASSES}
             >
               <option value="TODO">📝 À faire</option>
               <option value="IN_PROGRESS">⏳ En cours</option>
@@ -118,7 +117,7 @@ function TaskForm({ onTaskCreated }) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition duration-200 disabled:opacity-50"
+          className={BUTTON_SUBMIT}
         >
           {isSubmitting ? 'Création...' : '✨ Créer la tâche'}
         </button>

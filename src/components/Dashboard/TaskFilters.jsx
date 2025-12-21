@@ -1,6 +1,31 @@
+// src/components/Dashboard/TaskFilters.jsx
 import { useState } from 'react';
 import { FiPlus, FiSearch, FiX } from 'react-icons/fi';
 import ExportButton from './ExportButton';
+import FilterSelect from '../ui/FilterSelect';
+import { 
+  NEW_TASK_BUTTON,
+  SEARCH_COMPACT_BUTTON,
+  SEARCH_INPUT,
+  SEARCH_COUNT_BADGE,
+  SEARCH_CLEAR_BUTTON,
+  SEARCH_NO_RESULTS,
+  SEARCH_RESULTS_INFO
+} from '../../constants/styles';
+
+const statusOptions = [
+  { value: 'ALL', label: '📋 Tous les statuts' },
+  { value: 'TODO', label: '📝 À faire' },
+  { value: 'IN_PROGRESS', label: '⏳ En cours' },
+  { value: 'DONE', label: '✅ Terminé' }
+];
+
+const priorityOptions = [
+  { value: 'ALL', label: '🎯 Toutes priorités' },
+  { value: 'LOW', label: '🟢 Basse' },
+  { value: 'MEDIUM', label: '🟡 Moyenne' },
+  { value: 'HIGH', label: '🔴 Haute' }
+];
 
 function TaskFilters({ 
   statusFilter, 
@@ -38,10 +63,7 @@ function TaskFilters({
     <div className="mb-8">
       <div className="flex items-center justify-between gap-4">
         {/* Bouton Nouvelle tâche */}
-        <button
-          onClick={onNewTask}
-          className="inline-flex items-center gap-3 rounded-xl bg-gradient-to-r from-cyan-500 via-teal-500 to-orange-500 px-7 py-3.5 text-base font-bold text-white shadow-lg transition hover:shadow-xl hover:from-cyan-400 hover:via-teal-400 hover:to-orange-400 dark:from-amber-600 dark:via-orange-600 dark:to-rose-600 dark:hover:from-amber-500 dark:hover:via-orange-500 dark:hover:to-rose-500"
-        >
+        <button onClick={onNewTask} className={NEW_TASK_BUTTON}>
           <FiPlus size={20} /> 
           <span>Nouvelle tâche</span>
         </button>
@@ -50,10 +72,7 @@ function TaskFilters({
         <div className="flex flex-1 items-center justify-end gap-4">
           {/* Recherche compacte ou étendue */}
           {!isSearchExpanded ? (
-            <button
-              onClick={handleExpandSearch}
-              className="group flex items-center gap-2 rounded-xl border-2 border-cyan-400/70 bg-gradient-to-r from-white to-cyan-50/50 px-4 py-3 shadow-md transition-all hover:border-cyan-500 hover:shadow-lg dark:border-stone-700/70 dark:bg-gradient-to-r dark:from-stone-900/80 dark:to-slate-900/80 dark:hover:border-stone-600"
-            >
+            <button onClick={handleExpandSearch} className={SEARCH_COMPACT_BUTTON}>
               <FiSearch className="h-5 w-5 text-cyan-600 transition-transform group-hover:scale-110 dark:text-amber-400" />
               <span className="text-sm font-medium text-slate-500 dark:text-amber-300/70">
                 Votre tâche ici...
@@ -73,13 +92,13 @@ function TaskFilters({
                   onBlur={handleCollapseSearch}
                   autoFocus
                   placeholder="Rechercher par titre ou description..."
-                  className="w-full rounded-xl border-2 border-cyan-400/70 bg-gradient-to-r from-white to-cyan-50/30 py-3 pl-12 pr-24 text-sm font-medium text-slate-800 placeholder-slate-500 shadow-md outline-none ring-cyan-400/60 transition focus:border-cyan-500 focus:ring-2 dark:border-stone-700/70 dark:bg-gradient-to-r dark:from-stone-900/80 dark:to-slate-900/80 dark:text-amber-50 dark:placeholder-amber-300/50 dark:ring-amber-700/60 dark:focus:border-stone-600"
+                  className={SEARCH_INPUT}
                 />
 
                 {hasSearch && (
                   <>
                     <div className="absolute inset-y-0 right-14 flex items-center">
-                      <span className="rounded-full bg-cyan-500 px-2.5 py-1 text-xs font-bold text-white dark:bg-amber-600">
+                      <span className={SEARCH_COUNT_BADGE}>
                         {searchResultCount} / {totalCount}
                       </span>
                     </div>
@@ -89,7 +108,7 @@ function TaskFilters({
                         e.preventDefault();
                         handleClear();
                       }}
-                      className="absolute inset-y-0 right-3 flex items-center justify-center rounded-lg p-1.5 text-slate-500 transition hover:bg-slate-200 hover:text-slate-700 dark:text-amber-400 dark:hover:bg-stone-800 dark:hover:text-amber-300"
+                      className={SEARCH_CLEAR_BUTTON}
                       title="Effacer la recherche"
                     >
                       <FiX size={20} />
@@ -107,39 +126,31 @@ function TaskFilters({
           />
 
           {/* Filtres */}
-          <select
+          <FilterSelect
+            variant="status"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="rounded-xl border-2 border-cyan-400/70 bg-gradient-to-br from-cyan-50 to-teal-50 px-5 py-3 text-sm font-bold text-slate-800 shadow-md outline-none ring-cyan-400/60 transition focus:ring-2 hover:border-cyan-500 dark:border-stone-700/70 dark:bg-gradient-to-br dark:from-stone-900/80 dark:to-slate-900/80 dark:text-amber-50 dark:ring-amber-700/60 dark:hover:border-stone-600 [&>option]:bg-white [&>option]:text-slate-800 dark:[&>option]:bg-stone-800 dark:[&>option]:text-amber-50"
-          >
-            <option value="ALL">📋 Tous les statuts</option>
-            <option value="TODO">📝 À faire</option>
-            <option value="IN_PROGRESS">⏳ En cours</option>
-            <option value="DONE">✅ Terminé</option>
-          </select>
+            options={statusOptions}
+          />
 
-          <select
+          <FilterSelect
+            variant="priority"
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="rounded-xl border-2 border-orange-400/70 bg-gradient-to-br from-orange-50 to-amber-50 px-5 py-3 text-sm font-bold text-slate-800 shadow-md outline-none ring-orange-400/60 transition focus:ring-2 hover:border-orange-500 dark:border-stone-700/70 dark:bg-gradient-to-br dark:from-stone-900/80 dark:to-slate-900/80 dark:text-amber-50 dark:ring-amber-700/60 dark:hover:border-stone-600 [&>option]:bg-white [&>option]:text-slate-800 dark:[&>option]:bg-stone-800 dark:[&>option]:text-amber-50"
-          >
-            <option value="ALL">🎯 Toutes priorités</option>
-            <option value="LOW">🟢 Basse</option>
-            <option value="MEDIUM">🟡 Moyenne</option>
-            <option value="HIGH">🔴 Haute</option>
-          </select>
+            options={priorityOptions}
+          />
         </div>
       </div>
 
       {/* Messages de recherche en dessous */}
       {hasSearch && searchResultCount === 0 && (
-        <p className="mt-3 text-sm font-medium text-rose-600 dark:text-rose-400">
+        <p className={SEARCH_NO_RESULTS}>
           Aucun résultat trouvé pour "{searchQuery}"
         </p>
       )}
 
       {hasSearch && searchResultCount > 0 && (
-        <p className="mt-3 text-sm font-medium text-slate-600 dark:text-amber-300/80">
+        <p className={SEARCH_RESULTS_INFO}>
           {searchResultCount} tâche{searchResultCount > 1 ? 's' : ''} trouvée{searchResultCount > 1 ? 's' : ''}
         </p>
       )}

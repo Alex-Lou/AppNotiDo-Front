@@ -1,8 +1,10 @@
-// components/TaskBadge.jsx
+// src/components/Task/TaskBadge.jsx
+import { TASK_BADGE_COMPONENT, TASK_BADGE_DOT } from '../../constants/styles';
+
 function TaskBadge({ type, value, colors, labels }) {
   return (
-    <span className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-bold shadow-sm text-xs ${colors[value]}`}>
-      <span className="h-2 w-2 rounded-full bg-current/80" />
+    <span className={`${TASK_BADGE_COMPONENT} ${colors[value]}`}>
+      <span className={TASK_BADGE_DOT} />
       {labels[value]}
     </span>
   );

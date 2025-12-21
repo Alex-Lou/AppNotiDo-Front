@@ -1,11 +1,14 @@
+// src/components/Dashboard/DashboardHeader.jsx
+import { DASHBOARD_HEADER_CONTAINER, DASHBOARD_HEADER_TITLE, DASHBOARD_HEADER_SUBTITLE } from '../../constants/styles';
+
 function DashboardHeader({ username }) {
   return (
-    <div className="mb-8 flex items-center justify-between">
+    <div className={DASHBOARD_HEADER_CONTAINER}>
       <div>
-        <h2 className="text-4xl font-bold tracking-tight text-slate-800 dark:text-amber-50">
+        <h2 className={DASHBOARD_HEADER_TITLE}>
           Bonjour, {username} <span className="align-middle">👋</span>
         </h2>
-        <p className="mt-2 text-base font-medium text-slate-700/90 dark:text-amber-200/80">
+        <p className={DASHBOARD_HEADER_SUBTITLE}>
           Voici un aperçu de vos tâches pour aujourd'hui.
         </p>
       </div>

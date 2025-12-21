@@ -1,8 +1,10 @@
-// components/FormField.jsx
+// src/components/FormField.jsx
+import { FORM_FIELD_LABEL } from '../constants/styles';
+
 function FormField({ label, emoji, children, required = false }) {
   return (
     <div>
-      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+      <label className={FORM_FIELD_LABEL}>
         {emoji && `${emoji} `}{label} {required && '*'}
       </label>
       {children}

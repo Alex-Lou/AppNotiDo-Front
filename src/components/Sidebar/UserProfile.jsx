@@ -1,6 +1,19 @@
+// src/components/Sidebar/UserProfile.jsx
 import { useState, useEffect } from 'react';
 import { FaPencilAlt, FaCog } from 'react-icons/fa';
 import api from '../../services/api';
+import {
+  USER_PROFILE_SIDEBAR_CONTAINER,
+  USER_PROFILE_SIDEBAR_FLEX,
+  USER_PROFILE_SIDEBAR_AVATAR,
+  USER_PROFILE_SIDEBAR_INFO,
+  USER_PROFILE_SIDEBAR_NAME_ROW,
+  USER_PROFILE_SIDEBAR_INPUT,
+  USER_PROFILE_SIDEBAR_NAME,
+  USER_PROFILE_SIDEBAR_BUTTONS,
+  USER_PROFILE_SIDEBAR_BUTTON,
+  USER_PROFILE_SIDEBAR_STATUS
+} from '../../constants/styles';
 
 function UserProfile({ username, displayName: initialDisplayName, onOpenProfileModal }) {
   const [displayName, setDisplayName] = useState(initialDisplayName || username);
@@ -46,13 +59,13 @@ function UserProfile({ username, displayName: initialDisplayName, onOpenProfileM
   };
 
   return (
-    <div className="mb-8 rounded-2xl border-2 border-cyan-400/60 bg-gradient-to-br from-cyan-100 via-teal-100 to-orange-100 px-5 py-4 shadow-md dark:border-amber-800/70 dark:bg-gradient-to-br dark:from-amber-900/60 dark:via-stone-900/70 dark:to-slate-900/60">
-      <div className="flex items-center gap-3">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500 via-teal-500 to-orange-500 text-base font-bold text-white shadow-md dark:from-amber-600 dark:via-orange-600 dark:to-rose-600">
+    <div className={USER_PROFILE_SIDEBAR_CONTAINER}>
+      <div className={USER_PROFILE_SIDEBAR_FLEX}>
+        <div className={USER_PROFILE_SIDEBAR_AVATAR}>
           {firstLetter}
         </div>
-        <div className="flex flex-col">
-          <div className="flex items-center gap-2">
+        <div className={USER_PROFILE_SIDEBAR_INFO}>
+          <div className={USER_PROFILE_SIDEBAR_NAME_ROW}>
             {isEditing ? (
               <input
                 type="text"
@@ -61,19 +74,19 @@ function UserProfile({ username, displayName: initialDisplayName, onOpenProfileM
                 onKeyDown={handleKeyDown}
                 onBlur={saveEdit}
                 maxLength={100}
-                className="w-36 rounded-md border border-cyan-400/70 bg-white/80 px-2 py-0.5 text-sm font-semibold text-slate-900 shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 dark:border-amber-700/70 dark:bg-stone-900/80 dark:text-amber-50 dark:focus:border-amber-500 dark:focus:ring-amber-500"
+                className={USER_PROFILE_SIDEBAR_INPUT}
                 autoFocus
               />
             ) : (
               <>
-                <p className="max-w-[9rem] truncate text-base font-bold text-slate-900 dark:text-amber-50">
+                <p className={USER_PROFILE_SIDEBAR_NAME}>
                   {displayName}
                 </p>
-                <div className="flex gap-1">
+                <div className={USER_PROFILE_SIDEBAR_BUTTONS}>
                   <button
                     type="button"
                     onClick={startEdit}
-                    className="text-xs text-slate-600 transition hover:text-slate-900 dark:text-amber-300 dark:hover:text-amber-100"
+                    className={USER_PROFILE_SIDEBAR_BUTTON}
                     title="Modifier le nom d'affichage"
                   >
                     <FaPencilAlt size={12} />
@@ -81,7 +94,7 @@ function UserProfile({ username, displayName: initialDisplayName, onOpenProfileM
                   <button
                     type="button"
                     onClick={onOpenProfileModal}
-                    className="text-xs text-slate-600 transition hover:text-slate-900 dark:text-amber-300 dark:hover:text-amber-100"
+                    className={USER_PROFILE_SIDEBAR_BUTTON}
                     title="Gérer le profil complet"
                   >
                     <FaCog size={13} />
@@ -90,7 +103,7 @@ function UserProfile({ username, displayName: initialDisplayName, onOpenProfileM
               </>
             )}
           </div>
-          <p className="text-xs font-medium text-slate-800/80 dark:text-amber-200/70">
+          <p className={USER_PROFILE_SIDEBAR_STATUS}>
             Utilisateur actif
           </p>
         </div>

@@ -1,5 +1,12 @@
+// src/components/ThemeToggle.jsx
 import { FiSun, FiMoon } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
+import {
+  THEME_TOGGLE_BUTTON,
+  THEME_TOGGLE_ICON_LIGHT,
+  THEME_TOGGLE_ICON_DARK
+} from '../constants/styles';
+import { THEME } from '../constants/messages';
 
 function ThemeToggle() {
   const { isDark, toggleTheme } = useTheme();
@@ -7,23 +14,18 @@ function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="
-        inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium
-        border border-slate-700/80 bg-slate-900/80 text-slate-200
-        shadow-sm backdrop-blur-sm transition-all duration-150
-        hover:border-sky-500/60 hover:bg-slate-800
-      "
-      title={isDark ? 'Passer en mode clair' : 'Passer en mode sombre'}
+      className={THEME_TOGGLE_BUTTON}
+      title={isDark ? THEME.TITLE_SWITCH_TO_LIGHT : THEME.TITLE_SWITCH_TO_DARK}
     >
       {isDark ? (
         <>
-          <FiSun className="h-4 w-4 text-amber-300" />
-          <span>Mode clair</span>
+          <FiSun className={THEME_TOGGLE_ICON_LIGHT} />
+          <span>{THEME.LABEL_LIGHT_MODE}</span>
         </>
       ) : (
         <>
-          <FiMoon className="h-4 w-4 text-sky-300" />
-          <span>Mode sombre</span>
+          <FiMoon className={THEME_TOGGLE_ICON_DARK} />
+          <span>{THEME.LABEL_DARK_MODE}</span>
         </>
       )}
     </button>

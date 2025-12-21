@@ -1,13 +1,14 @@
-// components/TaskEditForm.jsx
+// src/components/Task/TaskEditForm.jsx
 import { FaSave, FaTimes } from 'react-icons/fa';
-import { INPUT_CLASSES } from '../../constants/taskConstants';
+import { INPUT_CLASSES, LABEL_CLASSES, BUTTON_PRIMARY, BUTTON_SECONDARY, EDIT_FORM_CONTAINER, DECORATIVE_HALO } from '../../constants/styles';
 
 function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, handleDateChange }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border-2 border-cyan-400/60 bg-gradient-to-br from-cyan-50 via-teal-50 to-orange-50 px-6 py-5 shadow-lg transition-transform duration-200 ease-out hover:-translate-y-0.5 hover:scale-[1.01] dark:border-amber-800/70 dark:bg-gradient-to-br dark:from-amber-950/40 dark:via-stone-950/60 dark:to-slate-950/40">
-      <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-gradient-to-br from-cyan-200/40 via-teal-200/40 to-orange-200/40 dark:bg-gradient-to-br dark:from-amber-900/20 dark:via-orange-900/20 dark:to-rose-900/20" />
+    <div className={EDIT_FORM_CONTAINER}>
+      <div className={DECORATIVE_HALO} />
       
       <div className="relative space-y-4">
+        {/* Titre */}
         <input
           type="text"
           value={editedTask.title}
@@ -16,6 +17,7 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
           placeholder="Titre de la tâche"
         />
         
+        {/* Description */}
         <textarea
           value={editedTask.description || ''}
           onChange={(e) => setEditedTask({ ...editedTask, description: e.target.value })}
@@ -24,8 +26,9 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
           rows="3"
         />
 
+        {/* Tags */}
         <div>
-          <label className="mb-2 block text-sm font-bold text-slate-700 dark:text-amber-200">
+          <label className={LABEL_CLASSES}>
             🏷️ Tags
           </label>
           <input
@@ -37,8 +40,9 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
           />
         </div>
 
+        {/* Date d'échéance */}
         <div>
-          <label className="mb-2 block text-sm font-bold text-slate-700 dark:text-amber-200">
+          <label className={LABEL_CLASSES}>
             📅 Date d'échéance
           </label>
           <input
@@ -49,9 +53,10 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
           />
         </div>
 
+        {/* Durée et Rappel */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="mb-2 block text-sm font-bold text-slate-700 dark:text-amber-200">
+            <label className={LABEL_CLASSES}>
               ⏱️ Durée (min)
             </label>
             <input
@@ -70,7 +75,7 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-bold text-slate-700 dark:text-amber-200">
+            <label className={LABEL_CLASSES}>
               🔔 Rappel (min)
             </label>
             <select
@@ -86,9 +91,10 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
           </div>
         </div>
 
+        {/* Priorité et Statut */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="mb-2 block text-sm font-bold text-slate-700 dark:text-amber-200">
+            <label className={LABEL_CLASSES}>
               🎯 Priorité
             </label>
             <select
@@ -103,7 +109,7 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-bold text-slate-700 dark:text-amber-200">
+            <label className={LABEL_CLASSES}>
               📌 Statut
             </label>
             <select
@@ -118,17 +124,12 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
           </div>
         </div>
 
+        {/* Boutons */}
         <div className="mt-2 flex gap-3">
-          <button
-            onClick={handleSave}
-            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-3 text-sm font-bold text-white shadow-md transition-transform duration-150 hover:from-emerald-400 hover:to-teal-400 active:scale-95 dark:from-emerald-600 dark:to-teal-600 dark:hover:from-emerald-500 dark:hover:to-teal-500"
-          >
+          <button onClick={handleSave} className={BUTTON_PRIMARY}>
             <FaSave size={16} /> Sauvegarder
           </button>
-          <button
-            onClick={handleCancel}
-            className="inline-flex items-center gap-2 rounded-xl bg-slate-200 px-6 py-3 text-sm font-bold text-slate-800 shadow-md transition-transform duration-150 hover:bg-slate-300 active:scale-95 dark:bg-slate-700 dark:text-amber-100 dark:hover:bg-slate-600"
-          >
+          <button onClick={handleCancel} className={BUTTON_SECONDARY}>
             <FaTimes size={16} /> Annuler
           </button>
         </div>

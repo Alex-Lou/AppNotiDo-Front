@@ -1,6 +1,30 @@
+// src/components/Skeleton/ProfileModal.jsx
 import { useState } from 'react';
 import { toast } from 'sonner';
 import api from '../../services/api';
+import {
+  PROFILE_MODAL_OVERLAY,
+  PROFILE_MODAL_CONTAINER,
+  PROFILE_MODAL_CLOSE_BUTTON,
+  PROFILE_MODAL_TITLE,
+  PROFILE_MODAL_SUBTITLE,
+  PROFILE_MODAL_SECTIONS,
+  PROFILE_MODAL_SECTION,
+  PROFILE_MODAL_SECTION_TITLE,
+  PROFILE_MODAL_SECTION_DESCRIPTION,
+  PROFILE_MODAL_INPUT_CONTAINER,
+  PROFILE_MODAL_LABEL,
+  PROFILE_MODAL_INPUT,
+  PROFILE_MODAL_INPUT_MT,
+  PROFILE_MODAL_BUTTON_CONTAINER,
+  PROFILE_MODAL_SAVE_BUTTON,
+  PROFILE_MODAL_PASSWORD_BUTTON,
+  PROFILE_MODAL_PASSWORD_INPUTS,
+  PROFILE_MODAL_DANGER_ZONE,
+  PROFILE_MODAL_DANGER_TITLE,
+  PROFILE_MODAL_DANGER_DESCRIPTION,
+  PROFILE_MODAL_DELETE_BUTTON
+} from '../../constants/styles';
 
 function ProfileModal({ onClose, initialEmail }) {
   const [email, setEmail] = useState(initialEmail || '');
@@ -66,50 +90,50 @@ function ProfileModal({ onClose, initialEmail }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm">
-      <div className="relative w-full max-w-xl rounded-2xl border border-cyan-300/70 bg-gradient-to-br from-cyan-50 via-teal-50 to-orange-50 p-6 shadow-2xl dark:border-amber-800/70 dark:bg-gradient-to-br dark:from-slate-950/90 dark:via-stone-950/90 dark:to-amber-950/80">
+    <div className={PROFILE_MODAL_OVERLAY}>
+      <div className={PROFILE_MODAL_CONTAINER}>
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 text-slate-500 transition hover:text-slate-800 dark:text-amber-300 dark:hover:text-amber-100"
+          className={PROFILE_MODAL_CLOSE_BUTTON}
           aria-label="Fermer"
         >
           ✕
         </button>
 
-        <h2 className="mb-1 text-xl font-bold text-slate-900 dark:text-amber-50">
+        <h2 className={PROFILE_MODAL_TITLE}>
           Paramètres du profil
         </h2>
-        <p className="mb-4 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-amber-300/70">
+        <p className={PROFILE_MODAL_SUBTITLE}>
           Email, mot de passe, compte
         </p>
 
-        <div className="space-y-6">
+        <div className={PROFILE_MODAL_SECTIONS}>
           {/* FORMULAIRE EMAIL */}
-          <form onSubmit={handleSaveEmail} className="rounded-xl border border-cyan-200/70 bg-white/70 p-4 shadow-sm dark:border-amber-800/60 dark:bg-stone-950/70">
-            <h3 className="mb-2 text-sm font-semibold text-slate-900 dark:text-amber-50">
+          <form onSubmit={handleSaveEmail} className={PROFILE_MODAL_SECTION}>
+            <h3 className={PROFILE_MODAL_SECTION_TITLE}>
               Email
             </h3>
-            <p className="mb-3 text-xs text-slate-500 dark:text-amber-200/70">
+            <p className={PROFILE_MODAL_SECTION_DESCRIPTION}>
               Modifiez votre adresse de contact utilisée pour votre compte.
             </p>
-            <div className="space-y-2">
-              <label className="block text-xs font-medium text-slate-700 dark:text-amber-200">
+            <div className={PROFILE_MODAL_INPUT_CONTAINER}>
+              <label className={PROFILE_MODAL_LABEL}>
                 Adresse email
               </label>
               <input
                 type="email"
-                className="w-full rounded-lg border border-cyan-300/70 bg-white/90 px-3 py-1.5 text-sm text-slate-900 shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 dark:border-amber-700/70 dark:bg-slate-900/80 dark:text-amber-50 dark:focus:border-amber-500 dark:focus:ring-amber-500"
+                className={PROFILE_MODAL_INPUT}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
-            <div className="mt-3 flex justify-end">
+            <div className={PROFILE_MODAL_BUTTON_CONTAINER}>
               <button
                 type="submit"
                 disabled={isSavingEmail}
-                className="rounded-lg bg-gradient-to-r from-cyan-500 to-teal-500 px-4 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:from-cyan-600 hover:to-teal-600 disabled:cursor-not-allowed disabled:opacity-60 dark:from-amber-600 dark:to-orange-600 dark:hover:from-amber-700 dark:hover:to-orange-700"
+                className={PROFILE_MODAL_SAVE_BUTTON}
               >
                 {isSavingEmail ? 'Enregistrement...' : 'Enregistrer'}
               </button>
@@ -117,44 +141,44 @@ function ProfileModal({ onClose, initialEmail }) {
           </form>
 
           {/* FORMULAIRE MOT DE PASSE */}
-          <form onSubmit={handleChangePassword} className="rounded-xl border border-cyan-200/70 bg-white/70 p-4 shadow-sm dark:border-amber-800/60 dark:bg-stone-950/70">
-            <h3 className="mb-2 text-sm font-semibold text-slate-900 dark:text-amber-50">
+          <form onSubmit={handleChangePassword} className={PROFILE_MODAL_SECTION}>
+            <h3 className={PROFILE_MODAL_SECTION_TITLE}>
               Mot de passe
             </h3>
-            <p className="mb-3 text-xs text-slate-500 dark:text-amber-200/70">
+            <p className={PROFILE_MODAL_SECTION_DESCRIPTION}>
               Choisissez un mot de passe suffisamment long et unique.
             </p>
-            <div className="space-y-3">
+            <div className={PROFILE_MODAL_PASSWORD_INPUTS}>
               <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-amber-200">
+                <label className={PROFILE_MODAL_LABEL}>
                   Mot de passe actuel
                 </label>
                 <input
                   type="password"
-                  className="mt-1 w-full rounded-lg border border-cyan-300/70 bg-white/90 px-3 py-1.5 text-sm text-slate-900 shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 dark:border-amber-700/70 dark:bg-slate-900/80 dark:text-amber-50 dark:focus:border-amber-500 dark:focus:ring-amber-500"
+                  className={PROFILE_MODAL_INPUT_MT}
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-amber-200">
+                <label className={PROFILE_MODAL_LABEL}>
                   Nouveau mot de passe
                 </label>
                 <input
                   type="password"
-                  className="mt-1 w-full rounded-lg border border-cyan-300/70 bg-white/90 px-3 py-1.5 text-sm text-slate-900 shadow-sm focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 dark:border-amber-700/70 dark:bg-slate-900/80 dark:text-amber-50 dark:focus:border-amber-500 dark:focus:ring-amber-500"
+                  className={PROFILE_MODAL_INPUT_MT}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   required
                 />
               </div>
             </div>
-            <div className="mt-3 flex justify-end">
+            <div className={PROFILE_MODAL_BUTTON_CONTAINER}>
               <button
                 type="submit"
                 disabled={isChangingPassword}
-                className="rounded-lg bg-gradient-to-r from-teal-500 to-emerald-500 px-4 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:from-teal-600 hover:to-emerald-600 disabled:cursor-not-allowed disabled:opacity-60 dark:from-emerald-600 dark:to-teal-600 dark:hover:from-emerald-700 dark:hover:to-teal-700"
+                className={PROFILE_MODAL_PASSWORD_BUTTON}
               >
                 {isChangingPassword ? 'Modification...' : 'Changer le mot de passe'}
               </button>
@@ -162,18 +186,18 @@ function ProfileModal({ onClose, initialEmail }) {
           </form>
 
           {/* ZONE DANGEREUSE */}
-          <div className="rounded-xl border border-red-200/70 bg-red-50/80 p-4 shadow-sm dark:border-red-800/70 dark:bg-red-950/60">
-            <h3 className="mb-2 text-sm font-semibold text-red-800 dark:text-red-200">
+          <div className={PROFILE_MODAL_DANGER_ZONE}>
+            <h3 className={PROFILE_MODAL_DANGER_TITLE}>
               Zone dangereuse
             </h3>
-            <p className="mb-3 text-xs text-red-700/90 dark:text-red-200/80">
+            <p className={PROFILE_MODAL_DANGER_DESCRIPTION}>
               Supprime définitivement votre compte et toutes vos tâches. Cette action est irréversible.
             </p>
             <button
               type="button"
               onClick={handleDeleteAccount}
               disabled={isDeleting}
-              className="rounded-lg border border-red-500/70 bg-gradient-to-r from-red-600 to-rose-600 px-4 py-1.5 text-xs font-semibold text-red-50 shadow-sm transition hover:from-red-700 hover:to-rose-700 disabled:cursor-not-allowed disabled:opacity-60 dark:border-red-500/80 dark:from-red-700 dark:to-rose-700 dark:hover:from-red-800 dark:hover:to-rose-800"
+              className={PROFILE_MODAL_DELETE_BUTTON}
             >
               {isDeleting ? 'Suppression...' : 'Supprimer mon compte'}
             </button>

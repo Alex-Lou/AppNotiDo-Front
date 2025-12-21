@@ -1,3 +1,4 @@
+// src/hooks/useNotifications.js
 import { useState, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import api from '../services/api';
@@ -68,17 +69,15 @@ export const useNotifications = (tasks, fetchTasks) => {
         notifiedTaskIdsRef.current.add(task.notificationKey || task.id);
 
         // Mettre à jour le backend si c'est une notification d'échéance
+        // ⚠️ On fait JUSTE l'appel API sans rafraîchir toutes les tâches
         if (task.minutesRemaining === 0 || task.isUrgent || task.notified === true) {
           try {
             await api.put(`/tasks/${task.id}`, { ...task, notified: true });
+            // ❌ SUPPRIMÉ : fetchTasks() qui causait la boucle infinie
           } catch (error) {
             console.error('Erreur lors de la mise à jour de la notification:', error);
           }
         }
-      }
-
-      if (tasksToNotify.length > 0) {
-        fetchTasks();
       }
     };
 
@@ -88,7 +87,7 @@ export const useNotifications = (tasks, fetchTasks) => {
     }, 30000); // Vérifier toutes les 30 secondes
 
     return () => clearInterval(interval);
-  }, [tasks, notificationPermission, notificationsEnabled, fetchTasks]);
+  }, [tasks, notificationPermission, notificationsEnabled]); // ✅ Retiré fetchTasks des deps
 
   const handleRequestNotificationPermission = async () => {
     const permission = await requestNotificationPermission();

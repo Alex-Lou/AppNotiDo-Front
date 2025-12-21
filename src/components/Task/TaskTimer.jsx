@@ -1,6 +1,23 @@
-// components/TaskTimer.jsx
+// src/components/Task/TaskTimer.jsx
 import { FaClock, FaPlay, FaPause, FaStop } from 'react-icons/fa';
 import { formatDuration } from '../../utils/taskUtils';
+import {
+  TASK_TIMER_CONTAINER,
+  TASK_TIMER_FLEX_CONTAINER,
+  TASK_TIMER_INFO,
+  TASK_TIMER_LABEL,
+  TASK_TIMER_TIME,
+  TASK_TIMER_PROGRESS_TEXT_NORMAL,
+  TASK_TIMER_PROGRESS_TEXT_OVERTIME,
+  TASK_TIMER_BUTTONS,
+  TASK_TIMER_START_BUTTON,
+  TASK_TIMER_PAUSE_BUTTON,
+  TASK_TIMER_STOP_BUTTON,
+  TASK_TIMER_PROGRESS_BAR_CONTAINER,
+  TASK_TIMER_PROGRESS_BAR,
+  TASK_TIMER_PROGRESS_FILL_NORMAL,
+  TASK_TIMER_PROGRESS_FILL_OVERTIME
+} from '../../constants/styles';
 
 function TaskTimer({ 
   task, 
@@ -17,30 +34,30 @@ function TaskTimer({
   const timerProgress = getProgress();
 
   return (
-    <div className="mt-4 rounded-xl border-2 border-cyan-300/60 bg-white/80 p-4 dark:border-amber-700/60 dark:bg-slate-900/60">
-      <div className="flex items-center justify-between">
-        <div className="flex-1">
-          <p className="text-xs font-semibold text-slate-600 dark:text-amber-300/80 mb-1">
+    <div className={TASK_TIMER_CONTAINER}>
+      <div className={TASK_TIMER_FLEX_CONTAINER}>
+        <div className={TASK_TIMER_INFO}>
+          <p className={TASK_TIMER_LABEL}>
             Temps écoulé
           </p>
-          <p className="text-lg font-bold text-cyan-700 dark:text-amber-400">
+          <p className={TASK_TIMER_TIME}>
             {formatTime()}
           </p>
           {timerProgress && (
-            <p className={`text-xs font-medium mt-1 ${timerProgress.isOvertime ? 'text-rose-600 dark:text-rose-400' : 'text-slate-500 dark:text-slate-400'}`}>
+            <p className={timerProgress.isOvertime ? TASK_TIMER_PROGRESS_TEXT_OVERTIME : TASK_TIMER_PROGRESS_TEXT_NORMAL}>
               {timerProgress.isOvertime ? '⚠️ Temps dépassé' : `${Math.round(timerProgress.percentage)}% du temps estimé`}
             </p>
           )}
         </div>
 
-        <div className="flex gap-2">
+        <div className={TASK_TIMER_BUTTONS}>
           {!isRunning ? (
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 handleStart();
               }}
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-2 text-sm font-bold text-white shadow-md transition-all hover:from-emerald-400 hover:to-teal-400 hover:scale-105 active:scale-95 dark:from-emerald-600 dark:to-teal-600"
+              className={TASK_TIMER_START_BUTTON}
               title="Démarrer"
             >
               <FaPlay size={14} /> Démarrer
@@ -52,7 +69,7 @@ function TaskTimer({
                   e.stopPropagation();
                   handlePause();
                 }}
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-2 text-sm font-bold text-white shadow-md transition-all hover:from-amber-400 hover:to-orange-400 hover:scale-105 active:scale-95"
+                className={TASK_TIMER_PAUSE_BUTTON}
                 title="Pause"
               >
                 <FaPause size={14} /> Pause
@@ -64,7 +81,7 @@ function TaskTimer({
                     handleStop();
                   }
                 }}
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-red-500 px-4 py-2 text-sm font-bold text-white shadow-md transition-all hover:from-rose-400 hover:to-red-400 hover:scale-105 active:scale-95"
+                className={TASK_TIMER_STOP_BUTTON}
                 title="Stopper et terminer"
               >
                 <FaStop size={14} /> Stopper
@@ -76,14 +93,10 @@ function TaskTimer({
 
       {/* Barre de progression timer */}
       {timerProgress && (
-        <div className="mt-3">
-          <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 shadow-inner dark:bg-slate-800/60">
+        <div className={TASK_TIMER_PROGRESS_BAR_CONTAINER}>
+          <div className={TASK_TIMER_PROGRESS_BAR}>
             <div
-              className={`h-full rounded-full transition-all duration-500 ${
-                timerProgress.isOvertime
-                  ? 'bg-gradient-to-r from-rose-500 to-red-500 dark:from-rose-600 dark:to-red-600'
-                  : 'bg-gradient-to-r from-emerald-500 to-teal-500 dark:from-emerald-600 dark:to-teal-600'
-              }`}
+              className={timerProgress.isOvertime ? TASK_TIMER_PROGRESS_FILL_OVERTIME : TASK_TIMER_PROGRESS_FILL_NORMAL}
               style={{ width: `${Math.min(100, timerProgress.percentage)}%` }}
             />
           </div>

@@ -1,4 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Parisienne&display=swap');
+
+
+@font-face {
+  font-family: 'NovaQuinta_PERSONAL_USE_ONLY';
+  src: url('./assets/fonts/NovaQuinta_PERSONAL_USE_ONLY.otf') format('opentype');
+  font-weight: 400;
+  font-display: swap;
+}
+
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

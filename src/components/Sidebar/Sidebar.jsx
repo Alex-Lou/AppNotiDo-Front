@@ -1,3 +1,4 @@
+// src/components/Sidebar/Sidebar.jsx
 import { useState, useEffect } from 'react';
 import UserProfile from './UserProfile';
 import NotificationPermission from './NotificationPermission';
@@ -6,6 +7,15 @@ import QuickViews from './QuickViews';
 import DailyQuote from './DailyQuote';
 import SidebarActions from './SidebarActions';
 import logonote from '../../assets/logonote.png';
+import {
+  SIDEBAR_CONTAINER,
+  SIDEBAR_HEADER,
+  SIDEBAR_LOGO_CONTAINER,
+  SIDEBAR_LOGO,
+  SIDEBAR_TITLE,
+  SIDEBAR_SUBTITLE,
+  SHOW_QUOTE_BUTTON
+} from '../../constants/styles';
 
 function Sidebar({
   username,
@@ -51,41 +61,28 @@ function Sidebar({
   };
 
   return (
-    <aside
-      className="
-        fixed left-0 top-0 z-20 flex h-full w-72 flex-col
-        border-r-2 border-cyan-300/60
-        bg-gradient-to-b from-cyan-200 via-teal-200 to-orange-200
-        px-7 py-7
-        dark:border-amber-900/60 dark:bg-gradient-to-b dark:from-amber-950/80 dark:via-stone-950/90 dark:to-slate-950/80
-      "
-    >
-      <div className="mb-10">
-        <div className="flex items-center gap-3">
+    <aside className={SIDEBAR_CONTAINER}>
+      <div className={SIDEBAR_HEADER}>
+        <div className={SIDEBAR_LOGO_CONTAINER}>
           <img
             src={logonote}
             alt="AppNotiDo"
-            className="
-              h-9 w-9 rounded-2xl
-              shadow-md shadow-cyan-300/40 dark:shadow-amber-700/40
-              transition-transform duration-200 ease-out
-              hover:scale-105 hover:-rotate-2
-            "
+            className={SIDEBAR_LOGO}
           />
-          <h1 className="bg-gradient-to-r from-cyan-700 via-teal-700 to-orange-600 bg-clip-text text-2xl font-bold tracking-tight text-transparent dark:from-amber-500 dark:via-orange-500 dark:to-rose-500">
+          <h1 className={SIDEBAR_TITLE}>
             AppNotiDo
           </h1>
         </div>
-<p className="mt-2 text-xl font-script italic text-slate-800/90 dark:text-amber-200/80">
-  Organisez votre journée
-</p>
-<p className="mt-2 ml-[115px] text-xl font-script italic text-slate-800/90 dark:text-amber-200/80">
-  avec le rythme!
-</p>
 
-
-
+        {/* Slogan avec la police NovaQuinta
+        <p className={`${SIDEBAR_SUBTITLE} font-nova-quinta`}>
+          Organisez votre journée
+        </p>
+        <p className={`${SIDEBAR_SUBTITLE} ml-[115px] font-nova-quinta`}>
+          avec le rythme!
+        </p> */}
       </div>
+
 
       <UserProfile
         username={username}
@@ -126,7 +123,7 @@ function Sidebar({
         <div className="mt-auto">
           <button
             onClick={handleShowQuote}
-            className="w-full rounded-xl border-2 border-amber-400/60 bg-gradient-to-r from-amber-50 to-orange-50 px-4 py-2.5 text-sm font-semibold text-amber-700 transition hover:from-amber-100 hover:to-orange-100 dark:border-amber-700/70 dark:bg-gradient-to-r dark:from-amber-900/40 dark:to-orange-900/40 dark:text-amber-300 dark:hover:from-amber-900/60 dark:hover:to-orange-900/60"
+            className={SHOW_QUOTE_BUTTON}
           >
             💡 Afficher la citation
           </button>

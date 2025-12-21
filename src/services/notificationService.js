@@ -1,4 +1,6 @@
+// src/services/notificationService.js
 import { toast } from 'sonner';
+import { NOTIFICATIONS } from '../constants/messages';
 
 // Demander la permission pour les notifications navigateur
 export const requestNotificationPermission = async () => {
@@ -11,7 +13,7 @@ export const requestNotificationPermission = async () => {
   }
 
   if (Notification.permission === 'denied') {
-    toast.error('🚫 Les notifications sont bloquées. Activez-les dans les paramètres du navigateur.');
+    toast.error(NOTIFICATIONS.BLOCKED);
     return 'denied';
   }
 
@@ -19,18 +21,18 @@ export const requestNotificationPermission = async () => {
     const permission = await Notification.requestPermission();
     
     if (permission === 'granted') {
-      toast.success('🎉 Notifications activées !');
-      new Notification('🎉 Notifications activées !', {
-        body: 'Vous recevrez maintenant des alertes pour vos tâches.',
+      toast.success(NOTIFICATIONS.ACTIVATED);
+      new Notification(NOTIFICATIONS.ACTIVATED, {
+        body: NOTIFICATIONS.ACTIVATED_BODY,
         icon: '/vite.svg',
       });
     } else if (permission === 'denied') {
-      toast.error('🚫 Notifications refusées');
+      toast.error(NOTIFICATIONS.REFUSED);
     }
     
     return permission;
   } catch (error) {
-    toast.error('❌ Erreur lors de l\'activation des notifications');
+    toast.error(NOTIFICATIONS.ERROR);
     return 'error';
   }
 };
@@ -56,7 +58,7 @@ export const sendBrowserNotification = (title, body) => {
     // Auto-close après 8 secondes
     setTimeout(() => notification.close(), 8000);
   } catch (error) {
-    console.error('❌ Erreur envoi notification :', error);
+    console.error(NOTIFICATIONS.SEND_ERROR_CONSOLE, error);
   }
 };
 
