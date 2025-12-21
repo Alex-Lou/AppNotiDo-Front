@@ -1,10 +1,21 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { toast } from 'sonner';
 
 export const useExport = () => {
   
   // Export CSV
   const exportToCSV = (tasks, filename = 'taches') => {
+    // Vérifier si la liste est vide
+    if (!tasks || tasks.length === 0) {
+      toast.warning('📋 Aucune tâche à exporter', {
+        description: 'Créez d\'abord des tâches pour pouvoir les exporter en CSV',
+        duration: 5000,
+        icon: '⚠️',
+      });
+      return;
+    }
+
     // En-têtes CSV
     const headers = ['Titre', 'Description', 'Statut', 'Priorité', 'Échéance', 'Durée (min)', 'Créée le'];
     
@@ -27,10 +38,26 @@ export const useExport = () => {
 
     // Télécharger le fichier
     downloadFile(csvContent, `${filename}_${getDateString()}.csv`, 'text/csv;charset=utf-8;');
+    
+    // Confirmation de succès
+    toast.success('✅ Export CSV réussi', {
+      description: `${tasks.length} tâche${tasks.length > 1 ? 's' : ''} exportée${tasks.length > 1 ? 's' : ''}`,
+      duration: 3000,
+    });
   };
 
   // Export PDF
   const exportToPDF = (tasks, stats, username, filename = 'rapport_taches') => {
+    // Vérifier si la liste est vide
+    if (!tasks || tasks.length === 0) {
+      toast.warning('📄 Aucune tâche à exporter', {
+        description: 'Créez d\'abord des tâches pour pouvoir générer un rapport PDF',
+        duration: 5000,
+        icon: '⚠️',
+      });
+      return;
+    }
+
     const doc = new jsPDF();
     
     // Configuration
@@ -150,6 +177,12 @@ export const useExport = () => {
 
     // Télécharger le PDF
     doc.save(`${filename}_${getDateString()}.pdf`);
+    
+    // Confirmation de succès
+    toast.success('✅ Export PDF réussi', {
+      description: `Rapport généré avec ${tasks.length} tâche${tasks.length > 1 ? 's' : ''}`,
+      duration: 3000,
+    });
   };
 
   // Fonctions utilitaires
