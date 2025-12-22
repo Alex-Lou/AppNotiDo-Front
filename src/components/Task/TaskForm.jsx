@@ -128,6 +128,26 @@ function TaskForm({ onTaskCreated, onClose }) {
           </FormField>
         </div>
 
+                {/* Réactivable */}
+        <div className="flex items-center gap-3 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+          <input
+            type="checkbox"
+            id="reactivable"
+            checked={values.reactivable}
+            onChange={(e) => handleChange('reactivable', e.target.checked)}
+            className="w-4 h-4 text-teal-600 bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded focus:ring-teal-500"
+          />
+          <label htmlFor="reactivable" className="flex-1 cursor-pointer">
+            <div className="font-medium text-slate-700 dark:text-slate-200">
+              🔄 Tâche réactivable
+            </div>
+            <div className="text-sm text-slate-500 dark:text-slate-400">
+              Si échue, proposer de la déplacer vers aujourd'hui (au lieu de la marquer urgente)
+            </div>
+          </label>
+        </div>
+
+
         {/* Bouton submit */}
         <button
           type="submit"

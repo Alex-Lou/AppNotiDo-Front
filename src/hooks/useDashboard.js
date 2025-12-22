@@ -1,5 +1,5 @@
 // src/hooks/useDashboard.js
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTasks } from './useTasks';
 import { useNotifications } from './useNotifications';
@@ -14,11 +14,13 @@ export const useDashboard = (setUsername) => {
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [activeQuickView, setActiveQuickView] = useState(null);
+  const [timeTick, setTimeTick] = useState(Date.now()); // tick temps
 
   const navigate = useNavigate();
   const username = localStorage.getItem('username') || 'User';
 
-  const { displayName, profileEmail, isProfileModalOpen, setIsProfileModalOpen } = useDashboardLogic(username);
+  const { displayName, profileEmail, isProfileModalOpen, setIsProfileModalOpen } =
+    useDashboardLogic(username);
 
   const {
     tasks,
@@ -62,8 +64,19 @@ export const useDashboard = (setUsername) => {
   const { exportToCSV, exportToPDF } = useExport();
   const { getTasksByView } = useQuickViews(tasks);
 
+  // Tick toutes les 30s pour forcer le recalcul urgent/échue
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeTick(Date.now());
+    }, 30000); // 30 000 ms = 30s
+    return () => clearInterval(interval);
+  }, []);
+
   const baseTasksToDisplay = activeQuickView ? getTasksByView(activeQuickView) : filteredTasks;
-  const { urgentTasks: urgentToDisplay, normalTasks: normalToDisplay } = useUrgentTasks(baseTasksToDisplay);
+
+  // on passe timeTick au hook urgent pour qu'il se recalcule régulièrement
+  const { urgentTasks: urgentToDisplay, normalTasks: normalToDisplay } =
+    useUrgentTasks(baseTasksToDisplay, timeTick);
 
   // Handlers
   const handleLogout = async () => {
@@ -106,7 +119,11 @@ export const useDashboard = (setUsername) => {
     }
   };
 
-  const hasFilters = statusFilter !== 'ALL' || priorityFilter !== 'ALL' || hasActiveSearch || activeQuickView !== null;
+  const hasFilters =
+    statusFilter !== 'ALL' ||
+    priorityFilter !== 'ALL' ||
+    hasActiveSearch ||
+    activeQuickView !== null;
 
   return {
     // State

@@ -1,4 +1,6 @@
+// src/hooks/useTimer.js
 import { useState, useEffect, useRef } from 'react';
+import api from '../services/api';
 
 export const useTimer = (task, onUpdate) => {
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -6,7 +8,6 @@ export const useTimer = (task, onUpdate) => {
   const taskIdRef = useRef(task.id);
 
   useEffect(() => {
-    // Nettoyer l'intervalle précédent si l'ID de la tâche change
     if (taskIdRef.current !== task.id) {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -15,14 +16,12 @@ export const useTimer = (task, onUpdate) => {
       taskIdRef.current = task.id;
     }
 
-    // Si le timer n'est pas actif, nettoyer et sortir
     if (!task.isRunning) {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
-      
-      // Calculer le temps déjà passé même quand en pause
+
       if (task.startedAt && task.pausedAt) {
         const startTime = new Date(task.startedAt).getTime();
         const pauseTime = new Date(task.pausedAt).getTime();
@@ -32,20 +31,18 @@ export const useTimer = (task, onUpdate) => {
       } else if (task.timeSpent) {
         setElapsedSeconds(task.timeSpent * 60);
       }
-      
+
       return;
     }
 
-    // Calculer le temps déjà écoulé depuis le démarrage
     const startTime = new Date(task.startedAt).getTime();
     const now = Date.now();
     const timeSpentSeconds = (task.timeSpent || 0) * 60;
     const currentSessionSeconds = Math.floor((now - startTime) / 1000);
     const totalElapsed = timeSpentSeconds + currentSessionSeconds;
-    
+
     setElapsedSeconds(totalElapsed);
 
-    // Mettre à jour chaque seconde
     intervalRef.current = setInterval(() => {
       setElapsedSeconds(prev => prev + 1);
     }, 1000);
@@ -56,9 +53,8 @@ export const useTimer = (task, onUpdate) => {
         intervalRef.current = null;
       }
     };
-  }, [task.isRunning, task.id]); // ← DÉPENDANCES RÉDUITES !
+  }, [task.isRunning, task.id]);
 
-  // Recalculer le temps si startedAt ou timeSpent change
   useEffect(() => {
     if (task.isRunning && task.startedAt) {
       const startTime = new Date(task.startedAt).getTime();
@@ -82,13 +78,9 @@ export const useTimer = (task, onUpdate) => {
 
   const handleStart = async () => {
     try {
-      await onUpdate(task.id, {
-        ...task,
-        isRunning: true,
-        startedAt: new Date().toISOString(),
-        pausedAt: null, // Reset pausedAt
-        status: 'IN_PROGRESS',
-      });
+      const response = await api.post(`/tasks/${task.id}/start`);
+      const updatedTask = response.data;
+      await onUpdate(task.id, updatedTask);
     } catch (error) {
       console.error('Erreur démarrage timer:', error);
     }
@@ -96,13 +88,9 @@ export const useTimer = (task, onUpdate) => {
 
   const handlePause = async () => {
     try {
-      const minutesSpent = Math.floor(elapsedSeconds / 60);
-      await onUpdate(task.id, {
-        ...task,
-        isRunning: false,
-        pausedAt: new Date().toISOString(),
-        timeSpent: minutesSpent,
-      });
+      const response = await api.post(`/tasks/${task.id}/pause`);
+      const updatedTask = response.data;
+      await onUpdate(task.id, updatedTask);
     } catch (error) {
       console.error('Erreur pause timer:', error);
     }
@@ -110,15 +98,9 @@ export const useTimer = (task, onUpdate) => {
 
   const handleStop = async () => {
     try {
-      const minutesSpent = Math.floor(elapsedSeconds / 60);
-      await onUpdate(task.id, {
-        ...task,
-        isRunning: false,
-        startedAt: null,
-        pausedAt: null,
-        timeSpent: minutesSpent,
-        status: 'DONE',
-      });
+      const response = await api.post(`/tasks/${task.id}/stop`);
+      const updatedTask = response.data;
+      await onUpdate(task.id, updatedTask);
     } catch (error) {
       console.error('Erreur stop timer:', error);
     }
@@ -126,10 +108,10 @@ export const useTimer = (task, onUpdate) => {
 
   const getProgress = () => {
     if (!task.estimatedDuration) return null;
-    
+
     const estimatedSeconds = task.estimatedDuration * 60;
     const percentage = Math.min(100, (elapsedSeconds / estimatedSeconds) * 100);
-    
+
     return {
       percentage,
       isOvertime: elapsedSeconds > estimatedSeconds,

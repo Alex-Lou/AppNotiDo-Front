@@ -13,6 +13,8 @@ import DashboardLayout from '../components/Dashboard/DashboardLayout';
 import ProfileModal from '../components/Skeleton/ProfileModal';
 import DashboardSkeleton from '../components/Skeleton/DashboardSkeleton';
 import { useDashboard } from '../hooks/useDashboard';
+import TaskSuggestionsModal from '../components/Dashboard/TaskSuggestionsModal';
+import { useTaskSuggestions } from '../hooks/useTaskSuggestions';
 import {
   DASHBOARD_HEADER_SECTION,
   DASHBOARD_TASK_FORM_CONTAINER,
@@ -21,6 +23,7 @@ import {
 
 function DashboardNew({ setUsername }) {
   const dashboard = useDashboard(setUsername);
+  const taskSuggestions = useTaskSuggestions();
 
   if (dashboard.loading || !dashboard.displayName) {
     return <DashboardSkeleton />;
@@ -28,6 +31,13 @@ function DashboardNew({ setUsername }) {
 
   const handleNewTask = () => {
     dashboard.setShowTaskForm(true);
+  };
+
+  // ← FONCTION AJOUTÉE ICI
+  const handleTaskCreation = async (taskData) => {
+    await dashboard.onTaskCreated(taskData);
+    dashboard.setShowTaskForm(false);
+    taskSuggestions.fetchSuggestions();
   };
 
   return (
@@ -65,7 +75,11 @@ function DashboardNew({ setUsername }) {
       }
     >
       <div className={DASHBOARD_HEADER_SECTION}>
-        <DashboardHeader username={dashboard.displayName} />
+        <DashboardHeader 
+          username={dashboard.displayName}
+          completedCount={dashboard.stats.done}
+          totalCount={dashboard.stats.total}
+        />
 
         <StatsCards
           stats={dashboard.stats}
@@ -92,7 +106,7 @@ function DashboardNew({ setUsername }) {
       {dashboard.showTaskForm && (
         <div className={DASHBOARD_TASK_FORM_CONTAINER}>
           <TaskForm 
-            onTaskCreated={dashboard.onTaskCreated}
+            onTaskCreated={handleTaskCreation}
             onClose={() => dashboard.setShowTaskForm(false)}
           />
         </div>
@@ -134,6 +148,20 @@ function DashboardNew({ setUsername }) {
           />
         )}
       </div>
+
+      {taskSuggestions.showModal && (
+      <TaskSuggestionsModal
+        suggestions={taskSuggestions.suggestions}
+        onClose={() => taskSuggestions.setShowModal(false)}
+        onMoveTasks={async (taskIds) => {
+          const success = await taskSuggestions.moveTasksToToday(taskIds);
+          if (success) {
+            await dashboard.fetchTasks(); // ← Attendre le refresh
+            taskSuggestions.fetchSuggestions(); // ← Re-vérifier s'il reste des suggestions
+          }
+        }}
+      />
+    )}
 
       {dashboard.isProfileModalOpen && (
         <ProfileModal

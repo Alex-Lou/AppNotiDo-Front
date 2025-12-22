@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: '/api',  // ✅ Relatif maintenant, proxy Vite redirige vers :8080
   withCredentials: true,
 });
 
-// Intercepteur pour gérer les erreurs d'authentification
+// Intercepteur de RÉPONSE pour gérer les erreurs d'authentification
 api.interceptors.response.use(
   response => response,
   error => {

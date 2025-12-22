@@ -1,15 +1,19 @@
-// src/components/Dashboard/DashboardHeader.jsx
 import { DASHBOARD_HEADER_CONTAINER, DASHBOARD_HEADER_TITLE, DASHBOARD_HEADER_SUBTITLE } from '../../constants/styles';
+import { getContextualGreeting, getContextualSubtitle, getCurrentHour } from '../../utils/greetingMessages';
 
-function DashboardHeader({ username }) {
+function DashboardHeader({ username, completedCount, totalCount }) {
+  const currentHour = getCurrentHour();
+  const greeting = getContextualGreeting(currentHour, completedCount, totalCount, username);
+  const subtitle = getContextualSubtitle(completedCount, totalCount);
+
   return (
     <div className={DASHBOARD_HEADER_CONTAINER}>
       <div className="w-full">
         <h2 className={`${DASHBOARD_HEADER_TITLE} dashboard-title-responsive`}>
-          Bonjour, {username} <span className="align-middle">👋</span>
+          {greeting}
         </h2>
         <p className={DASHBOARD_HEADER_SUBTITLE}>
-          Voici un aperçu de vos tâches pour aujourd'hui.
+          {subtitle}
         </p>
       </div>
     </div>

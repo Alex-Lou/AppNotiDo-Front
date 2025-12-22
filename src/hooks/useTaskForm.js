@@ -9,7 +9,8 @@ export function useTaskForm() {
     status: 'TODO',
     dueDate: '',
     estimatedDuration: '',
-    reminderMinutes: 15
+    reminderMinutes: 15,
+    reactivable: false  // ← AJOUTÉ
   };
 
   const [values, setValues] = useState(initialValues);
@@ -31,6 +32,7 @@ export function useTaskForm() {
     dueDate: values.dueDate ? new Date(values.dueDate).toISOString() : null,
     estimatedDuration: values.estimatedDuration ? parseInt(values.estimatedDuration) : null,
     reminderMinutes: parseInt(values.reminderMinutes),
+    reactivable: values.reactivable  // ← AJOUTÉ
   });
 
   return {

@@ -1,7 +1,14 @@
 // src/utils/taskUtils.js
 
 export const formatDate = (dateString) => {
-  if (!dateString) return null;
+  if (!dateString) {
+    return { 
+      text: 'À définir', 
+      color: 'text-slate-400 dark:text-slate-500', 
+      emoji: '📋', 
+      isOverdue: false 
+    };
+  }
   
   const date = new Date(dateString);
   const now = new Date();
