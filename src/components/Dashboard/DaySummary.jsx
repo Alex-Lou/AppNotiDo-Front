@@ -3,12 +3,16 @@ import { FiCalendar, FiCheckCircle, FiClock, FiAlertCircle } from 'react-icons/f
 import MiniStatCard from '../ui/MiniStatCard';
 import { 
   DAY_SUMMARY_CONTAINER,
+  DAY_SUMMARY_DATE_CONTAINER,
   DAY_SUMMARY_DATE_ICON,
   DAY_SUMMARY_DATE_TEXT,
+  DAY_SUMMARY_PROGRESS_SECTION,
+  DAY_SUMMARY_PROGRESS_HEADER,
   PROGRESS_LABEL,
   PROGRESS_PERCENTAGE,
   PROGRESS_BAR_BG,
   PROGRESS_BAR_FILL,
+  DAY_SUMMARY_STATS_GRID,
   URGENT_ALERT,
   URGENT_ALERT_TEXT
 } from '../../constants/styles';
@@ -27,7 +31,7 @@ function DaySummary({ stats, urgentCount }) {
   return (
     <div className={DAY_SUMMARY_CONTAINER}>
       {/* Date */}
-      <div className="mb-4 flex items-center gap-2">
+      <div className={DAY_SUMMARY_DATE_CONTAINER}>
         <FiCalendar className={DAY_SUMMARY_DATE_ICON} size={20} />
         <h3 className={DAY_SUMMARY_DATE_TEXT}>
           {today}
@@ -35,8 +39,8 @@ function DaySummary({ stats, urgentCount }) {
       </div>
 
       {/* Barre de progression */}
-      <div className="mb-4">
-        <div className="mb-2 flex items-center justify-between">
+      <div className={DAY_SUMMARY_PROGRESS_SECTION}>
+        <div className={DAY_SUMMARY_PROGRESS_HEADER}>
           <span className={PROGRESS_LABEL}>
             Progression du jour
           </span>
@@ -53,7 +57,7 @@ function DaySummary({ stats, urgentCount }) {
       </div>
 
       {/* Mini stats */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className={DAY_SUMMARY_STATS_GRID}>
         <MiniStatCard
           icon={FiCheckCircle}
           label="Terminées"

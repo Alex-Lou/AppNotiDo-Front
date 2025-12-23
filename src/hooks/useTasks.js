@@ -65,11 +65,8 @@ export const useTasks = (setUsername) => {
   };
 
   const handleTaskUpdate = async (taskId, taskData) => {
-    console.log('Updating task:', taskId, 'with data:', taskData);
     try {
       const response = await api.put(`/tasks/${taskId}`, taskData);
-      console.log('Update response:', response.data);
-
       setTasks(prevTasks => 
         prevTasks.map(task => 
           task.id === taskId ? { ...task, ...taskData } : task

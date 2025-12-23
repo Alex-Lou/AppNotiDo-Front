@@ -327,6 +327,39 @@ export const SEARCH_NO_RESULTS = "mt-2 sm:mt-3 text-sm font-medium text-rose-600
 
 export const SEARCH_RESULTS_INFO = "mt-2 sm:mt-3 text-sm font-medium text-slate-600 dark:text-amber-300/80";
 
+export const SEARCH_BAR_CONTAINER = "mb-6";
+
+export const SEARCH_BAR_WRAPPER = "relative flex items-center justify-end";
+
+export const SEARCH_COMPACT_ICON = "h-5 w-5 text-cyan-600 transition-transform group-hover:scale-110 dark:text-amber-400";
+
+export const SEARCH_COMPACT_TEXT = "text-sm font-medium text-slate-500 dark:text-amber-300/70";
+
+export const SEARCH_EXPANDED_CONTAINER = "w-full animate-expand-search";
+
+export const SEARCH_INPUT_WRAPPER = "relative";
+
+export const SEARCH_INPUT_ICON_CONTAINER = "pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4";
+export const SEARCH_INPUT_ICON = "h-5 w-5 text-cyan-600 dark:text-amber-400";
+
+export const SEARCH_COUNT_CONTAINER = "absolute inset-y-0 right-14 flex items-center";
+
+export const TASK_FILTERS_SEARCH_CONTAINER = "w-full sm:flex-1 sm:max-w-md";
+
+export const TASK_FILTERS_SEARCH_EXPANDED = "animate-expand-search";
+
+export const TASK_FILTERS_SEARCH_INPUT_WRAPPER = "relative";
+
+export const TASK_FILTERS_SEARCH_ICON_CONTAINER = "pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 sm:pl-4";
+export const TASK_FILTERS_SEARCH_ICON = "h-4 w-4 sm:h-5 sm:w-5 text-cyan-600 dark:text-amber-400";
+
+export const TASK_FILTERS_COMPACT_ICON = "h-5 w-5 text-cyan-600 transition-transform group-hover:scale-110 dark:text-amber-400";
+export const TASK_FILTERS_COMPACT_TEXT = "text-sm font-medium text-slate-500 dark:text-amber-300/70";
+
+export const TASK_FILTERS_COUNT_CONTAINER = "absolute inset-y-0 right-12 sm:right-14 flex items-center";
+
+export const TASK_FILTERS_CLEAR_ICON = "sm:w-5 sm:h-5";
+
 // ==========================================
 // EXPORT BUTTON
 // ==========================================
@@ -424,6 +457,30 @@ export const TASK_BADGE_COMPONENT = "inline-flex items-center gap-1.5 sm:gap-2 r
 export const TASK_BADGE_DOT = "h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-current/80";
 export const TASK_TAGS_CONTAINER = "mt-1.5 sm:mt-2 flex flex-wrap gap-1.5";
 export const TASK_TAG_BADGE = "rounded-full bg-cyan-100/90 px-2 py-0.5 sm:px-2.5 text-xs font-semibold text-cyan-800 dark:bg-amber-900/60 dark:text-amber-200";
+// Conteneur flex-1 interne
+export const TASK_ITEM_CONTENT_FLEX = "flex-1";
+
+// Conteneur des métadonnées (date + durée)
+export const TASK_METADATA_CONTAINER = "mt-3 flex flex-wrap items-center gap-3";
+
+// Icône dans le badge de durée
+export const TASK_DURATION_ICON = "h-3.5 w-3.5 text-cyan-600 dark:text-amber-400";
+
+// Icône du badge verrouillé
+export const TASK_LOCKED_ICON = "text-amber-600 dark:text-amber-400 animate-pulse";
+export const TASK_LOCKED_TEXT = "text-xs font-bold text-amber-700 dark:text-amber-300";
+
+// Icône de déverrouillage
+export const TASK_UNLOCK_ICON = "animate-pulse";
+
+// Boutons d'action avec états conditionnels
+export const TASK_ACTION_LOCK_LOCKED = "text-amber-600 hover:bg-amber-500 hover:text-white dark:bg-amber-900/80 dark:text-amber-300 dark:hover:bg-amber-600";
+export const TASK_ACTION_LOCK_UNLOCKED = "text-slate-500 hover:bg-amber-500 hover:text-white dark:bg-slate-800/80 dark:text-slate-400 dark:hover:bg-amber-600";
+export const TASK_ACTION_EDIT = "text-cyan-600 hover:bg-cyan-500 hover:text-white dark:bg-amber-900/80 dark:text-amber-300 dark:hover:bg-amber-600 dark:hover:text-white";
+export const TASK_ACTION_DELETE = "text-rose-500 hover:bg-rose-500 hover:text-white dark:bg-rose-900/80 dark:text-rose-300 dark:hover:bg-rose-600 dark:hover:text-white";
+
+// Texte du temps passé pour tâches terminées
+export const TASK_TIME_SPENT_TEXT = "text-xs font-semibold text-emerald-700 dark:text-emerald-300";
 
 // Task Timer
 export const TASK_TIMER_CONTAINER = "mt-3 sm:mt-4 rounded-xl border-2 border-cyan-300/60 bg-white/80 p-3 sm:p-4 dark:border-amber-700/60 dark:bg-slate-900/60";
@@ -448,12 +505,19 @@ export const TASK_PROGRESS_FILL = "h-full rounded-full bg-gradient-to-r shadow-s
 export const TASK_PROGRESS_TEXT = "mt-1.5 text-xs font-medium text-slate-600 dark:text-amber-300/70";
 export const TASK_PROGRESS_BAR_THIN = "h-1 w-full overflow-hidden rounded-full bg-slate-100 shadow-inner dark:bg-slate-800/60";
 export const TASK_PROGRESS_FILL_NO_TRANSITION = "h-full rounded-full shadow-sm";
+export const TASK_TIMER_COMPACT_CONTAINER = "mt-2 inline-flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300";
+export const TASK_TIMER_COMPACT_TIME = "tabular-nums font-semibold";
+export const TASK_TIMER_COMPACT_PLAY = "text-slate-600 hover:text-emerald-600 transition-colors dark:text-slate-400 dark:hover:text-emerald-400";
+export const TASK_TIMER_COMPACT_PAUSE = "text-slate-600 hover:text-amber-600 transition-colors dark:text-slate-400 dark:hover:text-amber-400";
+export const TASK_TIMER_COMPACT_STOP = "text-slate-600 hover:text-rose-600 transition-colors dark:text-slate-400 dark:hover:text-rose-400";
 
 // Task Form
 export const EDIT_FORM_CONTAINER = "relative overflow-hidden rounded-2xl border-2 border-cyan-400/60 bg-gradient-to-br from-cyan-50 via-teal-50 to-orange-50 px-4 py-4 sm:px-6 sm:py-5 shadow-lg transition-transform duration-200 ease-out hover:-translate-y-0.5 hover:scale-[1.01] dark:border-amber-800/70 dark:bg-gradient-to-br dark:from-amber-950/40 dark:via-stone-950/60 dark:to-slate-950/40";
 export const DECORATIVE_HALO = "pointer-events-none absolute -right-12 -top-12 sm:-right-16 sm:-top-16 h-32 w-32 sm:h-40 sm:w-40 rounded-full bg-gradient-to-br from-cyan-200/40 via-teal-200/40 to-orange-200/40 dark:bg-gradient-to-br dark:from-amber-900/20 dark:via-orange-900/20 dark:to-rose-900/20";
 export const FORM_CONTAINER = "bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6 mb-4 sm:mb-6";
 export const FORM_TITLE = "text-base sm:text-lg font-bold mb-3 sm:mb-4 text-gray-900 dark:text-white";
+export const TASK_TIME_SPENT_CONTAINER = "mt-2 sm:mt-3 relative rounded-lg bg-emerald-50/80 px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs dark:bg-emerald-900/20";
+export const TASK_TIME_SPENT_CLOSE = "absolute right-1 top-1 text-emerald-600 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-200 transition-colors";
 
 // ==========================================
 // RIGHT SIDEBAR COMPONENTS - RESPONSIVE
@@ -491,6 +555,13 @@ export const ACTIVITY_ICON_CONTAINER = "mt-0.5 flex h-6 w-6 sm:h-7 sm:w-7 flex-s
 export const ACTIVITY_TITLE_TEXT = "truncate text-xs sm:text-sm font-semibold text-slate-900 dark:text-amber-50";
 export const ACTIVITY_TYPE_TEXT = "font-medium text-slate-600 dark:text-amber-300/70 text-xs";
 export const ACTIVITY_TIME_TEXT = "text-slate-500 dark:text-amber-300/50 text-xs";
+
+export const DAY_SUMMARY_DATE_CONTAINER = "mb-4 flex items-center gap-2";
+
+export const DAY_SUMMARY_PROGRESS_SECTION = "mb-4";
+export const DAY_SUMMARY_PROGRESS_HEADER = "mb-2 flex items-center justify-between";
+
+export const DAY_SUMMARY_STATS_GRID = "grid grid-cols-2 gap-3";
 
 // ==========================================
 // SIDEBAR COMPONENTS - RESPONSIVE
@@ -544,9 +615,15 @@ export const SHOW_QUOTE_BUTTON = "w-full rounded-xl border-2 border-amber-400/60
 export const SIDEBAR_ACTIONS_CONTAINER = "mt-4 sm:mt-6 space-y-2 sm:space-y-3";
 export const SIDEBAR_NOTIFICATIONS_BUTTON = "flex w-full items-center justify-between rounded-xl bg-gradient-to-r from-teal-100 to-emerald-100 px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-bold text-teal-900 shadow-md ring-2 ring-teal-400/70 transition hover:from-teal-200 hover:to-emerald-200 hover:shadow-lg dark:bg-gradient-to-r dark:from-teal-900/60 dark:to-emerald-900/60 dark:text-amber-100 dark:ring-teal-800/70 dark:hover:from-teal-900/80 dark:hover:to-emerald-900/80";
 export const SIDEBAR_LOGOUT_BUTTON = "flex w-full items-center gap-2 rounded-xl px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-bold text-rose-700 transition hover:bg-gradient-to-r hover:from-rose-100 hover:to-orange-100 hover:shadow-md dark:text-rose-300 dark:hover:bg-gradient-to-r dark:hover:from-rose-900/60 dark:hover:to-orange-900/60";
-
 export const SIDEBAR_NAV = "mt-3 sm:mt-4 flex-1 space-y-2 sm:space-y-3";
 export const SIDEBAR_NAV_BUTTON = "flex w-full items-center gap-2 sm:gap-3 rounded-xl bg-gradient-to-r from-cyan-100 to-teal-100 px-4 py-3 sm:px-5 sm:py-3.5 text-sm sm:text-base font-bold text-cyan-900 shadow-md ring-2 ring-cyan-400/70 transition hover:from-cyan-200 hover:to-teal-200 hover:shadow-lg dark:bg-gradient-to-r dark:from-amber-900/60 dark:to-stone-900/60 dark:text-amber-50 dark:ring-amber-800/70 dark:hover:from-amber-900/80 dark:hover:to-stone-900/80";
+export const SIDEBAR_NOTIFICATIONS_BUTTON_FLEX = "flex items-center gap-1.5";
+export const SIDEBAR_NOTIFICATION_ICON_ENABLED = "text-teal-700 dark:text-amber-300";
+export const SIDEBAR_NOTIFICATION_ICON_DISABLED = "text-teal-500 dark:text-stone-500";
+export const SIDEBAR_THEME_TOGGLE_CONTAINER = "pointer-events-auto";
+export const SIDEBAR_NAV_BUTTON_ICON = "text-cyan-700 dark:text-amber-300";
+
+
 // ==========================================
 // IN-APP NOTIFICATIONS - RESPONSIVE
 // ==========================================
@@ -690,3 +767,13 @@ export const FORM_FIELD_LABEL = "block text-xs sm:text-sm font-semibold text-gra
 export const THEME_TOGGLE_BUTTON = "inline-flex items-center gap-1.5 sm:gap-2 rounded-xl px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-medium border border-slate-700/80 bg-slate-900/80 text-slate-200 shadow-sm backdrop-blur-sm transition-all duration-150 hover:border-sky-500/60 hover:bg-slate-800";
 export const THEME_TOGGLE_ICON_LIGHT = "h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-300";
 export const THEME_TOGGLE_ICON_DARK = "h-3.5 w-3.5 sm:h-4 sm:w-4 text-sky-300";
+export const FORM_HEADER = "flex items-center justify-between mb-6";
+export const FORM_CLOSE_BUTTON = "p-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:text-slate-500 dark:hover:text-slate-300 dark:hover:bg-slate-800 transition-all duration-200 group";
+export const FORM_CLOSE_ICON = "w-5 h-5 group-hover:scale-110 transition-transform";
+export const FORM_FIELDS_CONTAINER = "space-y-4";
+export const FORM_GRID_2_COLS = "grid grid-cols-2 gap-4";
+export const FORM_REACTIVABLE_CONTAINER = "flex items-center gap-3 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700";
+export const FORM_REACTIVABLE_CHECKBOX = "w-4 h-4 text-teal-600 bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded focus:ring-teal-500";
+export const FORM_REACTIVABLE_LABEL = "flex-1 cursor-pointer";
+export const FORM_REACTIVABLE_TITLE = "font-medium text-slate-700 dark:text-slate-200";
+export const FORM_REACTIVABLE_DESCRIPTION = "text-sm text-slate-500 dark:text-slate-400";

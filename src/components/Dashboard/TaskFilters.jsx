@@ -9,10 +9,19 @@ import {
   FILTERS_ROW_BOTTOM,
   FILTERS_GROUP,
   NEW_TASK_BUTTON,
+  TASK_FILTERS_SEARCH_CONTAINER,
   SEARCH_COMPACT_BUTTON,
+  TASK_FILTERS_COMPACT_ICON,
+  TASK_FILTERS_COMPACT_TEXT,
+  TASK_FILTERS_SEARCH_EXPANDED,
+  TASK_FILTERS_SEARCH_INPUT_WRAPPER,
+  TASK_FILTERS_SEARCH_ICON_CONTAINER,
+  TASK_FILTERS_SEARCH_ICON,
   SEARCH_INPUT,
+  TASK_FILTERS_COUNT_CONTAINER,
   SEARCH_COUNT_BADGE,
   SEARCH_CLEAR_BUTTON,
+  TASK_FILTERS_CLEAR_ICON,
   SEARCH_NO_RESULTS,
   SEARCH_RESULTS_INFO
 } from '../../constants/styles';
@@ -74,19 +83,19 @@ function TaskFilters({
         </button>
 
         {/* Recherche compacte ou étendue */}
-        <div className="w-full sm:flex-1 sm:max-w-md">
+        <div className={TASK_FILTERS_SEARCH_CONTAINER}>
           {!isSearchExpanded ? (
             <button onClick={handleExpandSearch} className={SEARCH_COMPACT_BUTTON}>
-              <FiSearch className="h-5 w-5 text-cyan-600 transition-transform group-hover:scale-110 dark:text-amber-400" />
-              <span className="text-sm font-medium text-slate-500 dark:text-amber-300/70">
+              <FiSearch className={TASK_FILTERS_COMPACT_ICON} />
+              <span className={TASK_FILTERS_COMPACT_TEXT}>
                 Votre tâche ici...
               </span>
             </button>
           ) : (
-            <div className="animate-expand-search">
-              <div className="relative">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 sm:pl-4">
-                  <FiSearch className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-600 dark:text-amber-400" />
+            <div className={TASK_FILTERS_SEARCH_EXPANDED}>
+              <div className={TASK_FILTERS_SEARCH_INPUT_WRAPPER}>
+                <div className={TASK_FILTERS_SEARCH_ICON_CONTAINER}>
+                  <FiSearch className={TASK_FILTERS_SEARCH_ICON} />
                 </div>
                 
                 <input
@@ -101,7 +110,7 @@ function TaskFilters({
 
                 {hasSearch && (
                   <>
-                    <div className="absolute inset-y-0 right-12 sm:right-14 flex items-center">
+                    <div className={TASK_FILTERS_COUNT_CONTAINER}>
                       <span className={SEARCH_COUNT_BADGE}>
                         {searchResultCount} / {totalCount}
                       </span>
@@ -115,7 +124,7 @@ function TaskFilters({
                       className={SEARCH_CLEAR_BUTTON}
                       title="Effacer la recherche"
                     >
-                      <FiX size={18} className="sm:w-5 sm:h-5" />
+                      <FiX size={18} className={TASK_FILTERS_CLEAR_ICON} />
                     </button>
                   </>
                 )}

@@ -2,7 +2,22 @@
 import { FiX } from 'react-icons/fi';
 import { useTaskForm } from '../../hooks/useTaskForm';
 import FormField from '../FormField';
-import { INPUT_CLASSES, FORM_CONTAINER, FORM_TITLE, BUTTON_SUBMIT } from '../../constants/styles';
+import { 
+  INPUT_CLASSES, 
+  FORM_CONTAINER, 
+  FORM_TITLE,
+  FORM_HEADER,
+  FORM_CLOSE_BUTTON,
+  FORM_CLOSE_ICON,
+  FORM_FIELDS_CONTAINER,
+  FORM_GRID_2_COLS,
+  FORM_REACTIVABLE_CONTAINER,
+  FORM_REACTIVABLE_CHECKBOX,
+  FORM_REACTIVABLE_LABEL,
+  FORM_REACTIVABLE_TITLE,
+  FORM_REACTIVABLE_DESCRIPTION,
+  BUTTON_SUBMIT 
+} from '../../constants/styles';
 
 function TaskForm({ onTaskCreated, onClose }) {
   const { values, handleChange, reset, isSubmitting, setIsSubmitting, prepareTaskData } = useTaskForm();
@@ -25,22 +40,22 @@ function TaskForm({ onTaskCreated, onClose }) {
   return (
     <form onSubmit={handleSubmit} className={FORM_CONTAINER}>
       {/* En-tête avec titre et bouton fermer */}
-      <div className="flex items-center justify-between mb-6">
+      <div className={FORM_HEADER}>
         <h3 className={FORM_TITLE}>➕ Nouvelle Tâche</h3>
         
         {onClose && (
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:text-slate-500 dark:hover:text-slate-300 dark:hover:bg-slate-800 transition-all duration-200 group"
+            className={FORM_CLOSE_BUTTON}
             title="Fermer"
           >
-            <FiX className="w-5 h-5 group-hover:scale-110 transition-transform" />
+            <FiX className={FORM_CLOSE_ICON} />
           </button>
         )}
       </div>
 
-      <div className="space-y-4">
+      <div className={FORM_FIELDS_CONTAINER}>
         {/* Titre */}
         <FormField label="Titre" required>
           <input
@@ -75,7 +90,7 @@ function TaskForm({ onTaskCreated, onClose }) {
         </FormField>
 
         {/* Durée estimée et Rappel */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className={FORM_GRID_2_COLS}>
           <FormField label="Durée estimée (minutes)" emoji="⏱️">
             <input
               type="number"
@@ -102,7 +117,7 @@ function TaskForm({ onTaskCreated, onClose }) {
         </div>
 
         {/* Priorité et Status */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className={FORM_GRID_2_COLS}>
           <FormField label="Priorité">
             <select
               value={values.priority}
@@ -128,25 +143,24 @@ function TaskForm({ onTaskCreated, onClose }) {
           </FormField>
         </div>
 
-                {/* Réactivable */}
-        <div className="flex items-center gap-3 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+        {/* Réactivable */}
+        <div className={FORM_REACTIVABLE_CONTAINER}>
           <input
             type="checkbox"
             id="reactivable"
             checked={values.reactivable}
             onChange={(e) => handleChange('reactivable', e.target.checked)}
-            className="w-4 h-4 text-teal-600 bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded focus:ring-teal-500"
+            className={FORM_REACTIVABLE_CHECKBOX}
           />
-          <label htmlFor="reactivable" className="flex-1 cursor-pointer">
-            <div className="font-medium text-slate-700 dark:text-slate-200">
+          <label htmlFor="reactivable" className={FORM_REACTIVABLE_LABEL}>
+            <div className={FORM_REACTIVABLE_TITLE}>
               🔄 Tâche réactivable
             </div>
-            <div className="text-sm text-slate-500 dark:text-slate-400">
+            <div className={FORM_REACTIVABLE_DESCRIPTION}>
               Si échue, proposer de la déplacer vers aujourd'hui (au lieu de la marquer urgente)
             </div>
           </label>
         </div>
-
 
         {/* Bouton submit */}
         <button

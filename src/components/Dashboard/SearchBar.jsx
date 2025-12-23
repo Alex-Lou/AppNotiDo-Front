@@ -2,8 +2,17 @@
 import { useState } from 'react';
 import { FiSearch, FiX } from 'react-icons/fi';
 import { 
+  SEARCH_BAR_CONTAINER,
+  SEARCH_BAR_WRAPPER,
   SEARCH_COMPACT_BUTTON,
+  SEARCH_COMPACT_ICON,
+  SEARCH_COMPACT_TEXT,
+  SEARCH_EXPANDED_CONTAINER,
+  SEARCH_INPUT_WRAPPER,
+  SEARCH_INPUT_ICON_CONTAINER,
+  SEARCH_INPUT_ICON,
   SEARCH_INPUT,
+  SEARCH_COUNT_CONTAINER,
   SEARCH_COUNT_BADGE,
   SEARCH_CLEAR_BUTTON,
   SEARCH_NO_RESULTS,
@@ -30,13 +39,13 @@ function SearchBar({ searchQuery, onSearchChange, onClear, resultCount, totalCou
   };
 
   return (
-    <div className="mb-6">
-      <div className="relative flex items-center justify-end">
+    <div className={SEARCH_BAR_CONTAINER}>
+      <div className={SEARCH_BAR_WRAPPER}>
         {/* Version compacte - bouton avec loupe */}
         {!isExpanded && (
           <button onClick={handleExpand} className={SEARCH_COMPACT_BUTTON}>
-            <FiSearch className="h-5 w-5 text-cyan-600 transition-transform group-hover:scale-110 dark:text-amber-400" />
-            <span className="text-sm font-medium text-slate-500 dark:text-amber-300/70">
+            <FiSearch className={SEARCH_COMPACT_ICON} />
+            <span className={SEARCH_COMPACT_TEXT}>
               Votre tâche ici...
             </span>
           </button>
@@ -45,14 +54,14 @@ function SearchBar({ searchQuery, onSearchChange, onClear, resultCount, totalCou
         {/* Version étendue - barre de recherche complète */}
         {isExpanded && (
           <div 
-            className="w-full animate-expand-search"
+            className={SEARCH_EXPANDED_CONTAINER}
             style={{
               animation: 'expandSearch 0.3s ease-out forwards'
             }}
           >
-            <div className="relative">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                <FiSearch className="h-5 w-5 text-cyan-600 dark:text-amber-400" />
+            <div className={SEARCH_INPUT_WRAPPER}>
+              <div className={SEARCH_INPUT_ICON_CONTAINER}>
+                <FiSearch className={SEARCH_INPUT_ICON} />
               </div>
               
               <input
@@ -67,7 +76,7 @@ function SearchBar({ searchQuery, onSearchChange, onClear, resultCount, totalCou
 
               {hasSearch && (
                 <>
-                  <div className="absolute inset-y-0 right-14 flex items-center">
+                  <div className={SEARCH_COUNT_CONTAINER}>
                     <span className={SEARCH_COUNT_BADGE}>
                       {resultCount} / {totalCount}
                     </span>

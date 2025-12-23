@@ -13,19 +13,16 @@ export const formatDate = (dateString) => {
   const date = new Date(dateString);
   const now = new Date();
   
-  // Normaliser les dates à minuit pour comparer uniquement le jour
   const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
   const nowOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   
   const diffTime = dateOnly - nowOnly;
   const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
   
-  // Si la date est passée (même avec l'heure)
   if (date < now) {
     return { text: 'Échue', color: 'text-rose-500 dark:text-rose-400', emoji: '🔴', isOverdue: true };
   }
   
-  // Comparaison basée sur le jour calendaire
   if (diffDays === 0) {
     return { text: "Aujourd'hui", color: 'text-amber-500 dark:text-amber-300', emoji: '⚠️', isOverdue: false };
   }
@@ -44,12 +41,27 @@ export const formatDate = (dateString) => {
   };
 };
 
+// ✅ Pour estimatedDuration (en MINUTES)
 export const formatDuration = (minutes) => {
   if (!minutes) return null;
   if (minutes < 60) return `${minutes} min`;
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
   return mins > 0 ? `${hours}h ${mins}min` : `${hours}h`;
+};
+
+// ✅ NOUVELLE FONCTION pour timeSpent (en SECONDES)
+export const formatTimeSpent = (seconds) => {
+  if (!seconds) return null;
+  
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+  
+  if (hours > 0) {
+    return `${hours}h ${minutes.toString().padStart(2, '0')}min ${secs.toString().padStart(2, '0')}s`;
+  }
+  return `${minutes}min ${secs.toString().padStart(2, '0')}s`;
 };
 
 export const calculateProgress = (task) => {

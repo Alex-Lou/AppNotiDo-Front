@@ -22,22 +22,14 @@ export const useTimer = (task, onUpdate) => {
         intervalRef.current = null;
       }
 
-      if (task.startedAt && task.pausedAt) {
-        const startTime = new Date(task.startedAt).getTime();
-        const pauseTime = new Date(task.pausedAt).getTime();
-        const timeSpentSeconds = (task.timeSpent || 0) * 60;
-        const sessionSeconds = Math.floor((pauseTime - startTime) / 1000);
-        setElapsedSeconds(timeSpentSeconds + sessionSeconds);
-      } else if (task.timeSpent) {
-        setElapsedSeconds(task.timeSpent * 60);
-      }
-
+      const timeSpentSeconds = task.timeSpent || 0;
+      setElapsedSeconds(timeSpentSeconds);
       return;
     }
 
     const startTime = new Date(task.startedAt).getTime();
     const now = Date.now();
-    const timeSpentSeconds = (task.timeSpent || 0) * 60;
+    const timeSpentSeconds = task.timeSpent || 0;
     const currentSessionSeconds = Math.floor((now - startTime) / 1000);
     const totalElapsed = timeSpentSeconds + currentSessionSeconds;
 
@@ -53,13 +45,13 @@ export const useTimer = (task, onUpdate) => {
         intervalRef.current = null;
       }
     };
-  }, [task.isRunning, task.id]);
+  }, [task.isRunning, task.id, task.timeSpent]);
 
   useEffect(() => {
     if (task.isRunning && task.startedAt) {
       const startTime = new Date(task.startedAt).getTime();
       const now = Date.now();
-      const timeSpentSeconds = (task.timeSpent || 0) * 60;
+      const timeSpentSeconds = task.timeSpent || 0;
       const currentSessionSeconds = Math.floor((now - startTime) / 1000);
       setElapsedSeconds(timeSpentSeconds + currentSessionSeconds);
     }
@@ -88,6 +80,19 @@ export const useTimer = (task, onUpdate) => {
 
   const handlePause = async () => {
     try {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+
+      const pauseTime = Date.now();
+      const startTime = new Date(task.startedAt).getTime();
+      const timeSpentSeconds = task.timeSpent || 0;
+      const currentSessionSeconds = Math.floor((pauseTime - startTime) / 1000);
+      const exactElapsed = timeSpentSeconds + currentSessionSeconds;
+
+      setElapsedSeconds(exactElapsed);
+
       const response = await api.post(`/tasks/${task.id}/pause`);
       const updatedTask = response.data;
       await onUpdate(task.id, updatedTask);
@@ -98,6 +103,11 @@ export const useTimer = (task, onUpdate) => {
 
   const handleStop = async () => {
     try {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+
       const response = await api.post(`/tasks/${task.id}/stop`);
       const updatedTask = response.data;
       await onUpdate(task.id, updatedTask);

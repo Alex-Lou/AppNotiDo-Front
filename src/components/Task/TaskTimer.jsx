@@ -1,5 +1,12 @@
 // src/components/Task/TaskTimer.jsx
 import { FaPlay, FaPause, FaStop } from 'react-icons/fa';
+import {
+  TASK_TIMER_COMPACT_CONTAINER,
+  TASK_TIMER_COMPACT_TIME,
+  TASK_TIMER_COMPACT_PLAY,
+  TASK_TIMER_COMPACT_PAUSE,
+  TASK_TIMER_COMPACT_STOP
+} from '../../constants/styles';
 
 function TaskTimer({
   task,
@@ -13,13 +20,13 @@ function TaskTimer({
   if (task.status === 'DONE') return null;
 
   return (
-    <div className="mt-2 inline-flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
+    <div className={TASK_TIMER_COMPACT_CONTAINER}>
       {/* Temps en chiffres uniquement */}
-      <span className="tabular-nums font-semibold">
+      <span className={TASK_TIMER_COMPACT_TIME}>
         {formatTime()}
       </span>
 
-      {/* Boutons compacts, sans cadre ni label texte */}
+      {/* Boutons minimalistes, icônes seules */}
       {!isRunning ? (
         <button
           onClick={(e) => {
@@ -28,9 +35,9 @@ function TaskTimer({
           }}
           aria-label="Démarrer"
           title="Démarrer"
-          className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-600 text-white hover:bg-emerald-500 active:scale-95 transition"
+          className={TASK_TIMER_COMPACT_PLAY}
         >
-          <FaPlay size={12} />
+          <FaPlay size={14} />
         </button>
       ) : (
         <>
@@ -41,9 +48,9 @@ function TaskTimer({
             }}
             aria-label="Pause"
             title="Pause"
-            className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-amber-500 text-white hover:bg-amber-400 active:scale-95 transition"
+            className={TASK_TIMER_COMPACT_PAUSE}
           >
-            <FaPause size={12} />
+            <FaPause size={14} />
           </button>
           <button
             onClick={(e) => {
@@ -54,9 +61,9 @@ function TaskTimer({
             }}
             aria-label="Stopper"
             title="Stopper"
-            className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-rose-600 text-white hover:bg-rose-500 active:scale-95 transition"
+            className={TASK_TIMER_COMPACT_STOP}
           >
-            <FaStop size={12} />
+            <FaStop size={14} />
           </button>
         </>
       )}
