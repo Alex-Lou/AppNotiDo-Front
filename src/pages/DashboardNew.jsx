@@ -9,6 +9,7 @@ import InAppNotifications from '../components/Dashboard/InAppNotifications';
 import EmptyState from '../components/Dashboard/EmptyState';
 import UrgentTasksSection from '../components/Dashboard/UrgentTasksSection';
 import TaskList from '../components/Dashboard/TaskList';
+import KanbanBoard from '../components/Dashboard/KanbanBoard';
 import DashboardLayout from '../components/Dashboard/DashboardLayout';
 import ProfileModal from '../components/Skeleton/ProfileModal';
 import DashboardSkeleton from '../components/Skeleton/DashboardSkeleton';
@@ -33,11 +34,78 @@ function DashboardNew({ setUsername }) {
     dashboard.setShowTaskForm(true);
   };
 
-  // ← FONCTION AJOUTÉE ICI
   const handleTaskCreation = async (taskData) => {
     await dashboard.onTaskCreated(taskData);
     dashboard.setShowTaskForm(false);
     taskSuggestions.fetchSuggestions();
+  };
+
+  // Rendu de la section des tâches selon le viewMode
+  const renderTasksSection = () => {
+    const isEmpty = dashboard.normalToDisplay.length === 0 && dashboard.urgentToDisplay.length === 0;
+
+    if (isEmpty) {
+      return (
+        <EmptyState 
+          hasFilters={dashboard.hasFilters} 
+          onNewTask={handleNewTask}
+        />
+      );
+    }
+
+    switch (dashboard.viewMode) {
+      case 'kanban':
+        return (
+          <KanbanBoard
+            tasks={dashboard.allTasksToDisplay}
+            onTaskUpdate={dashboard.handleTaskUpdate}
+            onTaskDelete={dashboard.handleTaskDelete}
+            onStartEditing={dashboard.setEditingTaskId}
+          />
+        );
+
+      case 'grid':
+        // TODO: GridView component
+        return (
+          <div className="text-center py-12 text-slate-500 dark:text-amber-300/70">
+            🚧 Vue Grille en construction...
+          </div>
+        );
+
+      case 'list':
+      default:
+        return (
+          <>
+            <UrgentTasksSection
+              urgentTasks={dashboard.urgentToDisplay}
+              draggedTaskId={dashboard.draggedTaskId}
+              dragOverTaskId={dashboard.dragOverTaskId}
+              editingTaskId={dashboard.editingTaskId}
+              onTaskUpdate={dashboard.handleTaskUpdate}
+              onTaskDelete={dashboard.handleTaskDelete}
+              onDragStart={dashboard.handleDragStart}
+              onDragEnter={dashboard.handleDragEnter}
+              onDragEnd={dashboard.handleDragEnd}
+              onStartEditing={dashboard.setEditingTaskId}
+              setTasks={dashboard.setTasks}
+              fetchTasks={dashboard.fetchTasks}
+            />
+
+            <TaskList
+              tasks={dashboard.normalToDisplay}
+              draggedTaskId={dashboard.draggedTaskId}
+              dragOverTaskId={dashboard.dragOverTaskId}
+              editingTaskId={dashboard.editingTaskId}
+              onTaskUpdate={dashboard.handleTaskUpdate}
+              onTaskDelete={dashboard.handleTaskDelete}
+              onDragStart={dashboard.handleDragStart}
+              onDragEnter={dashboard.handleDragEnter}
+              onDragEnd={dashboard.handleDragEnd}
+              onStartEditing={dashboard.setEditingTaskId}
+            />
+          </>
+        );
+    }
   };
 
   return (
@@ -100,6 +168,8 @@ function DashboardNew({ setUsername }) {
           totalCount={dashboard.tasks.length}
           onExportCSV={dashboard.exportToCSV}
           onExportPDF={dashboard.exportToPDF}
+          viewMode={dashboard.viewMode}
+          setViewMode={dashboard.setViewMode}
         />
       </div>
 
@@ -113,55 +183,22 @@ function DashboardNew({ setUsername }) {
       )}
 
       <div className={DASHBOARD_TASKS_SECTION}>
-        <UrgentTasksSection
-          urgentTasks={dashboard.urgentToDisplay}
-          draggedTaskId={dashboard.draggedTaskId}
-          dragOverTaskId={dashboard.dragOverTaskId}
-          editingTaskId={dashboard.editingTaskId}
-          onTaskUpdate={dashboard.handleTaskUpdate}
-          onTaskDelete={dashboard.handleTaskDelete}
-          onDragStart={dashboard.handleDragStart}
-          onDragEnter={dashboard.handleDragEnter}
-          onDragEnd={dashboard.handleDragEnd}
-          onStartEditing={dashboard.setEditingTaskId}
-          setTasks={dashboard.setTasks}
-          fetchTasks={dashboard.fetchTasks}
-        />
-
-        {dashboard.normalToDisplay.length === 0 && dashboard.urgentToDisplay.length === 0 ? (
-          <EmptyState 
-            hasFilters={dashboard.hasFilters} 
-            onNewTask={handleNewTask}
-          />
-        ) : (
-          <TaskList
-            tasks={dashboard.normalToDisplay}
-            draggedTaskId={dashboard.draggedTaskId}
-            dragOverTaskId={dashboard.dragOverTaskId}
-            editingTaskId={dashboard.editingTaskId}
-            onTaskUpdate={dashboard.handleTaskUpdate}
-            onTaskDelete={dashboard.handleTaskDelete}
-            onDragStart={dashboard.handleDragStart}
-            onDragEnter={dashboard.handleDragEnter}
-            onDragEnd={dashboard.handleDragEnd}
-            onStartEditing={dashboard.setEditingTaskId}
-          />
-        )}
+        {renderTasksSection()}
       </div>
 
       {taskSuggestions.showModal && (
-      <TaskSuggestionsModal
-        suggestions={taskSuggestions.suggestions}
-        onClose={() => taskSuggestions.setShowModal(false)}
-        onMoveTasks={async (taskIds) => {
-          const success = await taskSuggestions.moveTasksToToday(taskIds);
-          if (success) {
-            await dashboard.fetchTasks(); // ← Attendre le refresh
-            taskSuggestions.fetchSuggestions(); // ← Re-vérifier s'il reste des suggestions
-          }
-        }}
-      />
-    )}
+        <TaskSuggestionsModal
+          suggestions={taskSuggestions.suggestions}
+          onClose={() => taskSuggestions.setShowModal(false)}
+          onMoveTasks={async (taskIds) => {
+            const success = await taskSuggestions.moveTasksToToday(taskIds);
+            if (success) {
+              await dashboard.fetchTasks();
+              taskSuggestions.fetchSuggestions();
+            }
+          }}
+        />
+      )}
 
       {dashboard.isProfileModalOpen && (
         <ProfileModal

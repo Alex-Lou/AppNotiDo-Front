@@ -568,3 +568,65 @@ main::-webkit-scrollbar-thumb:active {
     rgb(251, 113, 133) 100%
   );
 }
+
+/* ==========================================
+   KANBAN BOARD - SCROLLBAR & RESPONSIVE
+   ========================================== */
+
+/* Scrollbar fine pour les colonnes Kanban */
+[class*="KANBAN_COLUMN_CONTENT"]::-webkit-scrollbar,
+.kanban-column-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+[class*="KANBAN_COLUMN_CONTENT"]::-webkit-scrollbar-track,
+.kanban-column-content::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 6px;
+}
+
+[class*="KANBAN_COLUMN_CONTENT"]::-webkit-scrollbar-thumb,
+.kanban-column-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, 
+    rgb(148, 163, 184) 0%,
+    rgb(100, 116, 139) 100%
+  );
+  border-radius: 6px;
+}
+
+.dark [class*="KANBAN_COLUMN_CONTENT"]::-webkit-scrollbar-thumb,
+.dark .kanban-column-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, 
+    rgb(120, 113, 108) 0%,
+    rgb(87, 83, 78) 100%
+  );
+}
+
+/* Mobile: Colonnes empilées verticalement */
+@media (max-width: 640px) {
+  .kanban-container {
+    flex-direction: column;
+  }
+  
+  .kanban-column {
+    max-height: 280px;
+  }
+}
+
+/* Tablette: Colonnes côte à côte avec taille réduite */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .kanban-column {
+    min-height: 350px;
+  }
+  
+  .kanban-card-description {
+    display: none;
+  }
+}
+
+/* Desktop: Pleine largeur */
+@media (min-width: 1025px) {
+  .kanban-column {
+    min-height: 500px;
+  }
+}

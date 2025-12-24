@@ -360,6 +360,210 @@ export const TASK_FILTERS_COUNT_CONTAINER = "absolute inset-y-0 right-12 sm:righ
 
 export const TASK_FILTERS_CLEAR_ICON = "sm:w-5 sm:h-5";
 
+
+// ==========================================
+// VIEW SWITCHER - RESPONSIVE
+// ==========================================
+export const VIEW_SWITCHER_CONTAINER = `
+  flex items-center gap-0.5 sm:gap-1 
+  rounded-lg sm:rounded-xl border-2 border-slate-200 
+  bg-white/80 p-0.5 sm:p-1 shadow-md
+  dark:border-stone-700 dark:bg-stone-800/80
+`;
+
+export const VIEW_SWITCHER_BUTTON = `
+  flex items-center justify-center gap-1 sm:gap-1.5 
+  rounded-md sm:rounded-lg 
+  px-2 py-1.5
+  sm:px-2.5 sm:py-2
+  md:px-3 md:py-2
+  text-xs sm:text-sm font-medium 
+  text-slate-500 
+  transition-all duration-200
+  hover:bg-slate-100 hover:text-slate-700
+  dark:text-amber-300/70 
+  dark:hover:bg-stone-700 dark:hover:text-amber-200
+`;
+
+export const VIEW_SWITCHER_BUTTON_ACTIVE = `
+  bg-gradient-to-r from-cyan-500 to-teal-500 
+  text-white shadow-sm
+  hover:from-cyan-400 hover:to-teal-400 hover:text-white
+  dark:from-amber-600 dark:to-orange-600
+  dark:hover:from-amber-500 dark:hover:to-orange-500
+`;
+
+// ==========================================
+// KANBAN BOARD - RESPONSIVE
+// ==========================================
+export const KANBAN_CONTAINER = `
+  flex flex-col gap-3
+  sm:flex-row sm:gap-2
+  md:gap-3
+  lg:gap-4
+  w-full
+  overflow-x-hidden
+`;
+
+export const KANBAN_COLUMN = `
+  w-full
+  sm:flex-1 sm:min-w-0
+  flex flex-col
+  rounded-xl sm:rounded-2xl
+  bg-slate-100/80 dark:bg-stone-800/50
+  border border-slate-200 dark:border-stone-700
+  max-h-[250px] sm:max-h-[400px] md:max-h-none
+  sm:min-h-[350px] md:min-h-[400px] lg:min-h-[500px]
+`;
+
+export const KANBAN_COLUMN_HEADER = `
+  flex items-center justify-between
+  px-2.5 py-2
+  sm:px-3 sm:py-2.5
+  md:px-4 md:py-3
+  border-b border-slate-200 dark:border-stone-700
+  flex-shrink-0
+`;
+
+export const KANBAN_COLUMN_TITLE = `
+  text-xs sm:text-sm font-bold text-slate-700 dark:text-amber-100
+  truncate
+`;
+
+export const KANBAN_COLUMN_COUNT = `
+  flex items-center justify-center
+  w-5 h-5 sm:w-6 sm:h-6 rounded-full
+  bg-slate-200 dark:bg-stone-700
+  text-xs font-bold text-slate-600 dark:text-amber-300
+  flex-shrink-0 ml-2
+`;
+
+export const KANBAN_COLUMN_CONTENT = `
+  flex-1 
+  p-2 sm:p-2.5 md:p-3
+  flex flex-col gap-2 sm:gap-2.5 md:gap-3
+  overflow-y-auto
+  transition-colors duration-200
+`;
+
+export const KANBAN_COLUMN_EMPTY = `
+  flex items-center justify-center
+  h-14 sm:h-20 md:h-24 
+  rounded-lg sm:rounded-xl
+  border-2 border-dashed border-slate-300 dark:border-stone-600
+  text-xs sm:text-sm text-slate-400 dark:text-stone-500
+`;
+
+export const KANBAN_DROP_ZONE = `
+  flex items-center justify-center
+  h-10 sm:h-14 md:h-16 
+  rounded-lg sm:rounded-xl
+  border-2 border-dashed border-cyan-400 dark:border-amber-500
+  bg-cyan-50/50 dark:bg-amber-900/20
+  text-xs sm:text-sm font-medium text-cyan-600 dark:text-amber-400
+  transition-all duration-200
+`;
+
+export const KANBAN_DROP_ZONE_ACTIVE = `
+  bg-cyan-50/30 dark:bg-amber-900/10
+`;
+
+// ==========================================
+// KANBAN CARD - RESPONSIVE
+// ==========================================
+export const KANBAN_CARD = `
+  relative
+  p-2 sm:p-2.5 md:p-3 
+  rounded-lg sm:rounded-xl
+  bg-white dark:bg-stone-900
+  border border-slate-200 dark:border-stone-700
+  shadow-sm hover:shadow-md
+  cursor-grab active:cursor-grabbing
+  transition-all duration-200
+`;
+
+export const KANBAN_CARD_DRAGGING = `
+  opacity-50 scale-95 rotate-1
+  shadow-lg
+`;
+
+export const KANBAN_CARD_DRAG_OVER = `
+  ring-2 ring-cyan-400 dark:ring-amber-500
+`;
+
+export const KANBAN_CARD_LOCKED = `
+  cursor-not-allowed opacity-75
+  border-slate-300 dark:border-stone-600
+  bg-slate-50 dark:bg-stone-800
+`;
+
+export const KANBAN_CARD_DONE = `
+  opacity-70
+  bg-emerald-50/50 dark:bg-emerald-900/20
+`;
+
+export const KANBAN_CARD_HEADER = `
+  pr-6 sm:pr-7 md:pr-8
+`;
+
+export const KANBAN_CARD_TITLE = `
+  text-xs sm:text-sm font-semibold text-slate-800 dark:text-amber-50
+  line-clamp-2
+`;
+
+export const KANBAN_CARD_DESCRIPTION = `
+  mt-1 sm:mt-1.5 
+  text-xs text-slate-500 dark:text-amber-300/70
+  line-clamp-1 sm:line-clamp-2
+  hidden xs:block
+`;
+
+export const KANBAN_CARD_METADATA = `
+  mt-1.5 sm:mt-2 
+  flex items-center gap-1.5 sm:gap-2 
+  flex-wrap
+`;
+
+export const KANBAN_CARD_DATE = `
+  flex items-center gap-0.5 sm:gap-1
+  text-xs font-medium
+`;
+
+export const KANBAN_CARD_BADGES = `
+  mt-1.5 sm:mt-2 
+  flex items-center gap-1 sm:gap-1.5
+`;
+
+export const KANBAN_CARD_BADGE = `
+  text-xs
+`;
+
+export const KANBAN_CARD_ACTIONS = `
+  absolute 
+  top-1.5 right-1.5
+  sm:top-2 sm:right-2
+  flex items-center gap-0.5 sm:gap-1
+`;
+
+export const KANBAN_CARD_ACTION_BUTTON = `
+  p-1 sm:p-1.5 
+  rounded-md sm:rounded-lg
+  text-slate-400 dark:text-stone-500
+  hover:bg-slate-100 dark:hover:bg-stone-800
+  hover:text-slate-600 dark:hover:text-amber-300
+  transition-colors duration-150
+`;
+
+export const KANBAN_CARD_LOCKED_INDICATOR = `
+  absolute 
+  top-1.5 right-1.5
+  sm:top-2 sm:right-2
+  p-1 sm:p-1.5 
+  rounded-full
+  bg-slate-200 dark:bg-stone-700
+  text-slate-500 dark:text-stone-400
+`;
+
 // ==========================================
 // EXPORT BUTTON
 // ==========================================

@@ -1,6 +1,6 @@
 // src/components/Dashboard/TaskFilters.jsx
 import { useState } from 'react';
-import { FiPlus, FiSearch, FiX } from 'react-icons/fi';
+import { FiPlus, FiSearch, FiX, FiList, FiGrid, FiColumns } from 'react-icons/fi';
 import ExportButton from './ExportButton';
 import FilterSelect from '../ui/FilterSelect';
 import { 
@@ -23,7 +23,10 @@ import {
   SEARCH_CLEAR_BUTTON,
   TASK_FILTERS_CLEAR_ICON,
   SEARCH_NO_RESULTS,
-  SEARCH_RESULTS_INFO
+  SEARCH_RESULTS_INFO,
+  VIEW_SWITCHER_CONTAINER,
+  VIEW_SWITCHER_BUTTON,
+  VIEW_SWITCHER_BUTTON_ACTIVE
 } from '../../constants/styles';
 
 const statusOptions = [
@@ -40,6 +43,12 @@ const priorityOptions = [
   { value: 'HIGH', label: '🔴 Haute' }
 ];
 
+const viewModes = [
+  { value: 'list', icon: FiList, label: 'Liste' },
+  { value: 'kanban', icon: FiColumns, label: 'Kanban' },
+  { value: 'grid', icon: FiGrid, label: 'Grille' }
+];
+
 function TaskFilters({ 
   statusFilter, 
   setStatusFilter, 
@@ -52,7 +61,9 @@ function TaskFilters({
   searchResultCount,
   totalCount,
   onExportCSV,
-  onExportPDF
+  onExportPDF,
+  viewMode,
+  setViewMode
 }) {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const hasSearch = searchQuery.trim().length > 0;
@@ -74,13 +85,28 @@ function TaskFilters({
 
   return (
     <div className={TASK_FILTERS_CONTAINER}>
-      {/* LIGNE 1 : Bouton nouvelle tâche + Recherche */}
+      {/* LIGNE 1 : Bouton nouvelle tâche + View Switcher + Recherche */}
       <div className={FILTERS_ROW_TOP}>
         {/* Bouton Nouvelle tâche */}
         <button onClick={onNewTask} className={NEW_TASK_BUTTON}>
           <FiPlus size={20} /> 
           <span>Nouvelle tâche</span>
         </button>
+
+        {/* View Switcher */}
+        <div className={VIEW_SWITCHER_CONTAINER}>
+          {viewModes.map(({ value, icon: Icon, label }) => (
+            <button
+              key={value}
+              onClick={() => setViewMode(value)}
+              className={`${VIEW_SWITCHER_BUTTON} ${viewMode === value ? VIEW_SWITCHER_BUTTON_ACTIVE : ''}`}
+              title={label}
+            >
+              <Icon size={18} />
+              <span className="hidden sm:inline">{label}</span>
+            </button>
+          ))}
+        </div>
 
         {/* Recherche compacte ou étendue */}
         <div className={TASK_FILTERS_SEARCH_CONTAINER}>

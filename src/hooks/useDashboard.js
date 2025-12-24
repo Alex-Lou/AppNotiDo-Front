@@ -14,7 +14,8 @@ export const useDashboard = (setUsername) => {
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [activeQuickView, setActiveQuickView] = useState(null);
-  const [timeTick, setTimeTick] = useState(Date.now()); // tick temps
+  const [timeTick, setTimeTick] = useState(Date.now());
+  const [viewMode, setViewMode] = useState('list'); // 'list' | 'kanban' | 'grid'
 
   const navigate = useNavigate();
   const username = localStorage.getItem('username') || 'User';
@@ -68,15 +69,17 @@ export const useDashboard = (setUsername) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setTimeTick(Date.now());
-    }, 30000); // 30 000 ms = 30s
+    }, 30000);
     return () => clearInterval(interval);
   }, []);
 
   const baseTasksToDisplay = activeQuickView ? getTasksByView(activeQuickView) : filteredTasks;
 
-  // on passe timeTick au hook urgent pour qu'il se recalcule régulièrement
   const { urgentTasks: urgentToDisplay, normalTasks: normalToDisplay } =
     useUrgentTasks(baseTasksToDisplay, timeTick);
+
+  // Toutes les tâches à afficher (urgent + normal combinés pour Kanban/Grid)
+  const allTasksToDisplay = [...urgentToDisplay, ...normalToDisplay];
 
   // Handlers
   const handleLogout = async () => {
@@ -139,12 +142,17 @@ export const useDashboard = (setUsername) => {
     setIsProfileModalOpen,
     loading,
 
+    // View Mode
+    viewMode,
+    setViewMode,
+
     // Tasks
     tasks,
     setTasks,
     filteredTasks,
     urgentToDisplay,
     normalToDisplay,
+    allTasksToDisplay,
     allUrgentTasks,
     stats,
 
