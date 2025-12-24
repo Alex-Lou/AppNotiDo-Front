@@ -25,17 +25,21 @@ import {
   DASHBOARD_TASKS_SECTION
 } from '../constants/styles';
 
+
 function DashboardNew({ setUsername }) {
   const dashboard = useDashboard(setUsername);
   const taskSuggestions = useTaskSuggestions();
+
 
   if (dashboard.loading || !dashboard.displayName) {
     return <DashboardSkeleton />;
   }
 
+
   const handleNewTask = () => {
     dashboard.setShowTaskForm(true);
   };
+
 
   const handleTaskCreation = async (taskData) => {
     await dashboard.onTaskCreated(taskData);
@@ -43,9 +47,11 @@ function DashboardNew({ setUsername }) {
     taskSuggestions.fetchSuggestions();
   };
 
+
   // Rendu de la section des tâches selon le viewMode
   const renderTasksSection = () => {
     const isEmpty = dashboard.normalToDisplay.length === 0 && dashboard.urgentToDisplay.length === 0;
+
 
     // Le calendrier s'affiche même s'il n'y a pas de tâches
     if (dashboard.viewMode === 'calendar') {
@@ -60,6 +66,7 @@ function DashboardNew({ setUsername }) {
       );
     }
 
+
     if (isEmpty) {
       return (
         <EmptyState 
@@ -68,6 +75,7 @@ function DashboardNew({ setUsername }) {
         />
       );
     }
+
 
     switch (dashboard.viewMode) {
       case 'kanban':
@@ -80,15 +88,24 @@ function DashboardNew({ setUsername }) {
           />
         );
 
+
       case 'grid':
         return (
           <GridView
-            tasks={dashboard.allTasksToDisplay}
+            tasks={dashboard.tasks}
+            filteredTasks={dashboard.allTasksToDisplay}
             onTaskUpdate={dashboard.handleTaskUpdate}
             onTaskDelete={dashboard.handleTaskDelete}
             onStartEditing={dashboard.openEditModal}
+            draggedTaskId={dashboard.draggedTaskId}
+            dragOverTaskId={dashboard.dragOverTaskId}
+            onDragStart={dashboard.handleDragStart}
+            onDragEnter={dashboard.handleDragEnter}
+            onDragEnd={dashboard.handleDragEnd}
+            setTasks={dashboard.setTasks}
           />
         );
+
 
       case 'list':
       default:
@@ -109,6 +126,7 @@ function DashboardNew({ setUsername }) {
               fetchTasks={dashboard.fetchTasks}
             />
 
+
             <TaskList
               tasks={dashboard.normalToDisplay}
               draggedTaskId={dashboard.draggedTaskId}
@@ -126,8 +144,10 @@ function DashboardNew({ setUsername }) {
     }
   };
 
+
   // Déterminer si on doit afficher le modal d'édition/création
   const showEditModal = (dashboard.taskToEdit || dashboard.isCreatingTask) && dashboard.viewMode !== 'list';
+
 
   return (
     <DashboardLayout
@@ -170,11 +190,13 @@ function DashboardNew({ setUsername }) {
           totalCount={dashboard.stats.total}
         />
 
+
         <StatsCards
           stats={dashboard.stats}
           onFilterClick={dashboard.handleStatsCardClick}
           activeFilter={dashboard.statusFilter}
         />
+
 
         <TaskFilters
           statusFilter={dashboard.statusFilter}
@@ -194,6 +216,7 @@ function DashboardNew({ setUsername }) {
         />
       </div>
 
+
       {dashboard.showTaskForm && (
         <div className={DASHBOARD_TASK_FORM_CONTAINER}>
           <TaskForm 
@@ -203,9 +226,11 @@ function DashboardNew({ setUsername }) {
         </div>
       )}
 
+
       <div className={DASHBOARD_TASKS_SECTION}>
         {renderTasksSection()}
       </div>
+
 
       {/* Modal d'édition/création global */}
       {showEditModal && (
@@ -218,6 +243,7 @@ function DashboardNew({ setUsername }) {
           onClose={dashboard.closeEditModal}
         />
       )}
+
 
       {taskSuggestions.showModal && (
         <TaskSuggestionsModal
@@ -233,6 +259,7 @@ function DashboardNew({ setUsername }) {
         />
       )}
 
+
       {dashboard.isProfileModalOpen && (
         <ProfileModal
           onClose={() => dashboard.setIsProfileModalOpen(false)}
@@ -242,5 +269,6 @@ function DashboardNew({ setUsername }) {
     </DashboardLayout>
   );
 }
+
 
 export default DashboardNew;

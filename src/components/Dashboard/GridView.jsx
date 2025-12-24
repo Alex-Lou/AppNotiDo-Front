@@ -1,5 +1,5 @@
 // src/components/Dashboard/GridView.jsx
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { FiClock, FiEdit2, FiTrash2, FiCheck } from 'react-icons/fi';
 import { FaLock } from 'react-icons/fa';
 import { formatDate } from '../../utils/taskUtils';
@@ -25,8 +25,6 @@ import {
   GRID_EMPTY
 } from '../../constants/styles';
 
-// Ordre de tri des priorités
-const PRIORITY_ORDER = { HIGH: 0, MEDIUM: 1, LOW: 2 };
 
 // Labels sans emoji (on les ajoute manuellement)
 const STATUS_TEXT = {
@@ -35,22 +33,30 @@ const STATUS_TEXT = {
   DONE: 'Terminé'
 };
 
+
 const STATUS_EMOJI = {
   TODO: '📝',
   IN_PROGRESS: '⏳',
   DONE: '✅'
 };
 
+
 function GridCard({ 
   task, 
   onEdit,
   onDelete,
-  onMarkDone
+  onMarkDone,
+  onDragStart,
+  onDragEnter,
+  onDragEnd,
+  isDragging,
+  isDragOver
 }) {
   const [showActions, setShowActions] = useState(false);
   const isLocked = task.locked || false;
   const isDone = task.status === 'DONE';
   const dateInfo = task.dueDate ? formatDate(task.dueDate) : null;
+
 
   const priorityClass = {
     HIGH: GRID_CARD_PRIORITY_HIGH,
@@ -58,12 +64,16 @@ function GridCard({
     LOW: GRID_CARD_PRIORITY_LOW
   }[task.priority] || '';
 
+
   const cardClasses = [
     GRID_CARD,
     priorityClass,
     isLocked && GRID_CARD_LOCKED,
-    isDone && GRID_CARD_DONE
+    isDone && GRID_CARD_DONE,
+    isDragging && 'opacity-50 scale-95 transition-all duration-200',
+    isDragOver && 'ring-2 ring-cyan-400 dark:ring-amber-500 scale-105 transition-all duration-200'
   ].filter(Boolean).join(' ');
+
 
   const handleEdit = (e) => {
     e.stopPropagation();
@@ -73,6 +83,7 @@ function GridCard({
     }
   };
 
+
   const handleDelete = (e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -80,6 +91,7 @@ function GridCard({
       onDelete(task.id);
     }
   };
+
 
   const handleDone = (e) => {
     e.stopPropagation();
@@ -89,9 +101,15 @@ function GridCard({
     }
   };
 
+
   return (
     <div 
       className={cardClasses}
+      draggable={!isLocked}
+      onDragStart={(e) => !isLocked && onDragStart && onDragStart(e, task.id)}
+      onDragEnter={(e) => !isLocked && onDragEnter && onDragEnter(e, task.id)}
+      onDragEnd={!isLocked && onDragEnd ? onDragEnd : undefined}
+      onDragOver={(e) => !isLocked && e.preventDefault()}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
       onTouchStart={() => setShowActions(true)}
@@ -103,6 +121,7 @@ function GridCard({
           <FaLock size={10} />
         </div>
       )}
+
 
       {/* Actions au hover */}
       {showActions && !isLocked && (
@@ -136,10 +155,12 @@ function GridCard({
         </div>
       )}
 
+
       {/* Header avec titre */}
       <div className={GRID_CARD_HEADER}>
         <h4 className={GRID_CARD_TITLE}>{task.title}</h4>
       </div>
+
 
       {/* Description tronquée */}
       {task.description && (
@@ -150,8 +171,10 @@ function GridCard({
         </p>
       )}
 
+
       {/* Tags */}
       <TaskTags tags={task.tags} compact />
+
 
       {/* Metadata - Date */}
       {dateInfo && (
@@ -162,6 +185,7 @@ function GridCard({
           </span>
         </div>
       )}
+
 
       {/* Footer - Status badge */}
       <div className={GRID_CARD_FOOTER}>
@@ -178,44 +202,21 @@ function GridCard({
   );
 }
 
+
 function GridView({
   tasks,
+  filteredTasks,
   onTaskUpdate,
   onTaskDelete,
-  onStartEditing
+  onStartEditing,
+  draggedTaskId,
+  dragOverTaskId,
+  onDragStart,
+  onDragEnter,
+  onDragEnd,
+  setTasks
 }) {
-  // Trier les tâches par priorité puis par date
-  const sortedTasks = useMemo(() => {
-    return [...tasks].sort((a, b) => {
-      // D'abord par priorité
-      const priorityDiff = PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority];
-      if (priorityDiff !== 0) return priorityDiff;
-      
-      // Ensuite par date d'échéance (les plus proches en premier)
-      if (a.dueDate && b.dueDate) {
-        return new Date(a.dueDate) - new Date(b.dueDate);
-      }
-      if (a.dueDate) return -1;
-      if (b.dueDate) return 1;
-      
-      return 0;
-    });
-  }, [tasks]);
-
-  // Marquer une tâche comme faite
-  const handleMarkDone = async (taskId) => {
-    const task = tasks.find(t => t.id === taskId);
-    if (!task || task.locked) return;
-
-    const updatedTask = {
-      ...task,
-      status: 'DONE'
-    };
-
-    await onTaskUpdate(taskId, updatedTask);
-  };
-
-  if (sortedTasks.length === 0) {
+  if (filteredTasks.length === 0) {
     return (
       <div className={GRID_EMPTY}>
         <p>Aucune tâche à afficher</p>
@@ -223,19 +224,42 @@ function GridView({
     );
   }
 
+
+  // Marquer une tâche comme faite
+  const handleMarkDone = async (taskId) => {
+    const task = filteredTasks.find(t => t.id === taskId);
+    if (!task || task.locked) return;
+
+
+    const updatedTask = {
+      ...task,
+      status: 'DONE'
+    };
+
+
+    await onTaskUpdate(taskId, updatedTask);
+  };
+
+
   return (
-    <div className={GRID_CONTAINER}>
-      {sortedTasks.map((task) => (
+    <div className={GRID_CONTAINER} onDragOver={(e) => e.preventDefault()}>
+      {filteredTasks.map((task) => (
         <GridCard
           key={task.id}
           task={task}
           onEdit={onStartEditing}
           onDelete={onTaskDelete}
           onMarkDone={handleMarkDone}
+          onDragStart={onDragStart}
+          onDragEnter={(e, targetTaskId) => onDragEnter && onDragEnter(e, targetTaskId, filteredTasks)}
+          onDragEnd={() => onDragEnd && onDragEnd(filteredTasks)}
+          isDragging={draggedTaskId === task.id}
+          isDragOver={dragOverTaskId === task.id}
         />
       ))}
     </div>
   );
 }
+
 
 export default GridView;
