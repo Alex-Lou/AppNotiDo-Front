@@ -644,6 +644,7 @@ export const GRID_CARD_LOCKED = `
 export const GRID_CARD_DONE = `
   opacity-60
   bg-emerald-50/50 dark:bg-emerald-900/20
+  [&:hover_.grid-actions]:opacity-100
 `;
 
 export const GRID_CARD_PRIORITY_INDICATOR = `
@@ -697,6 +698,7 @@ export const GRID_CARD_ACTIONS = `
   flex items-center gap-0.5
   opacity-0 group-hover:opacity-100
   transition-opacity duration-200
+  grid-actions
 `;
 
 export const GRID_CARD_ACTION_BUTTON = `

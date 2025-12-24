@@ -2,6 +2,7 @@
 import { FaSave, FaTimes } from 'react-icons/fa';
 import { INPUT_CLASSES, LABEL_CLASSES, BUTTON_PRIMARY, BUTTON_SECONDARY, EDIT_FORM_CONTAINER, DECORATIVE_HALO } from '../../constants/styles';
 
+
 function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, handleDateChange }) {
   return (
     <div className={EDIT_FORM_CONTAINER}>
@@ -26,6 +27,7 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
           rows="3"
         />
 
+
         {/* Tags */}
         <div>
           <label className={LABEL_CLASSES}>
@@ -40,6 +42,7 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
           />
         </div>
 
+
         {/* Date d'échéance */}
         <div>
           <label className={LABEL_CLASSES}>
@@ -52,6 +55,7 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
             className={INPUT_CLASSES}
           />
         </div>
+
 
         {/* Durée et Rappel */}
         <div className="grid grid-cols-2 gap-4">
@@ -74,6 +78,7 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
             />
           </div>
 
+
           <div>
             <label className={LABEL_CLASSES}>
               🔔 Rappel (min)
@@ -90,6 +95,7 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
             </select>
           </div>
         </div>
+
 
         {/* Priorité et Statut */}
         <div className="grid grid-cols-2 gap-4">
@@ -108,6 +114,7 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
             </select>
           </div>
 
+
           <div>
             <label className={LABEL_CLASSES}>
               📌 Statut
@@ -124,6 +131,49 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
           </div>
         </div>
 
+
+        {/* Chronométrer cette tâche */}
+        <div>
+          <label className="flex items-start gap-3 cursor-pointer p-3 rounded-xl bg-slate-50 dark:bg-stone-800 border border-slate-200 dark:border-stone-700 hover:bg-slate-100 dark:hover:bg-stone-700 transition-colors">
+            <input
+              type="checkbox"
+              checked={editedTask.timerEnabled !== false}
+              onChange={(e) => setEditedTask({ ...editedTask, timerEnabled: e.target.checked })}
+              className="w-5 h-5 mt-0.5 rounded border-slate-300 text-cyan-500 focus:ring-cyan-500 dark:border-stone-600 dark:bg-stone-800"
+            />
+            <div>
+              <span className="text-sm font-medium text-slate-700 dark:text-amber-100 block">
+                ⏱️ Chronométrer cette tâche
+              </span>
+              <span className="text-xs text-slate-500 dark:text-amber-300/70">
+                Afficher le chronomètre pour traquer le temps passé
+              </span>
+            </div>
+          </label>
+        </div>
+
+
+        {/* Réactivable */}
+        <div>
+          <label className="flex items-start gap-3 cursor-pointer p-3 rounded-xl bg-slate-50 dark:bg-stone-800 border border-slate-200 dark:border-stone-700 hover:bg-slate-100 dark:hover:bg-stone-700 transition-colors">
+            <input
+              type="checkbox"
+              checked={editedTask.reactivable || false}
+              onChange={(e) => setEditedTask({ ...editedTask, reactivable: e.target.checked })}
+              className="w-5 h-5 mt-0.5 rounded border-slate-300 text-cyan-500 focus:ring-cyan-500 dark:border-stone-600 dark:bg-stone-800"
+            />
+            <div>
+              <span className="text-sm font-medium text-slate-700 dark:text-amber-100 block">
+                🔄 Tâche réactivable
+              </span>
+              <span className="text-xs text-slate-500 dark:text-amber-300/70">
+                Si échue, proposer de la déplacer vers aujourd'hui
+              </span>
+            </div>
+          </label>
+        </div>
+
+
         {/* Boutons */}
         <div className="mt-2 flex gap-3">
           <button onClick={handleSave} className={BUTTON_PRIMARY}>
@@ -137,5 +187,6 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
     </div>
   );
 }
+
 
 export default TaskEditForm;

@@ -1,6 +1,6 @@
 // src/components/Dashboard/GridView.jsx
 import { useState } from 'react';
-import { FiClock, FiEdit2, FiTrash2, FiCheck } from 'react-icons/fi';
+import { FiClock, FiEdit2, FiTrash2, FiCheck, FiPlay, FiRotateCcw } from 'react-icons/fi';
 import { FaLock } from 'react-icons/fa';
 import { formatDate } from '../../utils/taskUtils';
 import TaskTags from '../Task/TaskTags';
@@ -45,7 +45,7 @@ function GridCard({
   task, 
   onEdit,
   onDelete,
-  onMarkDone,
+  onTaskUpdate,
   onDragStart,
   onDragEnter,
   onDragEnd,
@@ -55,6 +55,8 @@ function GridCard({
   const [showActions, setShowActions] = useState(false);
   const isLocked = task.locked || false;
   const isDone = task.status === 'DONE';
+  const isTodo = task.status === 'TODO';
+  const isInProgress = task.status === 'IN_PROGRESS';
   const dateInfo = task.dueDate ? formatDate(task.dueDate) : null;
 
 
@@ -93,12 +95,36 @@ function GridCard({
   };
 
 
-  const handleDone = (e) => {
+  const handleStartTask = async (e) => {
     e.stopPropagation();
     e.preventDefault();
-    if (onMarkDone && !isLocked && !isDone) {
-      onMarkDone(task.id);
-    }
+    const updatedTask = {
+      ...task,
+      status: 'IN_PROGRESS'
+    };
+    await onTaskUpdate(task.id, updatedTask);
+  };
+
+
+  const handleCompleteTask = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const updatedTask = {
+      ...task,
+      status: 'DONE'
+    };
+    await onTaskUpdate(task.id, updatedTask);
+  };
+
+
+  const handleReopenTask = async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const updatedTask = {
+      ...task,
+      status: 'IN_PROGRESS'
+    };
+    await onTaskUpdate(task.id, updatedTask);
   };
 
 
@@ -126,16 +152,42 @@ function GridCard({
       {/* Actions au hover */}
       {showActions && !isLocked && (
         <div className={GRID_CARD_ACTIONS}>
-          {!isDone && (
+          {/* Bouton Play - seulement pour "À faire" */}
+          {isTodo && (
             <button
-              onClick={handleDone}
+              onClick={handleStartTask}
               className={`${GRID_CARD_ACTION_BUTTON} hover:text-emerald-500 dark:hover:text-emerald-400`}
-              title="Marquer comme fait"
+              title="Démarrer la tâche"
+              type="button"
+            >
+              <FiPlay size={14} />
+            </button>
+          )}
+
+          {/* Bouton Check - seulement pour "En cours" */}
+          {isInProgress && (
+            <button
+              onClick={handleCompleteTask}
+              className={`${GRID_CARD_ACTION_BUTTON} hover:text-emerald-500 dark:hover:text-emerald-400`}
+              title="Marquer comme terminé"
               type="button"
             >
               <FiCheck size={14} />
             </button>
           )}
+
+          {/* Bouton Rouvrir - seulement pour "Terminé" */}
+          {isDone && (
+            <button
+              onClick={handleReopenTask}
+              className={`${GRID_CARD_ACTION_BUTTON} hover:text-amber-500 dark:hover:text-amber-400`}
+              title="Rouvrir la tâche"
+              type="button"
+            >
+              <FiRotateCcw size={14} />
+            </button>
+          )}
+
           <button
             onClick={handleEdit}
             className={GRID_CARD_ACTION_BUTTON}
@@ -225,22 +277,6 @@ function GridView({
   }
 
 
-  // Marquer une tâche comme faite
-  const handleMarkDone = async (taskId) => {
-    const task = filteredTasks.find(t => t.id === taskId);
-    if (!task || task.locked) return;
-
-
-    const updatedTask = {
-      ...task,
-      status: 'DONE'
-    };
-
-
-    await onTaskUpdate(taskId, updatedTask);
-  };
-
-
   return (
     <div className={GRID_CONTAINER} onDragOver={(e) => e.preventDefault()}>
       {filteredTasks.map((task) => (
@@ -249,7 +285,7 @@ function GridView({
           task={task}
           onEdit={onStartEditing}
           onDelete={onTaskDelete}
-          onMarkDone={handleMarkDone}
+          onTaskUpdate={onTaskUpdate}
           onDragStart={onDragStart}
           onDragEnter={(e, targetTaskId) => onDragEnter && onDragEnter(e, targetTaskId, filteredTasks)}
           onDragEnd={() => onDragEnd && onDragEnd(filteredTasks)}

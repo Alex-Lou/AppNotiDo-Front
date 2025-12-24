@@ -1,6 +1,6 @@
 // src/components/Dashboard/KanbanBoard.jsx
 import { useState } from 'react';
-import { FiClock, FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { FiClock, FiEdit2, FiTrash2, FiPlay, FiCheck, FiRotateCcw } from 'react-icons/fi';
 import { FaLock } from 'react-icons/fa';
 import { formatDate } from '../../utils/taskUtils';
 import { PRIORITY_COLORS } from '../../constants/taskConstants';
@@ -32,11 +32,13 @@ import {
   KANBAN_DROP_ZONE_ACTIVE
 } from '../../constants/styles';
 
+
 const COLUMNS = [
   { id: 'TODO', title: '📝 À faire', color: 'cyan' },
   { id: 'IN_PROGRESS', title: '⏳ En cours', color: 'amber' },
   { id: 'DONE', title: '✅ Terminé', color: 'emerald' }
 ];
+
 
 function KanbanCard({ 
   task, 
@@ -45,12 +47,16 @@ function KanbanCard({
   onDragStart, 
   onDragEnd,
   onEdit,
-  onDelete 
+  onDelete,
+  onTaskUpdate
 }) {
   const [showActions, setShowActions] = useState(false);
   const isLocked = task.locked || false;
   const isDone = task.status === 'DONE';
+  const isTodo = task.status === 'TODO';
+  const isInProgress = task.status === 'IN_PROGRESS';
   const dateInfo = task.dueDate ? formatDate(task.dueDate) : null;
+
 
   const cardClasses = [
     KANBAN_CARD,
@@ -59,6 +65,34 @@ function KanbanCard({
     isLocked && KANBAN_CARD_LOCKED,
     isDone && KANBAN_CARD_DONE
   ].filter(Boolean).join(' ');
+
+  const handleStartTask = async (e) => {
+    e.stopPropagation();
+    const updatedTask = {
+      ...task,
+      status: 'IN_PROGRESS'
+    };
+    await onTaskUpdate(task.id, updatedTask);
+  };
+
+  const handleCompleteTask = async (e) => {
+    e.stopPropagation();
+    const updatedTask = {
+      ...task,
+      status: 'DONE'
+    };
+    await onTaskUpdate(task.id, updatedTask);
+  };
+
+  const handleReopenTask = async (e) => {
+    e.stopPropagation();
+    const updatedTask = {
+      ...task,
+      status: 'IN_PROGRESS'
+    };
+    await onTaskUpdate(task.id, updatedTask);
+  };
+
 
   return (
     <div
@@ -78,9 +112,43 @@ function KanbanCard({
         </div>
       )}
 
+
       {/* Actions au hover */}
       {showActions && !isLocked && (
         <div className={KANBAN_CARD_ACTIONS}>
+          {/* Bouton Play - seulement pour les tâches "À faire" */}
+          {isTodo && (
+            <button
+              onClick={handleStartTask}
+              className={`${KANBAN_CARD_ACTION_BUTTON} hover:text-emerald-500 dark:hover:text-emerald-400`}
+              title="Démarrer la tâche"
+            >
+              <FiPlay size={14} />
+            </button>
+          )}
+
+          {/* Bouton Check - seulement pour les tâches "En cours" */}
+          {isInProgress && (
+            <button
+              onClick={handleCompleteTask}
+              className={`${KANBAN_CARD_ACTION_BUTTON} hover:text-emerald-500 dark:hover:text-emerald-400`}
+              title="Marquer comme terminé"
+            >
+              <FiCheck size={14} />
+            </button>
+          )}
+
+          {/* Bouton Rouvrir - seulement pour les tâches "Terminé" */}
+          {isDone && (
+            <button
+              onClick={handleReopenTask}
+              className={`${KANBAN_CARD_ACTION_BUTTON} hover:text-amber-500 dark:hover:text-amber-400`}
+              title="Rouvrir la tâche"
+            >
+              <FiRotateCcw size={14} />
+            </button>
+          )}
+          
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -104,10 +172,12 @@ function KanbanCard({
         </div>
       )}
 
+
       {/* Header avec titre */}
       <div className={KANBAN_CARD_HEADER}>
         <h4 className={KANBAN_CARD_TITLE}>{task.title}</h4>
       </div>
+
 
       {/* Description tronquée - cachée sur mobile */}
       {task.description && (
@@ -118,8 +188,10 @@ function KanbanCard({
         </p>
       )}
 
+
       {/* Tags - version compacte */}
       <TaskTags tags={task.tags} compact />
+
 
       {/* Metadata */}
       <div className={KANBAN_CARD_METADATA}>
@@ -130,6 +202,7 @@ function KanbanCard({
           </span>
         )}
       </div>
+
 
       {/* Badges priorité */}
       <div className={KANBAN_CARD_BADGES}>
@@ -143,6 +216,7 @@ function KanbanCard({
   );
 }
 
+
 function KanbanColumn({ 
   column, 
   tasks, 
@@ -153,10 +227,12 @@ function KanbanColumn({
   onDragOverColumn,
   onDropOnColumn,
   onEdit,
-  onDelete
+  onDelete,
+  onTaskUpdate
 }) {
   const isDropTarget = dragOverColumn === column.id && draggedTaskId;
   const columnTasks = tasks.filter(task => task.status === column.id);
+
 
   return (
     <div 
@@ -177,6 +253,7 @@ function KanbanColumn({
         <span className={KANBAN_COLUMN_COUNT}>{columnTasks.length}</span>
       </div>
 
+
       {/* Contenu colonne */}
       <div className={`${KANBAN_COLUMN_CONTENT} kanban-column-content ${isDropTarget ? KANBAN_DROP_ZONE_ACTIVE : ''}`}>
         {columnTasks.length === 0 ? (
@@ -194,9 +271,11 @@ function KanbanColumn({
               onDragEnd={onDragEnd}
               onEdit={onEdit}
               onDelete={onDelete}
+              onTaskUpdate={onTaskUpdate}
             />
           ))
         )}
+
 
         {/* Zone de drop visible */}
         {isDropTarget && (
@@ -209,6 +288,7 @@ function KanbanColumn({
   );
 }
 
+
 function KanbanBoard({
   tasks,
   onTaskUpdate,
@@ -218,15 +298,18 @@ function KanbanBoard({
   const [draggedTaskId, setDraggedTaskId] = useState(null);
   const [dragOverColumn, setDragOverColumn] = useState(null);
 
+
   const handleDragStart = (e, taskId) => {
     setDraggedTaskId(taskId);
     e.dataTransfer.effectAllowed = 'move';
   };
 
+
   const handleDragEnd = () => {
     setDraggedTaskId(null);
     setDragOverColumn(null);
   };
+
 
   const handleDragOverColumn = (columnId) => {
     if (draggedTaskId) {
@@ -234,8 +317,10 @@ function KanbanBoard({
     }
   };
 
+
   const handleDropOnColumn = async (newStatus) => {
     if (!draggedTaskId) return;
+
 
     const task = tasks.find(t => t.id === draggedTaskId);
     if (!task || task.locked) {
@@ -243,11 +328,13 @@ function KanbanBoard({
       return;
     }
 
+
     // Ne rien faire si même colonne
     if (task.status === newStatus) {
       handleDragEnd();
       return;
     }
+
 
     // Update le statut de la tâche
     const updatedTask = {
@@ -255,9 +342,11 @@ function KanbanBoard({
       status: newStatus
     };
 
+
     await onTaskUpdate(task.id, updatedTask);
     handleDragEnd();
   };
+
 
   return (
     <div className={`${KANBAN_CONTAINER} kanban-container`}>
@@ -274,10 +363,12 @@ function KanbanBoard({
           onDropOnColumn={handleDropOnColumn}
           onEdit={onStartEditing}
           onDelete={onTaskDelete}
+          onTaskUpdate={onTaskUpdate}
         />
       ))}
     </div>
   );
 }
+
 
 export default KanbanBoard;

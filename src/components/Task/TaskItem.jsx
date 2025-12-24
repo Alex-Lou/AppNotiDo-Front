@@ -1,7 +1,7 @@
 // src/components/Task/TaskItem.jsx
 import { useState, useEffect } from 'react';
-import { FaTrash, FaEdit, FaClock, FaLock, FaLockOpen } from 'react-icons/fa';
-import { FiX } from 'react-icons/fi';
+import { FaTrash, FaLock, FaLockOpen, FaClock } from 'react-icons/fa';
+import { FiX, FiCheck } from 'react-icons/fi';
 import { useTimer } from '../../hooks/useTimer';
 import { formatDate, formatDuration, formatTimeSpent, calculateProgress } from '../../utils/taskUtils';
 import { PRIORITY_COLORS, STATUS_COLORS, STATUS_LABELS, PRIORITY_LABELS } from '../../constants/taskConstants';
@@ -146,11 +146,32 @@ function TaskItem({
   };
 
 
+  const handleMarkDone = async (e) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    const updatedTask = {
+      ...task,
+      status: 'DONE'
+    };
+    await onUpdate(task.id, updatedTask);
+  };
+
+
   const handleCloseTimeSpent = (e) => {
     e.stopPropagation();
     const storageKey = `task-${task.id}-hideTimeSpent`;
     localStorage.setItem(storageKey, 'hidden');
     setShowTimeSpent(false);
+  };
+
+
+  const handleCardClick = () => {
+    const isLocked = task.locked || false;
+    if (!isLocked && !isEditing) {
+      onStartEditing(task.id);
+    }
   };
 
 
@@ -169,16 +190,19 @@ function TaskItem({
 
   const dateInfo = task.dueDate ? formatDate(task.dueDate) : null;
   const isLocked = task.locked || false;
+  const isDone = task.status === 'DONE';
   const progressInfo = calculateProgress(task);
 
 
   return (
     <div
-      className={getTaskCardClasses(isLocked, isDragging, isDragOver, task.status === 'DONE')}
+      className={getTaskCardClasses(isLocked, isDragging, isDragOver, isDone)}
       draggable={!isLocked}
       onDragStart={(e) => !isLocked && onDragStart(e, task.id)}
       onDragEnter={(e) => !isLocked && onDragEnter(e, task.id)}
       onDragEnd={!isLocked ? onDragEnd : undefined}
+      onClick={handleCardClick}
+      style={{ cursor: isLocked ? 'default' : 'pointer' }}
     >
       {/* Halo décoratif */}
       <div className={TASK_HALO} />
@@ -212,17 +236,18 @@ function TaskItem({
         >
           {isLocked ? <FaLock size={16} className={TASK_UNLOCK_ICON} /> : <FaLockOpen size={16} />}
         </button>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onStartEditing(task.id);
-          }}
-          className={`${TASK_ACTION_BUTTON} ${TASK_ACTION_EDIT}`}
-          title="Modifier"
-        >
-          <FaEdit size={16} />
-        </button>
+        
+        {/* Bouton Valider - seulement si pas terminé */}
+        {!isDone && (
+          <button
+            onClick={handleMarkDone}
+            className={`${TASK_ACTION_BUTTON} ${TASK_ACTION_EDIT}`}
+            title="Marquer comme terminé"
+          >
+            <FiCheck size={16} />
+          </button>
+        )}
+        
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -282,7 +307,7 @@ function TaskItem({
 
 
           {/* Temps passé pour tâches terminées - affiché seulement si timerEnabled */}
-          {isTimerEnabled && task.status === 'DONE' && task.timeSpent > 0 && showTimeSpent && (
+          {isTimerEnabled && isDone && task.timeSpent > 0 && showTimeSpent && (
             <div className={TASK_TIME_SPENT_CONTAINER}>
               <button
                 onClick={handleCloseTimeSpent}

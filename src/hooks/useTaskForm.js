@@ -12,7 +12,7 @@ export function useTaskForm() {
     estimatedDuration: '',
     reminderMinutes: 15,
     reactivable: false,
-    timerEnabled: true
+    timerEnabled: false
   };
 
 
