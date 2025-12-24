@@ -122,14 +122,17 @@ export const SIDEBAR_SUBTITLE = "mt-2 text-base sm:text-xl font-script italic te
 // DASHBOARD HEADER - RESPONSIVE
 // ==========================================
 
-export const DASHBOARD_HEADER_CONTAINER = "mb-6 sm:mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4";
+export const DASHBOARD_HEADER_CONTAINER = `
+  flex items-start justify-between gap-4
+  mb-4 sm:mb-6
+`;
 
 export const DASHBOARD_HEADER_TITLE = `
-  text-2xl font-bold tracking-tight text-slate-800 dark:text-amber-50
-  text-center
-  sm:text-left sm:text-3xl
-  lg:text-4xl
-  lg:ml-0
+  text-2xl sm:text-3xl md:text-4xl font-black
+  bg-gradient-to-r from-cyan-600 via-teal-500 to-orange-500
+  bg-clip-text text-transparent
+  dark:from-amber-400 dark:via-orange-400 dark:to-rose-400
+  leading-tight
 `;
 
 export const DASHBOARD_HEADER_SUBTITLE = `
@@ -140,37 +143,37 @@ export const DASHBOARD_HEADER_SUBTITLE = `
 export const DASHBOARD_HEADER_SECTION = "mb-8 sm:mb-10";
 
 // ==========================================
-// STATS CARDS - RESPONSIVE FINAL
+// STATS CARDS - RESPONSIVE COMPACT
 // ==========================================
 
 export const STATS_GRID = `
-  grid gap-2 mb-6
+  grid gap-2 mb-4
   grid-cols-2
   sm:grid-cols-2
   lg:grid-cols-4
-  sm:gap-4
-  sm:mb-8
+  sm:gap-3
+  sm:mb-6
 `;
 
 export const STAT_CARD_BASE = `
-  relative overflow-hidden rounded-2xl 
-  px-2 py-4
-  sm:px-5 sm:py-5
-  lg:px-6 lg:py-5
+  relative overflow-hidden rounded-xl 
+  px-2 py-2.5
+  sm:px-4 sm:py-3
+  lg:px-5 lg:py-3.5
   text-center
-  shadow-lg ring-2 transition-all 
-  hover:scale-[1.02] hover:shadow-xl
-  min-h-[120px]
-  sm:min-h-[130px]
+  shadow-md ring-2 transition-all 
+  hover:scale-[1.02] hover:shadow-lg
+  min-h-[90px]
+  sm:min-h-[100px]
   flex flex-col items-center justify-center
 `;
 
-export const STAT_CARD_HALO = "pointer-events-none absolute -right-8 -top-8 h-14 w-14 sm:-right-10 sm:-top-10 sm:h-20 sm:w-20 lg:h-24 lg:w-24 rounded-full";
+export const STAT_CARD_HALO = "pointer-events-none absolute -right-6 -top-6 h-12 w-12 sm:-right-8 sm:-top-8 sm:h-16 sm:w-16 lg:h-18 lg:w-18 rounded-full";
 
 export const STAT_CARD_LABEL = `
-  text-[8.5px] leading-[1.1]
-  sm:text-xs sm:leading-normal
-  lg:text-sm 
+  text-[8px] leading-[1.1]
+  sm:text-[10px] sm:leading-normal
+  lg:text-xs 
   font-bold uppercase 
   tracking-[0.02em]
   sm:tracking-wide
@@ -181,16 +184,16 @@ export const STAT_CARD_LABEL = `
 `;
 
 export const STAT_CARD_VALUE = `
-  mt-2 text-2xl
-  sm:mt-2 sm:text-3xl 
-  lg:mt-3 lg:text-4xl 
+  mt-1 text-xl
+  sm:mt-1.5 sm:text-2xl 
+  lg:mt-2 lg:text-3xl 
   font-bold
 `;
 
 export const STAT_CARD_SUBTITLE = `
-  mt-1 text-[7.5px] leading-[1.1]
-  sm:mt-1.5 sm:text-xs sm:leading-normal
-  lg:mt-2 
+  mt-0.5 text-[7px] leading-[1.1]
+  sm:mt-1 sm:text-[10px] sm:leading-normal
+  lg:mt-1 lg:text-xs
   font-bold uppercase 
   tracking-[0.02em]
   sm:tracking-wider
@@ -200,7 +203,6 @@ export const STAT_CARD_SUBTITLE = `
   text-ellipsis
   whitespace-nowrap
 `;
-
 
 export const STAT_CARD_VARIANTS = {
   ALL: {
@@ -240,6 +242,7 @@ export const STAT_CARD_VARIANTS = {
     subtitle: "text-teal-800 dark:text-teal-300/80"
   }
 };
+
 
 // ==========================================
 // TASK FILTERS - RESPONSIVE REDESIGN
@@ -976,17 +979,14 @@ export const CALENDAR_LEGEND_ITEM = `
 // ==========================================
 
 export const EXPORT_BUTTON = `
-  w-full
-  sm:w-auto
-  sm:flex-shrink-0
-  inline-flex items-center justify-center gap-2 rounded-xl border-2 border-emerald-400/70 
+  inline-flex items-center justify-center gap-2 rounded-lg border-2 border-emerald-400/70 
   bg-gradient-to-r from-emerald-50 to-teal-50 
-  px-4 py-2.5 sm:px-5 sm:py-3 
-  text-xs sm:text-sm font-bold text-emerald-800 shadow-md 
+  px-3 py-2 sm:px-4 sm:py-2.5 
+  text-xs font-bold text-emerald-800 shadow-md 
   transition hover:border-emerald-500 hover:from-emerald-100 hover:to-teal-100 hover:shadow-lg 
   dark:border-emerald-700/70 dark:bg-gradient-to-r dark:from-emerald-900/60 dark:to-teal-900/60 
   dark:text-emerald-200 dark:hover:border-emerald-600 dark:hover:from-emerald-900/80 dark:hover:to-teal-900/80 
-  relative z-10
+  whitespace-nowrap
 `;
 
 export const EXPORT_DROPDOWN = "absolute right-0 top-full z-[100] mt-2 w-44 sm:w-48 overflow-hidden rounded-xl border-2 border-slate-200/60 bg-white shadow-xl dark:border-stone-700/60 dark:bg-stone-900/95";

@@ -1,7 +1,6 @@
 // src/components/Dashboard/TaskFilters.jsx
 import { useState } from 'react';
 import { FiPlus, FiSearch, FiX, FiList, FiGrid, FiColumns, FiCalendar } from 'react-icons/fi';
-import ExportButton from './ExportButton';
 import FilterSelect from '../ui/FilterSelect';
 import { 
   TASK_FILTERS_CONTAINER,
@@ -61,8 +60,6 @@ function TaskFilters({
   onClearSearch,
   searchResultCount,
   totalCount,
-  onExportCSV,
-  onExportPDF,
   viewMode,
   setViewMode
 }) {
@@ -161,7 +158,7 @@ function TaskFilters({
         </div>
       </div>
 
-      {/* LIGNE 2 : Filtres + Export */}
+      {/* LIGNE 2 : Filtres seulement */}
       <div className={FILTERS_ROW_BOTTOM}>
         {/* Filtres */}
         <div className={FILTERS_GROUP}>
@@ -179,12 +176,6 @@ function TaskFilters({
             options={priorityOptions}
           />
         </div>
-
-        {/* Bouton Export */}
-        <ExportButton 
-          onExportCSV={onExportCSV}
-          onExportPDF={onExportPDF}
-        />
       </div>
 
       {/* Messages de recherche en dessous */}

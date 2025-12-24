@@ -188,6 +188,8 @@ function DashboardNew({ setUsername }) {
           username={dashboard.displayName}
           completedCount={dashboard.stats.done}
           totalCount={dashboard.stats.total}
+          onExportCSV={dashboard.exportToCSV}
+          onExportPDF={dashboard.exportToPDF}
         />
 
 
