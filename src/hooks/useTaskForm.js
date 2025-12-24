@@ -1,6 +1,7 @@
 // hooks/useTaskForm.js
 import { useState } from 'react';
 
+
 export function useTaskForm() {
   const initialValues = {
     title: '',
@@ -10,19 +11,24 @@ export function useTaskForm() {
     dueDate: '',
     estimatedDuration: '',
     reminderMinutes: 15,
-    reactivable: false  // ← AJOUTÉ
+    reactivable: false,
+    timerEnabled: true
   };
+
 
   const [values, setValues] = useState(initialValues);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
 
   const handleChange = (field, value) => {
     setValues(prev => ({ ...prev, [field]: value }));
   };
 
+
   const reset = () => {
     setValues(initialValues);
   };
+
 
   const prepareTaskData = () => ({
     title: values.title,
@@ -32,8 +38,10 @@ export function useTaskForm() {
     dueDate: values.dueDate ? new Date(values.dueDate).toISOString() : null,
     estimatedDuration: values.estimatedDuration ? parseInt(values.estimatedDuration) : null,
     reminderMinutes: parseInt(values.reminderMinutes),
-    reactivable: values.reactivable  // ← AJOUTÉ
+    reactivable: values.reactivable,
+    timerEnabled: values.timerEnabled
   });
+
 
   return {
     values,
