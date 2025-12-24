@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api',  // ✅ Relatif maintenant, proxy Vite redirige vers :8080
+  baseURL: '/api',
   withCredentials: true,
 });
 
@@ -9,11 +9,16 @@ const api = axios.create({
 api.interceptors.response.use(
   response => response,
   error => {
-    if (error.response?.status === 401 || error.response?.status === 403) {
-      // Token invalide/expiré → déconnecter et rediriger
+    const status = error.response?.status;
+    const method = error.config?.method?.toUpperCase();
+    
+    // Ne rediriger vers /auth que pour les erreurs 401
+    // ou 403 sur GET (pas sur POST/PUT/DELETE qui peuvent être des erreurs de validation)
+    if (status === 401 || (status === 403 && method === 'GET')) {
       localStorage.clear();
       window.location.href = '/auth';
     }
+    
     return Promise.reject(error);
   }
 );

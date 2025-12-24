@@ -564,6 +564,389 @@ export const KANBAN_CARD_LOCKED_INDICATOR = `
   text-slate-500 dark:text-stone-400
 `;
 
+
+// ==========================================
+// GRID VIEW - COMPACT RESPONSIVE
+// ==========================================
+export const GRID_CONTAINER = `
+  grid gap-3
+  grid-cols-1
+  xs:grid-cols-2
+  sm:grid-cols-2
+  md:grid-cols-3
+  lg:grid-cols-4
+  xl:grid-cols-5
+  w-full
+`;
+
+export const GRID_EMPTY = `
+  flex items-center justify-center
+  h-40 rounded-xl
+  border-2 border-dashed border-slate-300 dark:border-stone-600
+  text-sm text-slate-400 dark:text-stone-500
+`;
+
+// ==========================================
+// GRID CARD - COMPACT
+// ==========================================
+export const GRID_CARD = `
+  relative
+  flex flex-col
+  p-3 sm:p-4
+  rounded-xl
+  bg-white dark:bg-stone-900
+  border border-slate-200 dark:border-stone-700
+  shadow-sm hover:shadow-lg
+  transition-all duration-200
+  overflow-hidden
+  group
+`;
+
+export const GRID_CARD_PRIORITY_HIGH = `
+  border-l-4 border-l-red-500
+`;
+
+export const GRID_CARD_PRIORITY_MEDIUM = `
+  border-l-4 border-l-amber-500
+`;
+
+export const GRID_CARD_PRIORITY_LOW = `
+  border-l-4 border-l-emerald-500
+`;
+
+export const GRID_CARD_LOCKED = `
+  opacity-75
+  bg-slate-50 dark:bg-stone-800
+`;
+
+export const GRID_CARD_DONE = `
+  opacity-60
+  bg-emerald-50/50 dark:bg-emerald-900/20
+`;
+
+export const GRID_CARD_PRIORITY_INDICATOR = `
+  absolute top-0 left-0 right-0 h-1
+  bg-gradient-to-r from-transparent via-current to-transparent
+  opacity-0
+`;
+
+export const GRID_CARD_HEADER = `
+  pr-16
+  mb-1
+`;
+
+export const GRID_CARD_TITLE = `
+  text-sm font-semibold text-slate-800 dark:text-amber-50
+  line-clamp-2
+  leading-tight
+`;
+
+export const GRID_CARD_DESCRIPTION = `
+  text-xs text-slate-500 dark:text-amber-300/70
+  line-clamp-2
+  mb-2
+`;
+
+export const GRID_CARD_METADATA = `
+  flex items-center gap-1.5
+  mt-auto
+  pt-2
+`;
+
+export const GRID_CARD_DATE = `
+  flex items-center gap-1
+  text-xs font-medium
+`;
+
+export const GRID_CARD_FOOTER = `
+  flex items-center justify-between
+  mt-2 pt-2
+  border-t border-slate-100 dark:border-stone-800
+`;
+
+export const GRID_CARD_STATUS_BADGE = `
+  text-xs font-medium
+  text-slate-500 dark:text-amber-300/70
+`;
+
+export const GRID_CARD_ACTIONS = `
+  absolute 
+  top-2 right-2
+  flex items-center gap-0.5
+  opacity-0 group-hover:opacity-100
+  transition-opacity duration-200
+`;
+
+export const GRID_CARD_ACTION_BUTTON = `
+  p-1.5
+  rounded-lg
+  bg-white/80 dark:bg-stone-800/80
+  text-slate-400 dark:text-stone-500
+  hover:bg-slate-100 dark:hover:bg-stone-700
+  hover:text-slate-600 dark:hover:text-amber-300
+  transition-colors duration-150
+  shadow-sm
+`;
+
+export const GRID_CARD_LOCKED_INDICATOR = `
+  absolute 
+  top-2 right-2
+  p-1.5
+  rounded-full
+  bg-slate-200 dark:bg-stone-700
+  text-slate-500 dark:text-stone-400
+`;
+
+// ==========================================
+// CALENDAR VIEW - RESPONSIVE
+// ==========================================
+export const CALENDAR_CONTAINER = `
+  w-full
+  bg-white dark:bg-stone-900
+  rounded-2xl
+  border border-slate-200 dark:border-stone-700
+  shadow-lg
+  overflow-hidden
+`;
+
+export const CALENDAR_HEADER = `
+  flex items-center justify-center gap-2
+  px-3 py-3
+  sm:px-6 sm:py-4
+  bg-gradient-to-r from-cyan-500 via-teal-500 to-emerald-500
+  dark:from-amber-600 dark:via-orange-600 dark:to-rose-600
+`;
+
+export const CALENDAR_NAV_BUTTON = `
+  p-1.5 sm:p-2
+  rounded-lg
+  bg-white/20 hover:bg-white/30
+  text-white
+  transition-colors duration-200
+`;
+
+export const CALENDAR_TITLE = `
+  flex-1
+  text-center
+  text-base sm:text-xl font-bold text-white
+`;
+
+export const CALENDAR_TODAY_BUTTON = `
+  px-2 py-1
+  sm:px-3 sm:py-1.5
+  rounded-lg
+  bg-white/20 hover:bg-white/30
+  text-xs sm:text-sm font-medium text-white
+  transition-colors duration-200
+`;
+
+export const CALENDAR_WEEKDAYS = `
+  grid grid-cols-7
+  bg-slate-50 dark:bg-stone-800
+  border-b border-slate-200 dark:border-stone-700
+`;
+
+export const CALENDAR_WEEKDAY = `
+  py-2 sm:py-3
+  text-center
+  text-xs sm:text-sm font-semibold
+  text-slate-600 dark:text-amber-300
+`;
+
+export const CALENDAR_GRID = `
+  grid grid-cols-7
+`;
+
+export const CALENDAR_DAY = `
+  relative
+  min-h-[60px] sm:min-h-[80px] md:min-h-[100px]
+  p-1 sm:p-2
+  border-b border-r border-slate-100 dark:border-stone-800
+  cursor-pointer
+  transition-all duration-200
+  hover:bg-slate-50 dark:hover:bg-stone-800/50
+`;
+
+export const CALENDAR_DAY_OTHER_MONTH = `
+  bg-slate-50/50 dark:bg-stone-900/50
+  opacity-50
+`;
+
+export const CALENDAR_DAY_TODAY = `
+  bg-cyan-50 dark:bg-amber-900/20
+  ring-2 ring-inset ring-cyan-400 dark:ring-amber-500
+`;
+
+export const CALENDAR_DAY_SELECTED = `
+  bg-cyan-100 dark:bg-amber-900/40
+`;
+
+export const CALENDAR_DAY_HAS_TASKS = `
+  font-semibold
+`;
+
+export const CALENDAR_DAY_NUMBER = `
+  block
+  text-xs sm:text-sm font-medium
+  text-slate-700 dark:text-amber-100
+  mb-1
+`;
+
+export const CALENDAR_DAY_TASKS = `
+  flex flex-wrap gap-0.5 sm:gap-1
+`;
+
+export const CALENDAR_TASK_DOT = `
+  w-2 h-2 sm:w-2.5 sm:h-2.5
+  rounded-full
+  flex-shrink-0
+`;
+
+export const CALENDAR_TASK_DOT_HIGH = `
+  bg-red-500
+`;
+
+export const CALENDAR_TASK_DOT_MEDIUM = `
+  bg-amber-500
+`;
+
+export const CALENDAR_TASK_DOT_LOW = `
+  bg-emerald-500
+`;
+
+// ==========================================
+// CALENDAR MODAL
+// ==========================================
+export const CALENDAR_MODAL_OVERLAY = `
+  fixed inset-0 z-50
+  flex items-center justify-center
+  bg-black/50 backdrop-blur-sm
+  p-4
+`;
+
+export const CALENDAR_MODAL = `
+  w-full max-w-md
+  max-h-[80vh]
+  bg-white dark:bg-stone-900
+  rounded-2xl
+  shadow-2xl
+  overflow-hidden
+  flex flex-col
+`;
+
+export const CALENDAR_MODAL_HEADER = `
+  flex items-center justify-between
+  px-4 py-3 sm:px-6 sm:py-4
+  bg-gradient-to-r from-cyan-500 to-teal-500
+  dark:from-amber-600 dark:to-orange-600
+`;
+
+export const CALENDAR_MODAL_TITLE = `
+  text-base sm:text-lg font-bold text-white
+  flex items-center
+`;
+
+export const CALENDAR_MODAL_CLOSE = `
+  p-1.5
+  rounded-lg
+  bg-white/20 hover:bg-white/30
+  text-white
+  transition-colors duration-200
+`;
+
+export const CALENDAR_MODAL_CONTENT = `
+  flex-1
+  overflow-y-auto
+  p-3 sm:p-4
+  space-y-2 sm:space-y-3
+`;
+
+export const CALENDAR_MODAL_TASK = `
+  flex items-start gap-3
+  p-3 sm:p-4
+  rounded-xl
+  bg-slate-50 dark:bg-stone-800
+  border border-slate-200 dark:border-stone-700
+  transition-all duration-200
+  hover:shadow-md
+`;
+
+export const CALENDAR_MODAL_TASK_DONE = `
+  opacity-60
+  bg-emerald-50 dark:bg-emerald-900/20
+`;
+
+export const CALENDAR_MODAL_TASK_TITLE = `
+  text-sm sm:text-base font-semibold
+  text-slate-800 dark:text-amber-50
+  line-clamp-2
+`;
+
+export const CALENDAR_MODAL_TASK_META = `
+  flex items-center gap-2 sm:gap-3
+  mt-1
+  text-xs sm:text-sm
+  text-slate-500 dark:text-amber-300/70
+`;
+
+export const CALENDAR_MODAL_TASK_ACTIONS = `
+  flex items-center gap-1
+  flex-shrink-0
+`;
+
+export const CALENDAR_MODAL_TASK_ACTION = `
+  p-1.5 sm:p-2
+  rounded-lg
+  text-slate-400 dark:text-stone-500
+  hover:bg-slate-200 dark:hover:bg-stone-700
+  hover:text-slate-600 dark:hover:text-amber-300
+  transition-colors duration-150
+`;
+
+export const CALENDAR_MODAL_EMPTY = `
+  flex items-center justify-center
+  h-32
+  text-sm text-slate-400 dark:text-stone-500
+`;
+
+export const CALENDAR_MODAL_ADD_BUTTON = `
+  flex items-center justify-center gap-2
+  w-full
+  mt-3 px-4 py-3
+  rounded-xl
+  text-sm font-medium
+  text-cyan-600 dark:text-amber-400
+  bg-cyan-50 dark:bg-amber-900/20
+  border-2 border-dashed border-cyan-300 dark:border-amber-600
+  hover:bg-cyan-100 dark:hover:bg-amber-900/40
+  hover:border-cyan-400 dark:hover:border-amber-500
+  transition-all duration-200
+`;
+
+export const CALENDAR_MODAL_TASK_CONTENT = `
+  flex-1 min-w-0
+`;
+
+export const CALENDAR_MODAL_EMPTY_TEXT = `
+  mb-4
+`;
+
+export const CALENDAR_MODAL_LOCKED_ICON = `
+  text-slate-400 dark:text-stone-500
+  flex-shrink-0
+`;
+
+export const CALENDAR_LEGEND_CONTAINER = `
+  mt-4
+  flex items-center justify-center gap-4
+  text-xs text-slate-500 dark:text-amber-300/70
+  pb-4
+`;
+
+export const CALENDAR_LEGEND_ITEM = `
+  flex items-center gap-1
+`;
+
 // ==========================================
 // EXPORT BUTTON
 // ==========================================
@@ -981,3 +1364,141 @@ export const FORM_REACTIVABLE_CHECKBOX = "w-4 h-4 text-teal-600 bg-white dark:bg
 export const FORM_REACTIVABLE_LABEL = "flex-1 cursor-pointer";
 export const FORM_REACTIVABLE_TITLE = "font-medium text-slate-700 dark:text-slate-200";
 export const FORM_REACTIVABLE_DESCRIPTION = "text-sm text-slate-500 dark:text-slate-400";
+
+
+// ==========================================
+// TASK EDIT MODAL - RESPONSIVE
+// ==========================================
+export const TASK_EDIT_MODAL_OVERLAY = `
+  fixed inset-0 z-50
+  flex items-center justify-center
+  bg-black/50 backdrop-blur-sm
+  p-4
+`;
+
+export const TASK_EDIT_MODAL = `
+  w-full max-w-lg
+  max-h-[90vh]
+  bg-white dark:bg-stone-900
+  rounded-2xl
+  shadow-2xl
+  overflow-hidden
+  flex flex-col
+`;
+
+export const TASK_EDIT_MODAL_HEADER = `
+  flex items-center justify-between
+  px-4 py-3 sm:px-6 sm:py-4
+  bg-gradient-to-r from-cyan-500 to-teal-500
+  dark:from-amber-600 dark:to-orange-600
+`;
+
+export const TASK_EDIT_MODAL_TITLE = `
+  text-base sm:text-lg font-bold text-white
+`;
+
+export const TASK_EDIT_MODAL_CLOSE = `
+  p-1.5
+  rounded-lg
+  bg-white/20 hover:bg-white/30
+  text-white
+  transition-colors duration-200
+`;
+
+export const TASK_EDIT_MODAL_CONTENT = `
+  flex-1
+  overflow-y-auto
+  p-4 sm:p-6
+  space-y-4
+`;
+
+export const TASK_EDIT_MODAL_FIELD = `
+  flex flex-col gap-1.5
+`;
+
+export const TASK_EDIT_MODAL_LABEL = `
+  text-sm font-medium
+  text-slate-700 dark:text-amber-100
+`;
+
+export const TASK_EDIT_MODAL_INPUT = `
+  w-full
+  px-3 py-2.5
+  rounded-xl
+  border-2 border-slate-200 dark:border-stone-700
+  bg-white dark:bg-stone-800
+  text-slate-800 dark:text-amber-50
+  text-sm
+  outline-none
+  transition-all duration-200
+  focus:border-cyan-400 dark:focus:border-amber-500
+  focus:ring-2 focus:ring-cyan-400/20 dark:focus:ring-amber-500/20
+  placeholder:text-slate-400 dark:placeholder:text-stone-500
+`;
+
+export const TASK_EDIT_MODAL_TEXTAREA = `
+  w-full
+  px-3 py-2.5
+  rounded-xl
+  border-2 border-slate-200 dark:border-stone-700
+  bg-white dark:bg-stone-800
+  text-slate-800 dark:text-amber-50
+  text-sm
+  outline-none
+  transition-all duration-200
+  focus:border-cyan-400 dark:focus:border-amber-500
+  focus:ring-2 focus:ring-cyan-400/20 dark:focus:ring-amber-500/20
+  placeholder:text-slate-400 dark:placeholder:text-stone-500
+  resize-none
+`;
+
+export const TASK_EDIT_MODAL_SELECT = `
+  w-full
+  px-3 py-2.5
+  rounded-xl
+  border-2 border-slate-200 dark:border-stone-700
+  bg-white dark:bg-stone-800
+  text-slate-800 dark:text-amber-50
+  text-sm
+  outline-none
+  transition-all duration-200
+  focus:border-cyan-400 dark:focus:border-amber-500
+  cursor-pointer
+  appearance-none
+`;
+
+export const TASK_EDIT_MODAL_ROW = `
+  grid grid-cols-1 sm:grid-cols-2 gap-4
+`;
+
+export const TASK_EDIT_MODAL_FOOTER = `
+  flex items-center justify-end gap-3
+  px-4 py-3 sm:px-6 sm:py-4
+  border-t border-slate-200 dark:border-stone-700
+  bg-slate-50 dark:bg-stone-800/50
+`;
+
+export const TASK_EDIT_MODAL_BUTTON_CANCEL = `
+  px-4 py-2
+  rounded-xl
+  text-sm font-medium
+  text-slate-600 dark:text-amber-300
+  hover:bg-slate-100 dark:hover:bg-stone-700
+  transition-colors duration-200
+  disabled:opacity-50 disabled:cursor-not-allowed
+`;
+
+export const TASK_EDIT_MODAL_BUTTON_SAVE = `
+  flex items-center gap-2
+  px-4 py-2
+  rounded-xl
+  text-sm font-medium
+  text-white
+  bg-gradient-to-r from-cyan-500 to-teal-500
+  dark:from-amber-600 dark:to-orange-600
+  hover:from-cyan-400 hover:to-teal-400
+  dark:hover:from-amber-500 dark:hover:to-orange-500
+  transition-all duration-200
+  shadow-md hover:shadow-lg
+  disabled:opacity-50 disabled:cursor-not-allowed
+`;

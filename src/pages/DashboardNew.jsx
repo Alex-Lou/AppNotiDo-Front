@@ -10,6 +10,9 @@ import EmptyState from '../components/Dashboard/EmptyState';
 import UrgentTasksSection from '../components/Dashboard/UrgentTasksSection';
 import TaskList from '../components/Dashboard/TaskList';
 import KanbanBoard from '../components/Dashboard/KanbanBoard';
+import GridView from '../components/Dashboard/GridView';
+import CalendarView from '../components/Dashboard/CalendarView';
+import TaskEditModal from '../components/Dashboard/TaskEditModal';
 import DashboardLayout from '../components/Dashboard/DashboardLayout';
 import ProfileModal from '../components/Skeleton/ProfileModal';
 import DashboardSkeleton from '../components/Skeleton/DashboardSkeleton';
@@ -44,6 +47,19 @@ function DashboardNew({ setUsername }) {
   const renderTasksSection = () => {
     const isEmpty = dashboard.normalToDisplay.length === 0 && dashboard.urgentToDisplay.length === 0;
 
+    // Le calendrier s'affiche même s'il n'y a pas de tâches
+    if (dashboard.viewMode === 'calendar') {
+      return (
+        <CalendarView
+          tasks={dashboard.allTasksToDisplay}
+          onTaskUpdate={dashboard.handleTaskUpdate}
+          onTaskDelete={dashboard.handleTaskDelete}
+          onStartEditing={dashboard.openEditModal}
+          onCreateTask={dashboard.openCreateModal}
+        />
+      );
+    }
+
     if (isEmpty) {
       return (
         <EmptyState 
@@ -60,16 +76,18 @@ function DashboardNew({ setUsername }) {
             tasks={dashboard.allTasksToDisplay}
             onTaskUpdate={dashboard.handleTaskUpdate}
             onTaskDelete={dashboard.handleTaskDelete}
-            onStartEditing={dashboard.setEditingTaskId}
+            onStartEditing={dashboard.openEditModal}
           />
         );
 
       case 'grid':
-        // TODO: GridView component
         return (
-          <div className="text-center py-12 text-slate-500 dark:text-amber-300/70">
-            🚧 Vue Grille en construction...
-          </div>
+          <GridView
+            tasks={dashboard.allTasksToDisplay}
+            onTaskUpdate={dashboard.handleTaskUpdate}
+            onTaskDelete={dashboard.handleTaskDelete}
+            onStartEditing={dashboard.openEditModal}
+          />
         );
 
       case 'list':
@@ -107,6 +125,9 @@ function DashboardNew({ setUsername }) {
         );
     }
   };
+
+  // Déterminer si on doit afficher le modal d'édition/création
+  const showEditModal = (dashboard.taskToEdit || dashboard.isCreatingTask) && dashboard.viewMode !== 'list';
 
   return (
     <DashboardLayout
@@ -185,6 +206,18 @@ function DashboardNew({ setUsername }) {
       <div className={DASHBOARD_TASKS_SECTION}>
         {renderTasksSection()}
       </div>
+
+      {/* Modal d'édition/création global */}
+      {showEditModal && (
+        <TaskEditModal
+          task={dashboard.taskToEdit}
+          isCreating={dashboard.isCreatingTask}
+          defaultDate={dashboard.createTaskDefaultDate}
+          onSave={dashboard.handleEditModalSave}
+          onCreate={dashboard.handleCreateModalSave}
+          onClose={dashboard.closeEditModal}
+        />
+      )}
 
       {taskSuggestions.showModal && (
         <TaskSuggestionsModal

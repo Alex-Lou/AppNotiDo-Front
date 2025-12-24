@@ -1,6 +1,6 @@
 // src/components/Dashboard/TaskFilters.jsx
 import { useState } from 'react';
-import { FiPlus, FiSearch, FiX, FiList, FiGrid, FiColumns } from 'react-icons/fi';
+import { FiPlus, FiSearch, FiX, FiList, FiGrid, FiColumns, FiCalendar } from 'react-icons/fi';
 import ExportButton from './ExportButton';
 import FilterSelect from '../ui/FilterSelect';
 import { 
@@ -46,7 +46,8 @@ const priorityOptions = [
 const viewModes = [
   { value: 'list', icon: FiList, label: 'Liste' },
   { value: 'kanban', icon: FiColumns, label: 'Kanban' },
-  { value: 'grid', icon: FiGrid, label: 'Grille' }
+  { value: 'grid', icon: FiGrid, label: 'Grille' },
+  { value: 'calendar', icon: FiCalendar, label: 'Calendrier' }
 ];
 
 function TaskFilters({ 

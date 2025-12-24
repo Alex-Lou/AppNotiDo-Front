@@ -1,3 +1,4 @@
+// src/hooks/useTasks.js
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -24,16 +25,16 @@ export const useTasks = (setUsername) => {
   // Fetch tasks
   const fetchTasks = async () => {
     try {
-
       const response = await api.get('/tasks');
       setTasks(response.data.content);
     } catch (error) {
-      console.error('Erreur:', error);
-      if (error.response?.status === 401 || error.response?.status === 403) {
-        localStorage.clear();
-        if (setUsername) setUsername(null);
-        navigate('/auth');
-      }
+      console.error('Erreur fetchTasks:', error);
+      // TEMPORAIRE : On commente la redirection pour debug
+      // if (error.response?.status === 401 || error.response?.status === 403) {
+      //   localStorage.clear();
+      //   if (setUsername) setUsername(null);
+      //   navigate('/auth');
+      // }
     } finally {
       setLoading(false);
     }
@@ -54,13 +55,26 @@ export const useTasks = (setUsername) => {
 
   // Task operations
   const handleTaskCreated = async (taskData) => {
+    console.log('=== API POST /tasks ===');
+    console.log('Sending:', JSON.stringify(taskData, null, 2));
+    
     try {
-      await api.post('/tasks', taskData);
+      const response = await api.post('/tasks', taskData);
+      console.log('SUCCESS Response:', response);
       toast.success('✅ Tâche créée avec succès !');
-      fetchTasks();
+      await fetchTasks();
     } catch (error) {
-      console.error('Erreur création tâche:', error);
+      console.error('=== API ERROR ===');
+      console.error('Full error:', error);
+      console.error('Response status:', error.response?.status);
+      console.error('Response data:', error.response?.data);
+      console.error('Response headers:', error.response?.headers);
+      
+      // Afficher l'erreur dans une alerte pour être sûr de la voir
+      alert(`ERREUR API: ${error.response?.status} - ${JSON.stringify(error.response?.data)}`);
+      
       toast.error('❌ Erreur lors de la création de la tâche');
+      throw error;
     }
   };
 
@@ -74,7 +88,6 @@ export const useTasks = (setUsername) => {
       );
 
       await fetchTasks();
-      // Pas de toast ici car déjà géré dans useTimer pour le timer
     } catch (error) {
       console.error('Error updating task:', error);
       toast.error('❌ Erreur lors de la mise à jour');
@@ -124,7 +137,6 @@ export const useTasks = (setUsername) => {
       const dueDate = new Date(task.dueDate);
       const minutesRemaining = Math.floor((dueDate - now) / 60000);
       
-      // Urgent si ≤ 5 minutes ou déjà échue
       return minutesRemaining <= 5;
     });
   };
@@ -132,8 +144,8 @@ export const useTasks = (setUsername) => {
   const getNonUrgentTasks = () => {
     const now = new Date();
     return filteredTasks.filter(task => {
-      if (!task.dueDate) return true; // Pas d'échéance = pas urgent
-      if (task.status === 'DONE') return true; // Terminé = afficher normalement
+      if (!task.dueDate) return true;
+      if (task.status === 'DONE') return true;
       
       const dueDate = new Date(task.dueDate);
       const minutesRemaining = Math.floor((dueDate - now) / 60000);
@@ -163,6 +175,6 @@ export const useTasks = (setUsername) => {
     setSearchQuery,
     clearSearch,
     hasActiveSearch,
-    searchResultCount: resultCount, // ← CORRIGÉ : utilise resultCount du hook useSearch
+    searchResultCount: resultCount,
   };
 };

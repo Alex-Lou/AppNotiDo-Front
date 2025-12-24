@@ -10,12 +10,31 @@ import { useDashboardLogic } from './useDashboardLogic';
 import { useUrgentTasks } from './useUrgentTasks';
 import api from '../services/api';
 
+// Clé localStorage pour la vue
+const VIEW_MODE_STORAGE_KEY = 'appnotido-view-mode';
+
+// Fonction pour récupérer la vue sauvegardée
+const getSavedViewMode = () => {
+  try {
+    const saved = localStorage.getItem(VIEW_MODE_STORAGE_KEY);
+    if (saved && ['list', 'kanban', 'grid', 'calendar'].includes(saved)) {
+      return saved;
+    }
+  } catch (error) {
+    console.error('Erreur lecture viewMode localStorage:', error);
+  }
+  return 'list';
+};
+
 export const useDashboard = (setUsername) => {
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState(null);
+  const [taskToEdit, setTaskToEdit] = useState(null);
+  const [isCreatingTask, setIsCreatingTask] = useState(false);
+  const [createTaskDefaultDate, setCreateTaskDefaultDate] = useState(null);
   const [activeQuickView, setActiveQuickView] = useState(null);
   const [timeTick, setTimeTick] = useState(Date.now());
-  const [viewMode, setViewMode] = useState('list'); // 'list' | 'kanban' | 'grid'
+  const [viewMode, setViewModeState] = useState(getSavedViewMode);
 
   const navigate = useNavigate();
   const username = localStorage.getItem('username') || 'User';
@@ -65,6 +84,16 @@ export const useDashboard = (setUsername) => {
   const { exportToCSV, exportToPDF } = useExport();
   const { getTasksByView } = useQuickViews(tasks);
 
+  // Setter personnalisé pour viewMode avec sauvegarde localStorage
+  const setViewMode = (newMode) => {
+    try {
+      localStorage.setItem(VIEW_MODE_STORAGE_KEY, newMode);
+    } catch (error) {
+      console.error('Erreur sauvegarde viewMode localStorage:', error);
+    }
+    setViewModeState(newMode);
+  };
+
   // Tick toutes les 30s pour forcer le recalcul urgent/échue
   useEffect(() => {
     const interval = setInterval(() => {
@@ -72,6 +101,18 @@ export const useDashboard = (setUsername) => {
     }, 30000);
     return () => clearInterval(interval);
   }, []);
+
+  // Quand editingTaskId change, charger la tâche à éditer
+  useEffect(() => {
+    if (editingTaskId) {
+      const task = tasks.find(t => t.id === editingTaskId);
+      if (task) {
+        setTaskToEdit(task);
+      }
+    } else {
+      setTaskToEdit(null);
+    }
+  }, [editingTaskId, tasks]);
 
   const baseTasksToDisplay = activeQuickView ? getTasksByView(activeQuickView) : filteredTasks;
 
@@ -122,6 +163,53 @@ export const useDashboard = (setUsername) => {
     }
   };
 
+  // Ouvrir le modal d'édition
+  const openEditModal = (taskId) => {
+    setEditingTaskId(taskId);
+    setIsCreatingTask(false);
+    setCreateTaskDefaultDate(null);
+  };
+
+  // Fermer le modal d'édition/création
+  const closeEditModal = () => {
+    setEditingTaskId(null);
+    setTaskToEdit(null);
+    setIsCreatingTask(false);
+    setCreateTaskDefaultDate(null);
+  };
+
+  // Ouvrir le modal de création avec une date par défaut (depuis calendrier)
+  const openCreateModal = (defaultDate = null) => {
+    setIsCreatingTask(true);
+    setCreateTaskDefaultDate(defaultDate);
+    setEditingTaskId(null);
+    setTaskToEdit(null);
+  };
+
+  // Sauvegarder depuis le modal d'édition
+  const handleEditModalSave = async (taskId, updatedTask) => {
+    await handleTaskUpdate(taskId, updatedTask);
+    closeEditModal();
+  };
+
+  // Créer depuis le modal de création
+  const handleCreateModalSave = async (taskData) => {
+    console.log('=== DEBUG CREATE TASK ===');
+    console.log('Task data:', JSON.stringify(taskData, null, 2));
+    
+    try {
+      await handleTaskCreated(taskData);
+      closeEditModal();
+    } catch (error) {
+      console.error('=== ERROR CREATE TASK ===');
+      console.error('Error:', error);
+      console.error('Response:', error.response);
+      console.error('Status:', error.response?.status);
+      console.error('Data:', error.response?.data);
+      // Ne pas fermer le modal en cas d'erreur
+    }
+  };
+
   const hasFilters =
     statusFilter !== 'ALL' ||
     priorityFilter !== 'ALL' ||
@@ -134,6 +222,9 @@ export const useDashboard = (setUsername) => {
     setShowTaskForm,
     editingTaskId,
     setEditingTaskId,
+    taskToEdit,
+    isCreatingTask,
+    createTaskDefaultDate,
     activeQuickView,
     username,
     displayName,
@@ -194,5 +285,12 @@ export const useDashboard = (setUsername) => {
     exportToCSV: () => exportToCSV(filteredTasks, 'taches_appnotido'),
     exportToPDF: () => exportToPDF(filteredTasks, stats, username, 'rapport_appnotido'),
     fetchTasks,
+
+    // Edit/Create Modal
+    openEditModal,
+    openCreateModal,
+    closeEditModal,
+    handleEditModalSave,
+    handleCreateModalSave,
   };
 };
