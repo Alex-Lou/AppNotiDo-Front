@@ -303,20 +303,42 @@ export const SELECT_BASE = `
   w-full
   sm:w-auto
   sm:min-w-[180px]
-  rounded-xl border-2 
-  px-3 py-2.5 
+  rounded-lg
+  px-4 py-2.5 
   sm:px-5 sm:py-3
-  text-xs sm:text-sm font-bold shadow-md outline-none transition focus:ring-2 
+  text-xs sm:text-sm font-semibold
+  outline-none 
+  transition-all duration-200
   [&>option]:bg-white [&>option]:text-slate-800 
   dark:[&>option]:bg-stone-800 dark:[&>option]:text-amber-50
   appearance-none
   cursor-pointer
 `;
 
-export const SELECT_STATUS = "border-cyan-400/70 bg-gradient-to-br from-cyan-50 to-teal-50 text-slate-800 ring-cyan-400/60 hover:border-cyan-500 dark:border-stone-700/70 dark:bg-gradient-to-br dark:from-stone-900/80 dark:to-slate-900/80 dark:text-amber-50 dark:ring-amber-700/60 dark:hover:border-stone-600";
-
-export const SELECT_PRIORITY = "border-orange-400/70 bg-gradient-to-br from-orange-50 to-amber-50 text-slate-800 ring-orange-400/60 hover:border-orange-500 dark:border-stone-700/70 dark:bg-gradient-to-br dark:from-stone-900/80 dark:to-slate-900/80 dark:text-amber-50 dark:ring-amber-700/60 dark:hover:border-stone-600";
-
+export const SELECT_STATUS = `
+  bg-slate-100 
+  text-slate-700
+  hover:bg-slate-200
+  focus:bg-slate-200
+  focus:ring-2 focus:ring-cyan-400/30
+  dark:bg-stone-800/50
+  dark:text-amber-100
+  dark:hover:bg-stone-800
+  dark:focus:bg-stone-800
+  dark:focus:ring-amber-500/30
+`;
+export const SELECT_PRIORITY = `
+  bg-slate-100
+  text-slate-700
+  hover:bg-slate-200
+  focus:bg-slate-200
+  focus:ring-2 focus:ring-orange-400/30
+  dark:bg-stone-800/50
+  dark:text-amber-100
+  dark:hover:bg-stone-800
+  dark:focus:bg-stone-800
+  dark:focus:ring-amber-500/30
+`;
 export const SEARCH_COMPACT_BUTTON = "group flex items-center gap-2 rounded-xl border-2 border-cyan-400/70 bg-gradient-to-r from-white to-cyan-50/50 px-3 py-2.5 sm:px-4 sm:py-3 shadow-md transition-all hover:border-cyan-500 hover:shadow-lg dark:border-stone-700/70 dark:bg-gradient-to-r dark:from-stone-900/80 dark:to-slate-900/80 dark:hover:border-stone-600 w-full cursor-pointer";
 
 export const SEARCH_COUNT_BADGE = "rounded-full bg-cyan-500 px-2 py-0.5 sm:px-2.5 sm:py-1 text-xs font-bold text-white dark:bg-amber-600";
