@@ -1,8 +1,10 @@
 // src/constants/styles/sidebar.js
 
+
 // ==========================================
 // SIDEBARS - RESPONSIVE & COLLAPSIBLE
 // ==========================================
+
 
 export const SIDEBAR_CONTAINER = `
   fixed left-0 top-0 z-[60] flex h-full flex-col 
@@ -18,9 +20,11 @@ export const SIDEBAR_CONTAINER = `
 `;
 
 
+
 // Sidebar plus fine
 export const getSidebarWidth = (isCollapsed) =>
   isCollapsed ? 'w-14' : 'w-52';
+
 
 export const RIGHT_SIDEBAR_CONTAINER = `
   fixed right-0 top-0 z-[65] h-full overflow-y-auto 
@@ -34,11 +38,14 @@ export const RIGHT_SIDEBAR_CONTAINER = `
   xl:px-5 xl:py-8
 `;
 
+
 export const RIGHT_SIDEBAR = RIGHT_SIDEBAR_CONTAINER;
+
 
 // Right sidebar un peu plus fine aussi
 export const getRightSidebarWidth = (isCollapsed) =>
   isCollapsed ? 'w-14' : 'w-60';
+
 
 export const SIDEBAR_OVERLAY = `
   fixed inset-0 z-[55] bg-black/50 backdrop-blur-sm
@@ -46,9 +53,11 @@ export const SIDEBAR_OVERLAY = `
   xl:hidden
 `;
 
+
 // ==========================================
 // COLLAPSE BUTTONS
 // ==========================================
+
 
 export const COLLAPSE_BUTTON = `
   absolute top-3 flex h-7 w-7 items-center justify-center 
@@ -61,19 +70,23 @@ export const COLLAPSE_BUTTON = `
   border-2 border-cyan-400/50 dark:border-amber-600/50
 `;
 
+
 export const COLLAPSE_BUTTON_LEFT = `
   ${COLLAPSE_BUTTON}
-  right-1
+  right-3
 `;
+
 
 export const COLLAPSE_BUTTON_RIGHT = `
   ${COLLAPSE_BUTTON}
   left-1
 `;
 
+
 // ==========================================
 // HAMBURGER & TOGGLE BUTTONS
 // ==========================================
+
 
 export const HAMBURGER_BUTTON = `
   fixed top-4 z-[70] flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center 
@@ -83,6 +96,7 @@ export const HAMBURGER_BUTTON = `
   xl:hidden
 `;
 
+
 export const TOGGLE_RIGHT_SIDEBAR_BUTTON = `
   fixed right-4 top-4 z-[70] flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center 
   rounded-xl bg-gradient-to-br from-orange-500 to-rose-500 
@@ -91,11 +105,14 @@ export const TOGGLE_RIGHT_SIDEBAR_BUTTON = `
   xl:hidden
 `;
 
+
 export const HAMBURGER_ICON = "text-white w-5 h-5 sm:w-5 sm:h-5";
+
 
 // ==========================================
 // SIDEBAR HEADER - RESPONSIVE
 // ==========================================
+
 
 export const SIDEBAR_HEADER = "mb-5 sm:mb-6 relative";
 export const SIDEBAR_LOGO_CONTAINER = "flex items-center gap-2.5";
@@ -114,9 +131,11 @@ export const SIDEBAR_TITLE = `
 export const SIDEBAR_SUBTITLE =
   "mt-1 text-xs sm:text-sm font-script italic text-slate-800/90 dark:text-amber-200/80";
 
+
 // ==========================================
 // SIDEBAR COMPONENTS - RESPONSIVE
 // ==========================================
+
 
 export const USER_PROFILE_SIDEBAR_CONTAINER =
   "mb-4 sm:mb-5 rounded-2xl border-2 border-cyan-400/60 bg-gradient-to-br from-cyan-100 via-teal-100 to-orange-100 px-3 py-2.5 sm:px-3.5 sm:py-3 shadow-md dark:border-amber-800/70 dark:bg-gradient-to-br dark:from-amber-900/60 dark:via-stone-900/70 dark:to-slate-900/60";
@@ -137,6 +156,7 @@ export const USER_PROFILE_SIDEBAR_BUTTON =
 export const USER_PROFILE_SIDEBAR_STATUS =
   "mt-0.5 text-[11px] sm:text-xs font-medium text-slate-800/80 dark:text-amber-200/70";
 
+
 export const URGENT_TASKS_SIDEBAR_CONTAINER =
   "mb-3 sm:mb-4 rounded-2xl border-2 border-red-400/60 bg-gradient-to-br from-red-100 to-orange-100 px-3 py-2.5 sm:px-3.5 sm:py-3 text-red-900 shadow-md dark:border-red-700/70 dark:bg-gradient-to-br dark:from-red-900/70 dark:to-orange-900/70 dark:text-red-100";
 export const URGENT_TASKS_SIDEBAR_HEADER =
@@ -146,6 +166,7 @@ export const URGENT_TASKS_SIDEBAR_TITLE =
   "text-xs sm:text-[13px] font-bold";
 export const URGENT_TASKS_SIDEBAR_DESCRIPTION =
   "text-[11px] sm:text-xs font-medium leading-relaxed text-red-800/90 dark:text-red-200/80";
+
 
 export const NOTIFICATION_PERMISSION_CONTAINER =
   "mb-3 sm:mb-4 rounded-2xl border-2 border-amber-400/60 bg-gradient-to-br from-amber-100 to-orange-100 px-3 py-2.5 sm:px-3.5 sm:py-3 text-amber-900 shadow-md dark:border-amber-700/70 dark:bg-gradient-to-br dark:from-amber-900/70 dark:to-orange-900/70 dark:text-amber-50";
@@ -159,6 +180,7 @@ export const NOTIFICATION_PERMISSION_DESCRIPTION =
   "text-[11px] sm:text-xs leading-relaxed text-amber-800/90 dark:text-amber-200/80";
 export const NOTIFICATION_PERMISSION_BUTTON =
   "w-full rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1.5 sm:px-3.5 sm:py-2 text-xs sm:text-[13px] font-bold text-white shadow-md transition hover:from-amber-400 hover:to-orange-400 dark:from-amber-600 dark:to-orange-600 dark:hover:from-amber-500 dark:hover:to-orange-500";
+
 
 export const QUICK_VIEWS_NAV =
   "mt-2.5 sm:mt-3.5 space-y-1.5";
@@ -175,25 +197,26 @@ export const QUICK_VIEW_ICON_CONTAINER_BASE =
 export const QUICK_VIEW_ICON_CONTAINER_ACTIVE = "scale-105";
 export const QUICK_VIEW_ICON_CONTAINER_INACTIVE = "scale-100";
 
+
 export const QUOTE_CONTAINER =
-  "relative mt-3.5 sm:mt-5 rounded-2xl border-2 border-amber-400/60 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 p-3 sm:p-3.5 shadow-lg dark:border-amber-700/70 dark:bg-gradient-to-br dark:from-amber-900/40 dark:via-orange-900/40 dark:to-rose-900/40";
+  "relative mt-2.5 sm:mt-3.5 rounded-2xl border-2 border-amber-400/60 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 p-2.5 sm:p-3 shadow-lg dark:border-amber-700/70 dark:bg-gradient-to-br dark:from-amber-900/40 dark:via-orange-900/40 dark:to-rose-900/40";
+
 export const QUOTE_HEADER =
-  "mb-1.5 sm:mb-2 flex items-center justify-between";
+  "mb-1 sm:mb-1.5 flex items-center justify-between";
+
 export const QUOTE_LABEL =
-  "text-[11px] sm:text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300";
-export const QUOTE_ACTIONS = "flex gap-1";
-export const QUOTE_BUTTON_BASE = "rounded-lg p-1 sm:p-1 transition";
-export const QUOTE_BUTTON_DEFAULT =
-  "text-amber-600 hover:bg-amber-100 dark:text-amber-400 dark:hover:bg-amber-900/40";
-export const QUOTE_BUTTON_PINNED =
-  "bg-amber-200 text-amber-700 dark:bg-amber-800/60 dark:text-amber-300";
+  "text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300";
+
 export const QUOTE_TEXT =
-  "mb-1.5 text-[11px] sm:text-xs font-medium italic leading-relaxed text-amber-900 dark:text-amber-100";
+  "mb-1 text-[10px] sm:text-[11px] font-medium italic leading-snug text-amber-900 dark:text-amber-100";
+
 export const QUOTE_AUTHOR =
-  "text-right text-[11px] sm:text-xs font-bold text-amber-700 dark:text-amber-300";
+  "text-right text-[10px] sm:text-[11px] font-bold text-amber-700 dark:text-amber-300";
+
 
 export const SHOW_QUOTE_BUTTON =
   "w-full rounded-xl border-2 border-amber-400/60 bg-gradient-to-r from-amber-50 to-orange-50 px-3 py-1.5 sm:px-3.5 sm:py-2 text-xs sm:text-[13px] font-semibold text-amber-700 transition hover:from-amber-100 hover:to-orange-100 dark:border-amber-700/70 dark:bg-gradient-to-r dark:from-amber-900/40 dark:to-orange-900/40 dark:text-amber-300 dark:hover:from-amber-900/60 dark:hover:to-orange-900/60";
+
 
 export const SIDEBAR_ACTIONS_CONTAINER =
   "mt-3.5 sm:mt-5 space-y-2 sm:space-y-2.5";
@@ -215,12 +238,15 @@ export const SIDEBAR_THEME_TOGGLE_CONTAINER = "pointer-events-auto";
 export const SIDEBAR_NAV_BUTTON_ICON =
   "text-cyan-700 dark:text-amber-300";
 
+
 // ==========================================
 // RIGHT SIDEBAR COMPONENTS - RESPONSIVE
 // ==========================================
 
+
 export const DAY_SUMMARY_CONTAINER =
-  "rounded-2xl border-2 border-cyan-300/60 bg-gradient-to-br from-white via-cyan-50/30 to-orange-50/30 p-4 sm:p-5 shadow-lg dark:border-amber-900/60 dark:bg-gradient-to-br dark:from-amber-950/30 dark:via-stone-950/40 dark:to-slate-950/30";
+  "mt-2 rounded-2xl border-2 border-cyan-300/60 bg-gradient-to-br from-white via-cyan-50/30 to-orange-50/30 p-3 sm:p-3.5 shadow-lg dark:border-amber-900/60 dark:bg-gradient-to-br dark:from-amber-950/30 dark:via-stone-950/40 dark:to-slate-950/30";
+
 export const DAY_SUMMARY_DATE_ICON =
   "text-cyan-600 dark:text-amber-400";
 export const DAY_SUMMARY_DATE_TEXT =
@@ -248,6 +274,7 @@ export const URGENT_ALERT =
 export const URGENT_ALERT_TEXT =
   "text-xs sm:text-sm font-bold text-rose-800 dark:text-rose-300";
 
+
 export const UPCOMING_CONTAINER =
   "rounded-2xl border-2 border-cyan-300/60 bg-gradient-to-br from-white via-cyan-50/30 to-orange-50/30 p-4 sm:p-5 shadow-lg dark:border-amber-900/60 dark:bg-gradient-to-br dark:from-amber-950/30 dark:via-stone-950/40 dark:to-slate-950/30";
 export const UPCOMING_TITLE =
@@ -264,6 +291,7 @@ export const UPCOMING_TASK_PRIORITY =
 export const UPCOMING_DELETE_BUTTON =
   "flex items-center gap-1.5 rounded-lg bg-rose-500/10 px-2 py-1 sm:px-2.5 sm:py-1.5 text-xs font-semibold text-rose-600 transition hover:bg-rose-500 hover:text-white dark:bg-rose-900/20 dark:text-rose-400 dark:hover:bg-rose-600 dark:hover:text-white";
 
+
 export const ACTIVITY_CONTAINER = UPCOMING_CONTAINER;
 export const ACTIVITY_TITLE = UPCOMING_TITLE;
 export const ACTIVITY_EMPTY = UPCOMING_EMPTY;
@@ -278,10 +306,9 @@ export const ACTIVITY_TYPE_TEXT =
 export const ACTIVITY_TIME_TEXT =
   "text-slate-500 dark:text-amber-300/50 text-xs";
 
-export const DAY_SUMMARY_DATE_CONTAINER =
-  "mb-4 flex items-center gap-2";
-export const DAY_SUMMARY_PROGRESS_SECTION = "mb-4";
-export const DAY_SUMMARY_PROGRESS_HEADER =
-  "mb-2 flex items-center justify-between";
+
+export const DAY_SUMMARY_DATE_CONTAINER = "mb-2.5 flex items-center gap-2";
+export const DAY_SUMMARY_PROGRESS_SECTION = "mb-2.5";
+export const DAY_SUMMARY_PROGRESS_HEADER = "mb-2 flex items-center justify-between";
 export const DAY_SUMMARY_STATS_GRID =
   "grid grid-cols-2 gap-3";

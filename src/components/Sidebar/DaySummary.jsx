@@ -18,6 +18,7 @@ import {
   URGENT_ALERT_TEXT
 } from '../../constants/styles';
 
+
 function DaySummary({ stats, urgentCount }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   
@@ -34,7 +35,7 @@ function DaySummary({ stats, urgentCount }) {
   return (
     <div className={DAY_SUMMARY_CONTAINER}>
       {/* Date avec bouton collapse */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center">
         <div className={DAY_SUMMARY_DATE_CONTAINER}>
           <FiCalendar className={DAY_SUMMARY_DATE_ICON} size={20} />
           <h3 className={DAY_SUMMARY_DATE_TEXT}>
@@ -44,7 +45,7 @@ function DaySummary({ stats, urgentCount }) {
         
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-1.5 rounded-lg hover:bg-white/50 dark:hover:bg-stone-800/50 transition-colors"
+          className="ml-auto p-1 rounded-lg hover:bg-white/50 dark:hover:bg-stone-800/50 transition-colors"
           aria-label={isCollapsed ? "Expand" : "Collapse"}
         >
           {isCollapsed ? (
@@ -57,7 +58,7 @@ function DaySummary({ stats, urgentCount }) {
 
       {/* Contenu collapsible */}
       {!isCollapsed && (
-        <div className="space-y-4 animate-fade-in">
+        <div className="space-y-3 animate-fade-in">
           {/* Barre de progression */}
           <div className={DAY_SUMMARY_PROGRESS_SECTION}>
             <div className={DAY_SUMMARY_PROGRESS_HEADER}>
