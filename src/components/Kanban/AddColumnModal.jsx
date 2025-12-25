@@ -1,4 +1,4 @@
-// src/components/Dashboard/AddColumnModal.jsx
+// src/components/Kanban/AddColumnModal.jsx
 import { useState } from 'react';
 import { 
   FiX, 

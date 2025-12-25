@@ -80,7 +80,10 @@ function DashboardLayout({ children, sidebar, rightSidebar, notifications }) {
       {/* Bouton hamburger */}
       <button
         onClick={toggleSidebar}
-        className={HAMBURGER_BUTTON}
+        className={`
+          ${HAMBURGER_BUTTON}
+          ${isSidebarOpen ? 'left-36' : 'left-4'}
+        `}
         aria-label="Toggle sidebar"
       >
         {isSidebarOpen ? (
@@ -89,6 +92,7 @@ function DashboardLayout({ children, sidebar, rightSidebar, notifications }) {
           <Menu className={HAMBURGER_ICON} />
         )}
       </button>
+
 
       {/* Sidebar gauche */}
       <aside 
