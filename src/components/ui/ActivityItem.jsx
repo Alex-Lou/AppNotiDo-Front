@@ -10,12 +10,12 @@ import {
 
 const getActivityIcon = (task) => {
   if (task.status === 'DONE') {
-    return <FiCheck className="text-teal-600 dark:text-teal-400" size={16} />;
+    return <FiCheck className="text-teal-600 dark:text-teal-400" size={14} />;
   }
   if (task.createdAt === task.updatedAt) {
-    return <FiPlus className="text-cyan-600 dark:text-cyan-400" size={16} />;
+    return <FiPlus className="text-cyan-600 dark:text-cyan-400" size={14} />;
   }
-  return <FiEdit3 className="text-orange-600 dark:text-orange-400" size={16} />;
+  return <FiEdit3 className="text-orange-600 dark:text-orange-400" size={14} />;
 };
 
 const getActivityText = (task) => {
@@ -30,19 +30,11 @@ function ActivityItem({ task, timeAgo, onClick }) {
       <div className={ACTIVITY_ICON_CONTAINER}>
         {getActivityIcon(task)}
       </div>
-      <div className="flex-1 overflow-hidden">
-        <p className={ACTIVITY_TITLE_TEXT}>
-          {task.title}
+      <div className="flex-1 min-w-0">
+        <p className={ACTIVITY_TITLE_TEXT}>{task.title}</p>
+        <p className={ACTIVITY_TYPE_TEXT}>
+          {getActivityText(task)} · <span className={ACTIVITY_TIME_TEXT}>{timeAgo}</span>
         </p>
-        <div className="mt-1 flex items-center gap-2 text-xs">
-          <span className={ACTIVITY_TYPE_TEXT}>
-            {getActivityText(task)}
-          </span>
-          <span className={ACTIVITY_TIME_TEXT}>•</span>
-          <span className={ACTIVITY_TIME_TEXT}>
-            {timeAgo}
-          </span>
-        </div>
       </div>
     </button>
   );

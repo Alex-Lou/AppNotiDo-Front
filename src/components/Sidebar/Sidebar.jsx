@@ -130,7 +130,7 @@ function Sidebar({
         </div>
       )}
 
-      <div className={isQuotePinned || !showQuote ? 'mt-auto' : 'mt-6'}>
+      <div className="mt-4">
         <SidebarActions
           notificationsEnabled={notificationsEnabled}
           onToggleNotifications={onToggleNotifications}

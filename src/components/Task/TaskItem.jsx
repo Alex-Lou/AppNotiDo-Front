@@ -1,7 +1,7 @@
 // src/components/Task/TaskItem.jsx
 import { useState, useEffect } from 'react';
 import { FaTrash, FaLock, FaLockOpen, FaClock } from 'react-icons/fa';
-import { FiX, FiCheck } from 'react-icons/fi';
+import { FiX, FiCheck, FiClock, FiPauseCircle, FiCheckCircle } from 'react-icons/fi';
 import { useTimer } from '../../hooks/useTimer';
 import { formatDate, formatDuration, formatTimeSpent, calculateProgress } from '../../utils/taskUtils';
 import { PRIORITY_COLORS, STATUS_COLORS, STATUS_LABELS, PRIORITY_LABELS } from '../../constants/taskConstants';
@@ -58,6 +58,7 @@ function TaskItem({
 
   // Vérifier si le timer est activé pour cette tâche
   const isTimerEnabled = task.timerEnabled !== false;
+
 
   const { 
     elapsedSeconds, 
@@ -175,6 +176,55 @@ function TaskItem({
   };
 
 
+  // Fonction pour obtenir l'indicateur de timer à côté du titre
+  const getTimerIndicator = () => {
+    const isDone = task.status === 'DONE';
+    const hasTimeSpent = task.timeSpent > 0;
+    
+    // Timer stoppé (DONE avec temps enregistré)
+    if (isDone && hasTimeSpent) {
+      return (
+        <span className="inline-flex items-center gap-1 ml-2 px-1.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400" title="Temps enregistré">
+          <FiCheckCircle size={12} />
+          <span className="text-[10px] font-semibold">{formatTimeSpent(task.timeSpent)}</span>
+        </span>
+      );
+    }
+    
+    // Timer non activé
+    if (!isTimerEnabled) {
+      return null;
+    }
+    
+    // Timer en cours
+    if (isRunning) {
+      return (
+        <span className="inline-flex items-center gap-1 ml-2 px-1.5 py-0.5 rounded-md bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-400 animate-pulse" title="Timer en cours">
+          <FiClock size={12} />
+          <span className="text-[10px] font-semibold">En cours</span>
+        </span>
+      );
+    }
+    
+    // Timer en pause (a du temps mais pas running et pas DONE)
+    if (hasTimeSpent && !isDone) {
+      return (
+        <span className="inline-flex items-center gap-1 ml-2 px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400" title="Timer en pause">
+          <FiPauseCircle size={12} />
+          <span className="text-[10px] font-semibold">{formatTimeSpent(task.timeSpent)}</span>
+        </span>
+      );
+    }
+    
+    // Timer présent mais pas démarré
+    return (
+      <span className="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400" title="Timer disponible">
+        <FiClock size={12} />
+      </span>
+    );
+  };
+
+
   if (isEditing) {
     return (
       <TaskEditForm
@@ -264,9 +314,14 @@ function TaskItem({
 
       <div className={TASK_CONTENT}>
         <div className={TASK_ITEM_CONTENT_FLEX}>
-          <h3 className={TASK_TITLE}>
-            {task.title}
-          </h3>
+          {/* Titre avec indicateur de timer */}
+          <div className="flex items-center flex-wrap">
+            <h3 className={TASK_TITLE}>
+              {task.title}
+            </h3>
+            {getTimerIndicator()}
+          </div>
+
           {task.description && (
             <p className={TASK_DESCRIPTION}>
               {task.description}
@@ -291,8 +346,8 @@ function TaskItem({
           </div>
 
 
-          {/* Timer - affiché seulement si timerEnabled */}
-          {isTimerEnabled && (
+          {/* Timer - affiché seulement si timerEnabled et pas DONE */}
+          {isTimerEnabled && !isDone && (
             <TaskTimer
               task={task}
               elapsedSeconds={elapsedSeconds}
@@ -306,8 +361,8 @@ function TaskItem({
           )}
 
 
-          {/* Temps passé pour tâches terminées - affiché seulement si timerEnabled */}
-          {isTimerEnabled && isDone && task.timeSpent > 0 && showTimeSpent && (
+          {/* Temps passé pour tâches terminées - affiché seulement si timeSpent > 0 */}
+          {isDone && task.timeSpent > 0 && showTimeSpent && (
             <div className={TASK_TIME_SPENT_CONTAINER}>
               <button
                 onClick={handleCloseTimeSpent}

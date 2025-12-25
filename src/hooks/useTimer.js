@@ -71,7 +71,12 @@ export const useTimer = (task, onUpdate) => {
   const handleStart = async () => {
     try {
       const response = await api.post(`/tasks/${task.id}/start`);
-      const updatedTask = response.data;
+      // Préserver timerEnabled et reactivable de la tâche originale
+      const updatedTask = {
+        ...response.data,
+        timerEnabled: task.timerEnabled,
+        reactivable: task.reactivable
+      };
       await onUpdate(task.id, updatedTask);
     } catch (error) {
       console.error('Erreur démarrage timer:', error);
@@ -94,7 +99,12 @@ export const useTimer = (task, onUpdate) => {
       setElapsedSeconds(exactElapsed);
 
       const response = await api.post(`/tasks/${task.id}/pause`);
-      const updatedTask = response.data;
+      // Préserver timerEnabled et reactivable de la tâche originale
+      const updatedTask = {
+        ...response.data,
+        timerEnabled: task.timerEnabled,
+        reactivable: task.reactivable
+      };
       await onUpdate(task.id, updatedTask);
     } catch (error) {
       console.error('Erreur pause timer:', error);
@@ -109,7 +119,12 @@ export const useTimer = (task, onUpdate) => {
       }
 
       const response = await api.post(`/tasks/${task.id}/stop`);
-      const updatedTask = response.data;
+      // timerEnabled passe à false après stop
+      const updatedTask = {
+        ...response.data,
+        timerEnabled: false,
+        reactivable: task.reactivable
+      };
       await onUpdate(task.id, updatedTask);
     } catch (error) {
       console.error('Erreur stop timer:', error);

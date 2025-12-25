@@ -1,23 +1,14 @@
 // src/components/Dashboard/DaySummary.jsx
 import { useState } from 'react';
-import { FiCalendar, FiCheckCircle, FiClock, FiAlertCircle, FiChevronUp, FiChevronDown } from 'react-icons/fi';
-import MiniStatCard from '../ui/MiniStatCard';
+import { FiCalendar, FiChevronUp, FiChevronDown, FiAlertCircle } from 'react-icons/fi';
 import { 
   DAY_SUMMARY_CONTAINER,
-  DAY_SUMMARY_DATE_CONTAINER,
-  DAY_SUMMARY_DATE_ICON,
-  DAY_SUMMARY_DATE_TEXT,
-  DAY_SUMMARY_PROGRESS_SECTION,
-  DAY_SUMMARY_PROGRESS_HEADER,
-  PROGRESS_LABEL,
-  PROGRESS_PERCENTAGE,
+  WIDGET_HEADER,
+  WIDGET_TITLE,
+  WIDGET_COLLAPSE_BTN,
   PROGRESS_BAR_BG,
-  PROGRESS_BAR_FILL,
-  DAY_SUMMARY_STATS_GRID,
-  URGENT_ALERT,
-  URGENT_ALERT_TEXT
+  PROGRESS_BAR_FILL
 } from '../../constants/styles';
-
 
 function DaySummary({ stats, urgentCount }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -34,75 +25,68 @@ function DaySummary({ stats, urgentCount }) {
 
   return (
     <div className={DAY_SUMMARY_CONTAINER}>
-      {/* Date avec bouton collapse */}
-      <div className="flex items-center">
-        <div className={DAY_SUMMARY_DATE_CONTAINER}>
-          <FiCalendar className={DAY_SUMMARY_DATE_ICON} size={20} />
-          <h3 className={DAY_SUMMARY_DATE_TEXT}>
-            {today}
-          </h3>
+      {/* Header unifié */}
+      <div className={WIDGET_HEADER}>
+        <div className="flex items-center gap-2">
+          <FiCalendar className="text-cyan-600 dark:text-amber-400" size={18} />
+          <h3 className={WIDGET_TITLE}>{today}</h3>
         </div>
         
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="ml-auto p-1 rounded-lg hover:bg-white/50 dark:hover:bg-stone-800/50 transition-colors"
-          aria-label={isCollapsed ? "Expand" : "Collapse"}
-        >
-          {isCollapsed ? (
-            <FiChevronDown size={18} className="text-slate-600 dark:text-amber-400" />
-          ) : (
-            <FiChevronUp size={18} className="text-slate-600 dark:text-amber-400" />
+        <div className="flex items-center gap-2">
+          {/* Aperçu compact quand fermé */}
+          {isCollapsed && (
+            <span className="text-xs font-bold text-cyan-600 dark:text-amber-400">
+              {completionRate}%
+            </span>
           )}
-        </button>
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className={WIDGET_COLLAPSE_BTN}
+          >
+            {isCollapsed ? <FiChevronDown size={16} /> : <FiChevronUp size={16} />}
+          </button>
+        </div>
       </div>
 
-      {/* Contenu collapsible */}
+      {/* Contenu */}
       {!isCollapsed && (
-        <div className="space-y-3 animate-fade-in">
-          {/* Barre de progression */}
-          <div className={DAY_SUMMARY_PROGRESS_SECTION}>
-            <div className={DAY_SUMMARY_PROGRESS_HEADER}>
-              <span className={PROGRESS_LABEL}>
-                Progression du jour
+        <div className="mt-3 space-y-3">
+          {/* Progression compacte */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-xs font-medium text-slate-600 dark:text-amber-200/70">
+                Progression
               </span>
-              <span className={PROGRESS_PERCENTAGE}>
-                {completionRate}%
+              <span className="text-xs font-bold text-cyan-600 dark:text-amber-400">
+                {stats.done}/{stats.total} · {completionRate}%
               </span>
             </div>
             <div className={PROGRESS_BAR_BG}>
-              <div
-                className={PROGRESS_BAR_FILL}
-                style={{ width: `${completionRate}%` }}
-              />
+              <div className={PROGRESS_BAR_FILL} style={{ width: `${completionRate}%` }} />
             </div>
           </div>
 
-          {/* Mini stats */}
-          <div className={DAY_SUMMARY_STATS_GRID}>
-            <MiniStatCard
-              icon={FiCheckCircle}
-              label="Terminées"
-              value={stats.done}
-              variant="success"
-              iconColor="text-teal-600 dark:text-teal-400"
-            />
-
-            <MiniStatCard
-              icon={FiClock}
-              label="En cours"
-              value={stats.inProgress}
-              variant="warning"
-              iconColor="text-orange-600 dark:text-orange-400"
-            />
+          {/* Stats en ligne */}
+          <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-teal-500" />
+              <span className="text-slate-600 dark:text-amber-200/70">Terminées:</span>
+              <span className="font-bold text-slate-800 dark:text-amber-50">{stats.done}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-orange-500" />
+              <span className="text-slate-600 dark:text-amber-200/70">En cours:</span>
+              <span className="font-bold text-slate-800 dark:text-amber-50">{stats.inProgress}</span>
+            </div>
           </div>
 
-          {/* Alerte tâches urgentes */}
+          {/* Alerte urgente */}
           {urgentCount > 0 && (
-            <div className={URGENT_ALERT}>
-              <FiAlertCircle className="text-rose-600 dark:text-rose-400" size={18} />
-              <p className={URGENT_ALERT_TEXT}>
-                {urgentCount} tâche{urgentCount > 1 ? 's' : ''} urgente{urgentCount > 1 ? 's' : ''}
-              </p>
+            <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-rose-100/80 dark:bg-rose-900/30">
+              <FiAlertCircle className="text-rose-600 dark:text-rose-400" size={14} />
+              <span className="text-xs font-bold text-rose-700 dark:text-rose-300">
+                {urgentCount} urgente{urgentCount > 1 ? 's' : ''}
+              </span>
             </div>
           )}
         </div>

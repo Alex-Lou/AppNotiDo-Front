@@ -4,6 +4,9 @@ import { INPUT_CLASSES, LABEL_CLASSES, BUTTON_PRIMARY, BUTTON_SECONDARY, EDIT_FO
 
 
 function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, handleDateChange }) {
+  // Vérifier si la tâche est terminée avec du temps enregistré
+  const isCompletedWithTime = editedTask.status === 'DONE' && editedTask.timeSpent > 0;
+
   return (
     <div className={EDIT_FORM_CONTAINER}>
       <div className={DECORATIVE_HALO} />
@@ -132,25 +135,39 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
         </div>
 
 
-        {/* Chronométrer cette tâche */}
-        <div>
-          <label className="flex items-start gap-3 cursor-pointer p-3 rounded-xl bg-slate-50 dark:bg-stone-800 border border-slate-200 dark:border-stone-700 hover:bg-slate-100 dark:hover:bg-stone-700 transition-colors">
-            <input
-              type="checkbox"
-              checked={editedTask.timerEnabled !== false}
-              onChange={(e) => setEditedTask({ ...editedTask, timerEnabled: e.target.checked })}
-              className="w-5 h-5 mt-0.5 rounded border-slate-300 text-cyan-500 focus:ring-cyan-500 dark:border-stone-600 dark:bg-stone-800"
-            />
-            <div>
-              <span className="text-sm font-medium text-slate-700 dark:text-amber-100 block">
-                ⏱️ Chronométrer cette tâche
-              </span>
-              <span className="text-xs text-slate-500 dark:text-amber-300/70">
-                Afficher le chronomètre pour traquer le temps passé
-              </span>
-            </div>
-          </label>
-        </div>
+        {/* Chronométrer cette tâche - Caché si DONE avec temps enregistré */}
+        {!isCompletedWithTime && (
+          <div>
+            <label className="flex items-start gap-3 cursor-pointer p-3 rounded-xl bg-slate-50 dark:bg-stone-800 border border-slate-200 dark:border-stone-700 hover:bg-slate-100 dark:hover:bg-stone-700 transition-colors">
+              <input
+                type="checkbox"
+                checked={editedTask.timerEnabled !== false}
+                onChange={(e) => setEditedTask({ ...editedTask, timerEnabled: e.target.checked })}
+                className="w-5 h-5 mt-0.5 rounded border-slate-300 text-cyan-500 focus:ring-cyan-500 dark:border-stone-600 dark:bg-stone-800"
+              />
+              <div>
+                <span className="text-sm font-medium text-slate-700 dark:text-amber-100 block">
+                  ⏱️ Chronométrer cette tâche
+                </span>
+                <span className="text-xs text-slate-500 dark:text-amber-300/70">
+                  Afficher le chronomètre pour traquer le temps passé
+                </span>
+              </div>
+            </label>
+          </div>
+        )}
+
+        {/* Message si tâche terminée avec temps enregistré */}
+        {isCompletedWithTime && (
+          <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700">
+            <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300 block">
+              ✅ Tâche chronométrée terminée
+            </span>
+            <span className="text-xs text-emerald-600 dark:text-emerald-400">
+              Temps enregistré : {Math.floor(editedTask.timeSpent / 60)}min {editedTask.timeSpent % 60}s
+            </span>
+          </div>
+        )}
 
 
         {/* Réactivable */}

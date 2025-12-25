@@ -1,13 +1,18 @@
 // src/components/Dashboard/RecentActivity.jsx
 import { useState } from 'react';
-import { FiChevronUp, FiChevronDown } from 'react-icons/fi';
+import { FiActivity, FiChevronUp, FiChevronDown } from 'react-icons/fi';
 import ActivityItem from '../ui/ActivityItem';
-import { ACTIVITY_CONTAINER, ACTIVITY_TITLE, ACTIVITY_EMPTY } from '../../constants/styles';
+import { 
+  ACTIVITY_CONTAINER, 
+  WIDGET_HEADER,
+  WIDGET_TITLE,
+  WIDGET_COLLAPSE_BTN,
+  ACTIVITY_EMPTY 
+} from '../../constants/styles';
 
 function RecentActivity({ tasks, onTaskClick }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   
-  // Trier les tâches par date de mise à jour
   const recentTasks = [...tasks]
     .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
     .slice(0, 5);
@@ -30,32 +35,31 @@ function RecentActivity({ tasks, onTaskClick }) {
 
   return (
     <div className={ACTIVITY_CONTAINER}>
-      {/* Header avec bouton collapse */}
-      <div className="flex items-center justify-between mb-3">
-        <h3 className={ACTIVITY_TITLE}>
-          Activité récente
-        </h3>
+      <div className={WIDGET_HEADER}>
+        <div className="flex items-center gap-2">
+          <FiActivity className="text-cyan-600 dark:text-amber-400" size={18} />
+          <h3 className={WIDGET_TITLE}>Activité récente</h3>
+        </div>
         
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-1.5 rounded-lg hover:bg-white/50 dark:hover:bg-stone-800/50 transition-colors"
-          aria-label={isCollapsed ? "Expand" : "Collapse"}
-        >
-          {isCollapsed ? (
-            <FiChevronDown size={18} className="text-slate-600 dark:text-amber-400" />
-          ) : (
-            <FiChevronUp size={18} className="text-slate-600 dark:text-amber-400" />
+        <div className="flex items-center gap-2">
+          {isCollapsed && recentTasks.length > 0 && (
+            <span className="text-xs font-bold text-cyan-600 dark:text-amber-400">
+              {recentTasks.length}
+            </span>
           )}
-        </button>
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className={WIDGET_COLLAPSE_BTN}
+          >
+            {isCollapsed ? <FiChevronDown size={16} /> : <FiChevronUp size={16} />}
+          </button>
+        </div>
       </div>
 
-      {/* Contenu collapsible */}
       {!isCollapsed && (
-        <div className="space-y-3 animate-fade-in">
+        <div className="mt-3 space-y-2 max-h-72 overflow-y-auto scrollbar-thin">
           {recentTasks.length === 0 ? (
-            <p className={ACTIVITY_EMPTY}>
-              Aucune activité récente
-            </p>
+            <p className={ACTIVITY_EMPTY}>Aucune activité récente</p>
           ) : (
             recentTasks.map(task => (
               <ActivityItem

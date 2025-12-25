@@ -3,12 +3,9 @@ import { FiLogOut, FiBell, FiBellOff } from 'react-icons/fi';
 import ThemeToggle from '../ThemeToggle';
 import {
   SIDEBAR_ACTIONS_CONTAINER,
-  SIDEBAR_NOTIFICATIONS_BUTTON,
-  SIDEBAR_NOTIFICATIONS_BUTTON_FLEX,
-  SIDEBAR_NOTIFICATION_ICON_ENABLED,
-  SIDEBAR_NOTIFICATION_ICON_DISABLED,
-  SIDEBAR_THEME_TOGGLE_CONTAINER,
-  SIDEBAR_LOGOUT_BUTTON
+  SIDEBAR_LOGOUT_BUTTON,
+  SIDEBAR_TOGGLE_ROW,
+  SIDEBAR_ICON_BUTTON
 } from '../../constants/styles';
 
 function SidebarActions({
@@ -18,23 +15,21 @@ function SidebarActions({
 }) {
   return (
     <div className={SIDEBAR_ACTIONS_CONTAINER}>
-      <button
-        onClick={onToggleNotifications}
-        className={SIDEBAR_NOTIFICATIONS_BUTTON}
-        title={notificationsEnabled ? 'Désactiver les notifications' : 'Activer les notifications'}
-      >
-        <span>Notifications</span>
-        <div className={SIDEBAR_NOTIFICATIONS_BUTTON_FLEX}>
+      {/* Cloche + Dark Mode côte à côte */}
+      <div className={SIDEBAR_TOGGLE_ROW}>
+        <button
+          onClick={onToggleNotifications}
+          className={SIDEBAR_ICON_BUTTON}
+          title={notificationsEnabled ? 'Désactiver les notifications' : 'Activer les notifications'}
+        >
           {notificationsEnabled ? (
-            <FiBell className={SIDEBAR_NOTIFICATION_ICON_ENABLED} size={18} />
+            <FiBell className="text-teal-600 dark:text-amber-400" size={18} />
           ) : (
-            <FiBellOff className={SIDEBAR_NOTIFICATION_ICON_DISABLED} size={18} />
+            <FiBellOff className="text-slate-400 dark:text-stone-500" size={18} />
           )}
-        </div>
-      </button>
+        </button>
 
-      <div className={SIDEBAR_THEME_TOGGLE_CONTAINER}>
-        <ThemeToggle />
+        <ThemeToggle iconOnly />
       </div>
 
       <button

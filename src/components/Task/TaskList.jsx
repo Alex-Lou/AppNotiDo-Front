@@ -16,7 +16,7 @@ function TaskList({
   if (tasks.length === 0) return null;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       {tasks.map((task) => (
         <div key={task.id} id={`task-${task.id}`} onDragOver={(e) => e.preventDefault()}>
           <TaskItem

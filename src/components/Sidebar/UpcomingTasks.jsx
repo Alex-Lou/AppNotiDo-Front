@@ -2,16 +2,21 @@
 import { useState } from 'react';
 import { FiClock, FiChevronUp, FiChevronDown } from 'react-icons/fi';
 import UpcomingTaskItem from '../ui/UpcomingTaskItem';
-import { UPCOMING_CONTAINER, UPCOMING_TITLE, UPCOMING_EMPTY } from '../../constants/styles';
+import { 
+  UPCOMING_CONTAINER, 
+  WIDGET_HEADER,
+  WIDGET_TITLE,
+  WIDGET_COLLAPSE_BTN,
+  UPCOMING_EMPTY 
+} from '../../constants/styles';
 
 function UpcomingTasks({ tasks, onTaskClick, onTaskDelete }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   
-  // Trier les tâches par date d'échéance
   const sortedTasks = [...tasks]
     .filter(task => task.dueDate && task.status !== 'DONE')
     .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
-    .slice(0, 5); // Max 5 tâches
+    .slice(0, 5);
 
   const getTimeUntilDue = (dueDate) => {
     const now = new Date();
@@ -30,47 +35,41 @@ function UpcomingTasks({ tasks, onTaskClick, onTaskDelete }) {
 
   return (
     <div className={UPCOMING_CONTAINER}>
-      {/* Header avec bouton collapse */}
-      <div className="flex items-center justify-between mb-3">
-        <h3 className={UPCOMING_TITLE}>
-          <FiClock size={18} />
-          À venir
-        </h3>
+      <div className={WIDGET_HEADER}>
+        <div className="flex items-center gap-2">
+          <FiClock className="text-cyan-600 dark:text-amber-400" size={18} />
+          <h3 className={WIDGET_TITLE}>À venir</h3>
+        </div>
         
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-1.5 rounded-lg hover:bg-white/50 dark:hover:bg-stone-800/50 transition-colors"
-          aria-label={isCollapsed ? "Expand" : "Collapse"}
-        >
-          {isCollapsed ? (
-            <FiChevronDown size={18} className="text-slate-600 dark:text-amber-400" />
-          ) : (
-            <FiChevronUp size={18} className="text-slate-600 dark:text-amber-400" />
+        <div className="flex items-center gap-2">
+          {isCollapsed && (
+            <span className="text-xs font-bold text-cyan-600 dark:text-amber-400">
+              {sortedTasks.length}
+            </span>
           )}
-        </button>
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className={WIDGET_COLLAPSE_BTN}
+          >
+            {isCollapsed ? <FiChevronDown size={16} /> : <FiChevronUp size={16} />}
+          </button>
+        </div>
       </div>
 
-      {/* Contenu collapsible */}
       {!isCollapsed && (
-        <div className="space-y-3 animate-fade-in">
+        <div className="mt-3 space-y-2">
           {sortedTasks.length === 0 ? (
-            <p className={UPCOMING_EMPTY}>
-              Aucune échéance prochaine 🎉
-            </p>
+            <p className={UPCOMING_EMPTY}>Aucune échéance prochaine 🎉</p>
           ) : (
-            sortedTasks.map(task => {
-              const timeInfo = getTimeUntilDue(task.dueDate);
-              
-              return (
-                <UpcomingTaskItem
-                  key={task.id}
-                  task={task}
-                  timeInfo={timeInfo}
-                  onTaskClick={onTaskClick}
-                  onDelete={onTaskDelete}
-                />
-              );
-            })
+            sortedTasks.map(task => (
+              <UpcomingTaskItem
+                key={task.id}
+                task={task}
+                timeInfo={getTimeUntilDue(task.dueDate)}
+                onTaskClick={onTaskClick}
+                onDelete={onTaskDelete}
+              />
+            ))
           )}
         </div>
       )}

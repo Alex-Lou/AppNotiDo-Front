@@ -14,11 +14,34 @@ export const SIDEBAR_CONTAINER = `
   dark:border-amber-900/60 
   dark:bg-gradient-to-b dark:from-amber-950/80 dark:via-stone-950/90 dark:to-slate-950/80
   transition-all duration-300 ease-in-out
-  overflow-y-auto
+  overflow-hidden
   sm:pl-1 sm:pr-1 sm:py-5
   xl:pl-1 xl:pr-1 xl:py-5
 `;
 
+// ==========================================
+// QUOTE ACTION BUTTONS
+// ==========================================
+
+export const QUOTE_ACTIONS = `
+  flex items-center gap-1
+`;
+
+export const QUOTE_BUTTON_BASE = `
+  flex items-center justify-center w-7 h-7 rounded-lg
+  transition-all duration-200 ease-out
+  hover:scale-110 active:scale-95
+`;
+
+export const QUOTE_BUTTON_DEFAULT = `
+  text-amber-600 dark:text-amber-400
+  hover:bg-amber-200/50 dark:hover:bg-amber-800/50
+`;
+
+export const QUOTE_BUTTON_PINNED = `
+  text-amber-700 dark:text-amber-300
+  bg-amber-200/60 dark:bg-amber-800/60
+`;
 
 
 // Sidebar plus fine
@@ -28,6 +51,7 @@ export const getSidebarWidth = (isCollapsed) =>
 
 export const RIGHT_SIDEBAR_CONTAINER = `
   fixed right-0 top-0 z-[65] h-full overflow-y-auto 
+  scrollbar-none
   border-l-2 border-cyan-300/60 
   bg-gradient-to-b from-cyan-100/30 via-teal-100/20 to-orange-100/30 
   px-4 py-5
@@ -53,6 +77,25 @@ export const SIDEBAR_OVERLAY = `
   xl:hidden
 `;
 
+
+// ==========================================
+// WIDGET COMMON STYLES (Right Sidebar)
+// ==========================================
+
+export const WIDGET_HEADER = `
+  flex items-center justify-between
+`;
+
+export const WIDGET_TITLE = `
+  text-sm font-bold text-slate-800 dark:text-amber-50 capitalize
+`;
+
+export const WIDGET_COLLAPSE_BTN = `
+  p-1.5 rounded-lg 
+  text-slate-500 dark:text-amber-400
+  hover:bg-white/60 dark:hover:bg-stone-800/60 
+  transition-colors
+`;
 
 // ==========================================
 // COLLAPSE BUTTONS
@@ -180,7 +223,15 @@ export const NOTIFICATION_PERMISSION_DESCRIPTION =
   "text-[11px] sm:text-xs leading-relaxed text-amber-800/90 dark:text-amber-200/80";
 export const NOTIFICATION_PERMISSION_BUTTON =
   "w-full rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1.5 sm:px-3.5 sm:py-2 text-xs sm:text-[13px] font-bold text-white shadow-md transition hover:from-amber-400 hover:to-orange-400 dark:from-amber-600 dark:to-orange-600 dark:hover:from-amber-500 dark:hover:to-orange-500";
-
+export const NOTIFICATION_TOGGLE_BUTTON = `
+  flex items-center justify-center w-10 h-10 rounded-xl
+  bg-white/50 dark:bg-stone-800/50
+  border border-cyan-300/50 dark:border-amber-700/50
+  transition-all duration-200 ease-out
+  hover:bg-cyan-100/70 dark:hover:bg-stone-700/70
+  hover:scale-105 active:scale-95
+  shadow-sm hover:shadow-md
+`;
 
 export const QUICK_VIEWS_NAV =
   "mt-2.5 sm:mt-3.5 space-y-1.5";
@@ -237,7 +288,19 @@ export const SIDEBAR_NOTIFICATION_ICON_DISABLED =
 export const SIDEBAR_THEME_TOGGLE_CONTAINER = "pointer-events-auto";
 export const SIDEBAR_NAV_BUTTON_ICON =
   "text-cyan-700 dark:text-amber-300";
+export const SIDEBAR_TOGGLE_ROW = `
+  flex items-center justify-start gap-2
+`;
 
+export const SIDEBAR_ICON_BUTTON = `
+  flex items-center justify-center w-10 h-10 rounded-xl
+  bg-white/60 dark:bg-stone-800/60
+  border border-cyan-300/50 dark:border-amber-700/50
+  transition-all duration-200 ease-out
+  hover:bg-cyan-100/80 dark:hover:bg-stone-700/80
+  hover:scale-105 active:scale-95
+  shadow-sm hover:shadow-md
+`;
 
 // ==========================================
 // RIGHT SIDEBAR COMPONENTS - RESPONSIVE
@@ -295,16 +358,35 @@ export const UPCOMING_DELETE_BUTTON =
 export const ACTIVITY_CONTAINER = UPCOMING_CONTAINER;
 export const ACTIVITY_TITLE = UPCOMING_TITLE;
 export const ACTIVITY_EMPTY = UPCOMING_EMPTY;
-export const ACTIVITY_ITEM =
-  "flex w-full items-start gap-2 sm:gap-3 rounded-xl border border-slate-200/60 bg-white/50 p-2.5 sm:p-3 text-left transition hover:border-cyan-400/60 hover:bg-white/80 hover:shadow-md dark:border-stone-700/60 dark:bg-stone-900/30 dark:hover:border-amber-700/60 dark:hover:bg-stone-900/50";
-export const ACTIVITY_ICON_CONTAINER =
-  "mt-0.5 flex h-6 w-6 sm:h-7 sm:w-7 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-cyan-100 to-teal-100 dark:from-cyan-900/40 dark:to-teal-900/40";
-export const ACTIVITY_TITLE_TEXT =
-  "truncate text-xs sm:text-sm font-semibold text-slate-900 dark:text-amber-50";
-export const ACTIVITY_TYPE_TEXT =
-  "font-medium text-slate-600 dark:text-amber-300/70 text-xs";
-export const ACTIVITY_TIME_TEXT =
-  "text-slate-500 dark:text-amber-300/50 text-xs";
+// ==========================================
+// ACTIVITY ITEM - COMPACT
+// ==========================================
+
+export const ACTIVITY_ITEM = `
+  flex w-full items-center gap-2 rounded-lg 
+  px-2 py-1.5
+  text-left transition-colors
+  hover:bg-white/40 dark:hover:bg-stone-800/40
+`;
+
+export const ACTIVITY_ICON_CONTAINER = `
+  flex h-7 w-7 flex-shrink-0 items-center justify-center 
+  rounded-full 
+  bg-slate-100 dark:bg-stone-800
+`;
+
+export const ACTIVITY_TITLE_TEXT = `
+  text-xs font-medium text-slate-800 dark:text-amber-50 
+  truncate
+`;
+
+export const ACTIVITY_TYPE_TEXT = `
+  text-[10px] text-slate-500 dark:text-amber-300/60
+`;
+
+export const ACTIVITY_TIME_TEXT = `
+  text-[10px] text-slate-400 dark:text-amber-300/40
+`;
 
 
 export const DAY_SUMMARY_DATE_CONTAINER = "mb-2.5 flex items-center gap-2";

@@ -29,12 +29,6 @@ export const useTasks = (setUsername) => {
       setTasks(response.data.content);
     } catch (error) {
       console.error('Erreur fetchTasks:', error);
-      // TEMPORAIRE : On commente la redirection pour debug
-      // if (error.response?.status === 401 || error.response?.status === 403) {
-      //   localStorage.clear();
-      //   if (setUsername) setUsername(null);
-      //   navigate('/auth');
-      // }
     } finally {
       setLoading(false);
     }
@@ -70,7 +64,6 @@ export const useTasks = (setUsername) => {
       console.error('Response data:', error.response?.data);
       console.error('Response headers:', error.response?.headers);
       
-      // Afficher l'erreur dans une alerte pour être sûr de la voir
       alert(`ERREUR API: ${error.response?.status} - ${JSON.stringify(error.response?.data)}`);
       
       toast.error('❌ Erreur lors de la création de la tâche');
@@ -81,13 +74,25 @@ export const useTasks = (setUsername) => {
   const handleTaskUpdate = async (taskId, taskData) => {
     try {
       const response = await api.put(`/tasks/${taskId}`, taskData);
+      
+      // Fusionner la réponse du serveur avec les données envoyées
+      // pour s'assurer que timerEnabled et reactivable sont préservés
+      const updatedTask = {
+        ...response.data,
+        timerEnabled: taskData.timerEnabled,
+        reactivable: taskData.reactivable
+      };
+      
+      // Mise à jour locale immédiate
       setTasks(prevTasks => 
         prevTasks.map(task => 
-          task.id === taskId ? { ...task, ...taskData } : task
+          task.id === taskId ? updatedTask : task
         )
       );
 
-      await fetchTasks();
+      // Ne pas refetch immédiatement pour éviter d'écraser les valeurs
+      // Le refetch se fera au prochain chargement de page
+      
     } catch (error) {
       console.error('Error updating task:', error);
       toast.error('❌ Erreur lors de la mise à jour');
