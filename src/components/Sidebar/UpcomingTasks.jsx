@@ -1,9 +1,12 @@
 // src/components/Dashboard/UpcomingTasks.jsx
-import { FiClock } from 'react-icons/fi';
+import { useState } from 'react';
+import { FiClock, FiChevronUp, FiChevronDown } from 'react-icons/fi';
 import UpcomingTaskItem from '../ui/UpcomingTaskItem';
 import { UPCOMING_CONTAINER, UPCOMING_TITLE, UPCOMING_EMPTY } from '../../constants/styles';
 
 function UpcomingTasks({ tasks, onTaskClick, onTaskDelete }) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  
   // Trier les tâches par date d'échéance
   const sortedTasks = [...tasks]
     .filter(task => task.dueDate && task.status !== 'DONE')
@@ -25,42 +28,52 @@ function UpcomingTasks({ tasks, onTaskClick, onTaskDelete }) {
     return { text: due.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }), color: 'text-slate-600 dark:text-slate-400', urgent: false, isOverdue: false };
   };
 
-  if (sortedTasks.length === 0) {
-    return (
-      <div className={UPCOMING_CONTAINER}>
+  return (
+    <div className={UPCOMING_CONTAINER}>
+      {/* Header avec bouton collapse */}
+      <div className="flex items-center justify-between mb-3">
         <h3 className={UPCOMING_TITLE}>
           <FiClock size={18} />
           À venir
         </h3>
-        <p className={UPCOMING_EMPTY}>
-          Aucune échéance prochaine 🎉
-        </p>
+        
+        <button
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="p-1.5 rounded-lg hover:bg-white/50 dark:hover:bg-stone-800/50 transition-colors"
+          aria-label={isCollapsed ? "Expand" : "Collapse"}
+        >
+          {isCollapsed ? (
+            <FiChevronDown size={18} className="text-slate-600 dark:text-amber-400" />
+          ) : (
+            <FiChevronUp size={18} className="text-slate-600 dark:text-amber-400" />
+          )}
+        </button>
       </div>
-    );
-  }
 
-  return (
-    <div className={UPCOMING_CONTAINER}>
-      <h3 className={UPCOMING_TITLE}>
-        <FiClock size={18} />
-        À venir
-      </h3>
-
-      <div className="space-y-3">
-        {sortedTasks.map(task => {
-          const timeInfo = getTimeUntilDue(task.dueDate);
-          
-          return (
-            <UpcomingTaskItem
-              key={task.id}
-              task={task}
-              timeInfo={timeInfo}
-              onTaskClick={onTaskClick}
-              onDelete={onTaskDelete}
-            />
-          );
-        })}
-      </div>
+      {/* Contenu collapsible */}
+      {!isCollapsed && (
+        <div className="space-y-3 animate-fade-in">
+          {sortedTasks.length === 0 ? (
+            <p className={UPCOMING_EMPTY}>
+              Aucune échéance prochaine 🎉
+            </p>
+          ) : (
+            sortedTasks.map(task => {
+              const timeInfo = getTimeUntilDue(task.dueDate);
+              
+              return (
+                <UpcomingTaskItem
+                  key={task.id}
+                  task={task}
+                  timeInfo={timeInfo}
+                  onTaskClick={onTaskClick}
+                  onDelete={onTaskDelete}
+                />
+              );
+            })
+          )}
+        </div>
+      )}
     </div>
   );
 }

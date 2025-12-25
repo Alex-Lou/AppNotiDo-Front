@@ -24,22 +24,41 @@ function DashboardLayout({ children, sidebar, rightSidebar, notifications }) {
   const [isLeftCollapsed, setIsLeftCollapsed] = useState(false);
   const [isRightCollapsed, setIsRightCollapsed] = useState(false);
 
-  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
-  const toggleRightSidebar = () => setIsRightSidebarOpen(!isRightSidebarOpen);
+  // Toggle avec fermeture automatique de l'autre sidebar (seulement si écran < 545px)
+  const toggleSidebar = () => {
+    const shouldAutoClose = window.innerWidth < 573;
+    setIsSidebarOpen(!isSidebarOpen);
+    if (!isSidebarOpen && isRightSidebarOpen && shouldAutoClose) {
+      // Si on ouvre la gauche et que la droite est ouverte ET écran petit, fermer la droite
+      setIsRightSidebarOpen(false);
+    }
+  };
+
+  const toggleRightSidebar = () => {
+    const shouldAutoClose = window.innerWidth < 545;
+    setIsRightSidebarOpen(!isRightSidebarOpen);
+    if (!isRightSidebarOpen && isSidebarOpen && shouldAutoClose) {
+      // Si on ouvre la droite et que la gauche est ouverte ET écran petit, fermer la gauche
+      setIsSidebarOpen(false);
+    }
+  };
+
   const toggleLeftCollapse = () => setIsLeftCollapsed(!isLeftCollapsed);
   const toggleRightCollapse = () => setIsRightCollapsed(!isRightCollapsed);
 
   const closeSidebar = () => setIsSidebarOpen(false);
   const closeRightSidebar = () => setIsRightSidebarOpen(false);
 
-  // Extraire l'initiale du sidebar (cherche le displayName dans les props du Sidebar)
+  // Extraire l'initiale du sidebar
   const getUserInitial = () => {
-    // Le sidebar contient le composant Sidebar avec la prop displayName
     if (sidebar?.props?.displayName) {
       return sidebar.props.displayName.charAt(0).toUpperCase();
     }
-    return 'P'; // Fallback
+    return 'P';
   };
+
+  // Reste du composant identique...
+
 
   return (
     <div className={DASHBOARD_LAYOUT_CONTAINER}>
@@ -89,12 +108,14 @@ function DashboardLayout({ children, sidebar, rightSidebar, notifications }) {
           {isLeftCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
         </button>
 
-        {/* Contenu normal de la sidebar */}
-        {!isLeftCollapsed && sidebar}
+        {/* Contenu normal - toujours visible sur mobile, conditionnel sur desktop */}
+        <div className={`xl:${isLeftCollapsed ? 'hidden' : 'block'}`}>
+          {sidebar}
+        </div>
         
-        {/* Version collapsed - initiale de l'utilisateur */}
+        {/* Version collapsed - desktop only */}
         {isLeftCollapsed && (
-          <div className="flex flex-col items-center gap-4 pt-16">
+          <div className="hidden xl:flex flex-col items-center gap-4 pt-16">
             <div className="h-12 w-12 rounded-full bg-gradient-to-br from-orange-500 to-rose-500 shadow-lg flex items-center justify-center">
               <span className="text-white text-xl font-bold">
                 {getUserInitial()}
@@ -137,12 +158,14 @@ function DashboardLayout({ children, sidebar, rightSidebar, notifications }) {
           {isRightCollapsed ? <ChevronLeft size={14} /> : <ChevronRight size={14} />}
         </button>
 
-        {/* Contenu normal de la sidebar */}
-        {!isRightCollapsed && rightSidebar}
+        {/* Contenu normal - toujours visible sur mobile, conditionnel sur desktop */}
+        <div className={`xl:${isRightCollapsed ? 'hidden' : 'block'}`}>
+          {rightSidebar}
+        </div>
 
-        {/* Version collapsed - minimal */}
+        {/* Version collapsed - desktop only */}
         {isRightCollapsed && (
-          <div className="flex flex-col items-center gap-4 pt-16">
+          <div className="hidden xl:flex flex-col items-center gap-4 pt-16">
             <LayoutDashboard size={24} className="text-slate-600 dark:text-amber-400" />
           </div>
         )}

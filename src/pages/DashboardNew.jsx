@@ -1,7 +1,7 @@
 // src/pages/DashboardNew.jsx
 import TaskForm from '../components/Task/TaskForm';
 import Sidebar from '../components/Sidebar/Sidebar';
-import RightSidebar from '../components/Dashboard/RightSidebar';
+import RightSidebar from '../components/Sidebar/RightSidebar';
 import DashboardHeader from '../components/Dashboard/DashboardHeader';
 import StatsCards from '../components/Dashboard/StatsCards';
 import TaskFilters from '../components/Dashboard/TaskFilters';

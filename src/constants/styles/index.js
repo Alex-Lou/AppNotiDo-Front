@@ -167,61 +167,71 @@ export const SIDEBAR_SUBTITLE = "mt-1 text-sm sm:text-base font-script italic te
 // ==========================================
 
 export const DASHBOARD_HEADER_CONTAINER = `
-  flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4
-  mb-4 sm:mb-6
+  flex flex-col gap-2
+  sm:flex-row sm:items-start sm:justify-between sm:gap-4
+  mb-3 sm:mb-4 md:mb-6
 `;
 
 export const DASHBOARD_HEADER_TITLE = `
-  text-2xl sm:text-3xl md:text-4xl font-black
+  text-xl leading-tight
+  sm:text-2xl sm:leading-tight
+  md:text-3xl md:leading-tight
+  lg:text-4xl lg:leading-tight
+  font-black
   bg-gradient-to-r from-cyan-600 via-teal-500 to-orange-500
   bg-clip-text text-transparent
   dark:from-amber-400 dark:via-orange-400 dark:to-rose-400
-  leading-tight
 `;
 
 export const DASHBOARD_HEADER_SUBTITLE = `
-  mt-1 sm:mt-2 text-sm font-medium text-slate-700/90 dark:text-amber-200/80
-  sm:text-base
+  mt-0.5 text-xs
+  sm:mt-1 sm:text-sm
+  md:text-base
+  font-medium text-slate-700/90 dark:text-amber-200/80
 `;
 
 export const DASHBOARD_HEADER_SECTION = "mb-6 sm:mb-8";
 
 
 // ==========================================
-// STATS CARDS - RESPONSIVE COMPACT
+// STATS CARDS - RESPONSIVE OPTIMIZED
 // ==========================================
 
 export const STATS_GRID = `
   grid gap-2 mb-4
   grid-cols-2
   sm:grid-cols-2
-  lg:grid-cols-4
+  md:grid-cols-4
   sm:gap-3
   sm:mb-6
 `;
 
 export const STAT_CARD_BASE = `
   relative overflow-hidden rounded-xl 
-  px-2 py-2.5
-  sm:px-4 sm:py-3
+  px-2 py-2
+  sm:px-3 sm:py-2.5
+  md:px-4 md:py-3
   lg:px-5 lg:py-3.5
   text-center
   shadow-md ring-2 transition-all 
   hover:scale-[1.02] hover:shadow-lg
-  min-h-[90px]
-  sm:min-h-[100px]
+  min-h-[85px]
+  sm:min-h-[95px]
+  md:min-h-[100px]
   flex flex-col items-center justify-center
 `;
 
-export const STAT_CARD_HALO = "pointer-events-none absolute -right-6 -top-6 h-12 w-12 sm:-right-8 sm:-top-8 sm:h-16 sm:w-16 lg:h-18 lg:w-18 rounded-full";
+export const STAT_CARD_HALO = "pointer-events-none absolute -right-6 -top-6 h-10 w-10 sm:-right-7 sm:-top-7 sm:h-14 sm:w-14 md:-right-8 md:-top-8 md:h-16 md:w-16 lg:h-18 lg:w-18 rounded-full";
 
 export const STAT_CARD_LABEL = `
-  text-[8px] leading-[1.1]
-  sm:text-[10px] sm:leading-normal
+  text-[7.5px] leading-[1.1]
+  sm:text-[9px] sm:leading-tight
+  md:text-[10px] md:leading-normal
   lg:text-xs 
   font-bold uppercase 
   tracking-[0.02em]
-  sm:tracking-wide
+  sm:tracking-tight
+  md:tracking-normal
   w-full
   max-w-full
   overflow-hidden
@@ -231,17 +241,20 @@ export const STAT_CARD_LABEL = `
 export const STAT_CARD_VALUE = `
   mt-1 text-xl
   sm:mt-1.5 sm:text-2xl 
-  lg:mt-2 lg:text-3xl 
+  md:mt-2 md:text-2xl
+  lg:text-3xl 
   font-bold
 `;
 
 export const STAT_CARD_SUBTITLE = `
   mt-0.5 text-[7px] leading-[1.1]
-  sm:mt-1 sm:text-[10px] sm:leading-normal
-  lg:mt-1 lg:text-xs
+  sm:mt-0.5 sm:text-[8px] sm:leading-tight
+  md:mt-1 md:text-[9px] md:leading-normal
+  lg:text-xs
   font-bold uppercase 
   tracking-[0.02em]
-  sm:tracking-wider
+  sm:tracking-tight
+  md:tracking-normal
   w-full
   max-w-full
   overflow-hidden
@@ -294,23 +307,25 @@ export const STAT_CARD_VARIANTS = {
 // ==========================================
 
 export const TASK_FILTERS_CONTAINER = `
-  mb-4 sm:mb-6 flex flex-col gap-3
-  sm:gap-4
+  mb-3 sm:mb-4 md:mb-6 flex flex-col gap-2 sm:gap-3
 `;
 
 export const FILTERS_ROW_TOP = `
-  flex flex-col gap-3
-  sm:flex-row sm:items-center sm:gap-4
+  flex flex-col gap-2
+  sm:flex-row sm:items-center sm:gap-3
+  md:gap-4
 `;
 
 export const FILTERS_ROW_BOTTOM = `
   flex flex-col gap-2
-  sm:flex-row sm:items-center sm:gap-3
+  sm:flex-row sm:items-center sm:gap-2
+  md:gap-3
 `;
 
 export const FILTERS_GROUP = `
   flex flex-col gap-2
-  sm:flex-row sm:items-center sm:gap-3
+  sm:flex-row sm:items-center sm:gap-2
+  md:gap-3
   w-full
   sm:w-auto
   sm:flex-1
@@ -320,10 +335,15 @@ export const NEW_TASK_BUTTON = `
   w-full
   sm:w-auto
   sm:flex-shrink-0
-  inline-flex items-center justify-center gap-2 sm:gap-3 rounded-xl 
+  inline-flex items-center justify-center gap-1.5 sm:gap-2 md:gap-3 rounded-xl 
   bg-gradient-to-r from-cyan-500 via-teal-500 to-orange-500 
-  px-5 py-3 sm:px-7 sm:py-3.5 
-  text-sm sm:text-base font-bold text-white shadow-lg 
+  px-4 py-2.5
+  sm:px-5 sm:py-3
+  md:px-7 md:py-3.5 
+  text-xs
+  sm:text-sm
+  md:text-base
+  font-bold text-white shadow-lg 
   transition hover:shadow-xl hover:from-cyan-400 hover:via-teal-400 hover:to-orange-400 
   dark:from-amber-600 dark:via-orange-600 dark:to-rose-600 
   dark:hover:from-amber-500 dark:hover:via-orange-500 dark:hover:to-rose-500
@@ -350,43 +370,58 @@ export const SEARCH_INPUT = `
 export const SELECT_BASE = `
   w-full
   sm:w-auto
-  sm:min-w-[180px]
-  rounded-lg
-  px-4 py-2.5 
-  sm:px-5 sm:py-3
-  text-xs sm:text-sm font-semibold
+  sm:min-w-[140px]
+  rounded-full
+  px-3 py-1.5
+  sm:px-4 sm:py-2
+  text-xs font-semibold
   outline-none 
   transition-all duration-200
   [&>option]:bg-white [&>option]:text-slate-800 
   dark:[&>option]:bg-stone-800 dark:[&>option]:text-amber-50
   appearance-none
   cursor-pointer
+  border-2
 `;
 
 export const SELECT_STATUS = `
-  bg-slate-100 
-  text-slate-700
-  hover:bg-slate-200
-  focus:bg-slate-200
+  bg-cyan-50/50
+  text-cyan-800
+  border-cyan-300/60
+  hover:bg-cyan-100/70
+  hover:border-cyan-400
+  focus:bg-cyan-100/70
+  focus:border-cyan-500
   focus:ring-2 focus:ring-cyan-400/30
-  dark:bg-stone-800/50
-  dark:text-amber-100
-  dark:hover:bg-stone-800
-  dark:focus:bg-stone-800
-  dark:focus:ring-amber-500/30
+  dark:bg-cyan-900/20
+  dark:text-cyan-300
+  dark:border-cyan-800/60
+  dark:hover:bg-cyan-900/30
+  dark:hover:border-cyan-700
+  dark:focus:bg-cyan-900/30
+  dark:focus:border-cyan-600
+  dark:focus:ring-cyan-500/30
 `;
+
 export const SELECT_PRIORITY = `
-  bg-slate-100
-  text-slate-700
-  hover:bg-slate-200
-  focus:bg-slate-200
+  bg-orange-50/50
+  text-orange-800
+  border-orange-300/60
+  hover:bg-orange-100/70
+  hover:border-orange-400
+  focus:bg-orange-100/70
+  focus:border-orange-500
   focus:ring-2 focus:ring-orange-400/30
-  dark:bg-stone-800/50
-  dark:text-amber-100
-  dark:hover:bg-stone-800
-  dark:focus:bg-stone-800
+  dark:bg-orange-900/20
+  dark:text-orange-300
+  dark:border-orange-800/60
+  dark:hover:bg-orange-900/30
+  dark:hover:border-orange-700
+  dark:focus:bg-orange-900/30
+  dark:focus:border-orange-600
   dark:focus:ring-amber-500/30
 `;
+
 export const SEARCH_COMPACT_BUTTON = "group flex items-center gap-2 rounded-xl border-2 border-cyan-400/70 bg-gradient-to-r from-white to-cyan-50/50 px-3 py-2.5 sm:px-4 sm:py-3 shadow-md transition-all hover:border-cyan-500 hover:shadow-lg dark:border-stone-700/70 dark:bg-gradient-to-r dark:from-stone-900/80 dark:to-slate-900/80 dark:hover:border-stone-600 w-full cursor-pointer";
 
 export const SEARCH_COUNT_BADGE = "rounded-full bg-cyan-500 px-2 py-0.5 sm:px-2.5 sm:py-1 text-xs font-bold text-white dark:bg-amber-600";
@@ -435,10 +470,10 @@ export const TASK_FILTERS_CLEAR_ICON = "sm:w-5 sm:h-5";
 // VIEW SWITCHER - RESPONSIVE
 // ==========================================
 export const VIEW_SWITCHER_CONTAINER = `
-  flex items-center gap-0.5 sm:gap-1 
-  rounded-lg sm:rounded-xl border-2 border-slate-200 
-  bg-white/80 p-0.5 sm:p-1 shadow-md
-  dark:border-stone-700 dark:bg-stone-800/80
+  flex items-center gap-1 sm:gap-1.5 md:gap-2
+  w-full sm:w-auto
+  overflow-x-auto
+  scrollbar-hide
 `;
 
 export const VIEW_SWITCHER_BUTTON = `
@@ -1024,15 +1059,21 @@ export const CALENDAR_LEGEND_ITEM = `
 // ==========================================
 
 export const EXPORT_BUTTON = `
-  inline-flex items-center justify-center gap-2 rounded-lg border-2 border-emerald-400/70 
+  inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-lg border-2 border-emerald-400/70 
   bg-gradient-to-r from-emerald-50 to-teal-50 
-  px-3 py-2 sm:px-4 sm:py-2.5 
-  text-xs sm:text-sm font-bold text-emerald-800 shadow-md 
+  px-2.5 py-1.5
+  sm:px-3 sm:py-2
+  md:px-4 md:py-2.5 
+  text-[10px]
+  sm:text-xs
+  md:text-sm
+  font-bold text-emerald-800 shadow-md 
   transition hover:border-emerald-500 hover:from-emerald-100 hover:to-teal-100 hover:shadow-lg 
   dark:border-emerald-700/70 dark:bg-gradient-to-r dark:from-emerald-900/60 dark:to-teal-900/60 
   dark:text-emerald-200 dark:hover:border-emerald-600 dark:hover:from-emerald-900/80 dark:hover:to-teal-900/80 
   whitespace-nowrap
   w-full sm:w-auto
+  flex-shrink-0
 `;
 
 export const EXPORT_DROPDOWN = "absolute right-0 top-full z-[100] mt-2 w-44 sm:w-48 overflow-hidden rounded-xl border-2 border-slate-200/60 bg-white shadow-xl dark:border-stone-700/60 dark:bg-stone-900/95";
