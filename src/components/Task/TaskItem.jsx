@@ -39,7 +39,6 @@ import TaskBadge from './TaskBadge';
 import TaskTags from './TaskTags';
 import TaskProgressBar from './TaskProgressBar';
 
-
 function TaskItem({ 
   task, 
   onUpdate, 
@@ -56,9 +55,7 @@ function TaskItem({
   const [editedTask, setEditedTask] = useState({ ...task });
   const [showTimeSpent, setShowTimeSpent] = useState(true);
 
-  // Vérifier si le timer est activé pour cette tâche
   const isTimerEnabled = task.timerEnabled !== false;
-
 
   const { 
     elapsedSeconds, 
@@ -70,14 +67,11 @@ function TaskItem({
     isRunning 
   } = useTimer(task, onUpdate);
 
-
   useEffect(() => {
     setIsEditing(editingTaskId === task.id);
     setEditedTask({ ...task });
   }, [editingTaskId, task]);
 
-
-  // Vérifier le localStorage au montage
   useEffect(() => {
     const storageKey = `task-${task.id}-hideTimeSpent`;
     const saved = localStorage.getItem(storageKey);
@@ -89,7 +83,6 @@ function TaskItem({
     }
   }, [task.id]);
 
-
   const handleDateChange = (e) => {
     const newDate = e.target.value;
     
@@ -98,16 +91,13 @@ function TaskItem({
       return;
     }
 
-
     const selectedDate = new Date(newDate);
     const now = new Date();
-
 
     if (selectedDate < now) {
       alert('⚠️ Impossible de définir une échéance dans le passé. Veuillez choisir une date future.');
       return;
     }
-
 
     const updatedTask = {
       ...editedTask,
@@ -115,10 +105,8 @@ function TaskItem({
       notified: false,
     };
 
-
     setEditedTask(updatedTask);
   };
-
 
   const handleSave = async () => {
     await onUpdate(task.id, editedTask);
@@ -126,13 +114,11 @@ function TaskItem({
     onStartEditing(null);
   };
 
-
   const handleCancel = () => {
     setEditedTask({ ...task });
     setIsEditing(false);
     onStartEditing(null);
   };
-
 
   const handleToggleLock = async (e) => {
     if (e) {
@@ -146,7 +132,6 @@ function TaskItem({
     await onUpdate(task.id, updatedTask);
   };
 
-
   const handleMarkDone = async (e) => {
     if (e) {
       e.stopPropagation();
@@ -159,14 +144,12 @@ function TaskItem({
     await onUpdate(task.id, updatedTask);
   };
 
-
   const handleCloseTimeSpent = (e) => {
     e.stopPropagation();
     const storageKey = `task-${task.id}-hideTimeSpent`;
     localStorage.setItem(storageKey, 'hidden');
     setShowTimeSpent(false);
   };
-
 
   const handleCardClick = () => {
     const isLocked = task.locked || false;
@@ -175,13 +158,10 @@ function TaskItem({
     }
   };
 
-
-  // Fonction pour obtenir l'indicateur de timer à côté du titre
   const getTimerIndicator = () => {
     const isDone = task.status === 'DONE';
     const hasTimeSpent = task.timeSpent > 0;
     
-    // Timer stoppé (DONE avec temps enregistré)
     if (isDone && hasTimeSpent) {
       return (
         <span className="inline-flex items-center gap-1 ml-2 px-1.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400" title="Temps enregistré">
@@ -191,12 +171,10 @@ function TaskItem({
       );
     }
     
-    // Timer non activé
     if (!isTimerEnabled) {
       return null;
     }
     
-    // Timer en cours
     if (isRunning) {
       return (
         <span className="inline-flex items-center gap-1 ml-2 px-1.5 py-0.5 rounded-md bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-400 animate-pulse" title="Timer en cours">
@@ -206,7 +184,6 @@ function TaskItem({
       );
     }
     
-    // Timer en pause (a du temps mais pas running et pas DONE)
     if (hasTimeSpent && !isDone) {
       return (
         <span className="inline-flex items-center gap-1 ml-2 px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400" title="Timer en pause">
@@ -216,14 +193,12 @@ function TaskItem({
       );
     }
     
-    // Timer présent mais pas démarré
     return (
       <span className="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400" title="Timer disponible">
         <FiClock size={12} />
       </span>
     );
   };
-
 
   if (isEditing) {
     return (
@@ -237,12 +212,10 @@ function TaskItem({
     );
   }
 
-
   const dateInfo = task.dueDate ? formatDate(task.dueDate) : null;
   const isLocked = task.locked || false;
   const isDone = task.status === 'DONE';
   const progressInfo = calculateProgress(task);
-
 
   return (
     <div
@@ -254,19 +227,14 @@ function TaskItem({
       onClick={handleCardClick}
       style={{ cursor: isLocked ? 'default' : 'pointer' }}
     >
-      {/* Halo décoratif */}
       <div className={TASK_HALO} />
 
-
-      {/* Handle drag */}
       {!isLocked && (
         <div className={TASK_DRAG_HANDLE}>
           <div className={TASK_DRAG_BAR} />
         </div>
       )}
 
-
-      {/* Badge verrouillé */}
       {isLocked && (
         <div className={TASK_LOCKED_BADGE}>
           <FaLock className={TASK_LOCKED_ICON} size={12} />
@@ -274,20 +242,15 @@ function TaskItem({
         </div>
       )}
 
-
-      {/* Actions flottantes */}
       <div className={TASK_ACTIONS_CONTAINER}>
         <button
           onClick={handleToggleLock}
-          className={`${TASK_ACTION_BUTTON} ${
-            isLocked ? TASK_ACTION_LOCK_LOCKED : TASK_ACTION_LOCK_UNLOCKED
-          }`}
+          className={`${TASK_ACTION_BUTTON} ${isLocked ? TASK_ACTION_LOCK_LOCKED : TASK_ACTION_LOCK_UNLOCKED}`}
           title={isLocked ? 'Déverrouiller' : 'Verrouiller'}
         >
           {isLocked ? <FaLock size={16} className={TASK_UNLOCK_ICON} /> : <FaLockOpen size={16} />}
         </button>
         
-        {/* Bouton Valider - seulement si pas terminé */}
         {!isDone && (
           <button
             onClick={handleMarkDone}
@@ -311,10 +274,8 @@ function TaskItem({
         </button>
       </div>
 
-
       <div className={TASK_CONTENT}>
         <div className={TASK_ITEM_CONTENT_FLEX}>
-          {/* Titre avec indicateur de timer */}
           <div className="flex items-center flex-wrap">
             <h3 className={TASK_TITLE}>
               {task.title}
@@ -327,10 +288,6 @@ function TaskItem({
               {task.description}
             </p>
           )}
-
-
-          <TaskTags tags={task.tags} />
-
 
           <div className={TASK_METADATA_CONTAINER}>
             {dateInfo && (
@@ -345,8 +302,6 @@ function TaskItem({
             )}
           </div>
 
-
-          {/* Timer - affiché seulement si timerEnabled et pas DONE */}
           {isTimerEnabled && !isDone && (
             <TaskTimer
               task={task}
@@ -360,8 +315,6 @@ function TaskItem({
             />
           )}
 
-
-          {/* Temps passé pour tâches terminées - affiché seulement si timeSpent > 0 */}
           {isDone && task.timeSpent > 0 && showTimeSpent && (
             <div className={TASK_TIME_SPENT_CONTAINER}>
               <button
@@ -378,12 +331,11 @@ function TaskItem({
             </div>
           )}
 
-
           <div className={TASK_BADGES_CONTAINER}>
             <TaskBadge type="status" value={task.status} colors={STATUS_COLORS} labels={STATUS_LABELS} />
             <TaskBadge type="priority" value={task.priority} colors={PRIORITY_COLORS} labels={PRIORITY_LABELS} />
+            <TaskTags tags={task.tags} />
           </div>
-
 
           <TaskProgressBar progressInfo={progressInfo} dateInfo={dateInfo} />
         </div>
@@ -391,6 +343,5 @@ function TaskItem({
     </div>
   );
 }
-
 
 export default TaskItem;
