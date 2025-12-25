@@ -19,15 +19,12 @@ import {
   BUTTON_SUBMIT 
 } from '../../constants/styles';
 
-
 function TaskForm({ onTaskCreated, onClose }) {
   const { values, handleChange, reset, isSubmitting, setIsSubmitting, prepareTaskData } = useTaskForm();
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
 
     try {
       const taskData = prepareTaskData();
@@ -39,7 +36,6 @@ function TaskForm({ onTaskCreated, onClose }) {
       setIsSubmitting(false);
     }
   };
-
 
   return (
     <form onSubmit={handleSubmit} className={FORM_CONTAINER}>
@@ -59,7 +55,6 @@ function TaskForm({ onTaskCreated, onClose }) {
         )}
       </div>
 
-
       <div className={FORM_FIELDS_CONTAINER}>
         {/* Titre */}
         <FormField label="Titre" required>
@@ -73,7 +68,6 @@ function TaskForm({ onTaskCreated, onClose }) {
           />
         </FormField>
 
-
         {/* Description */}
         <FormField label="Description">
           <textarea
@@ -85,6 +79,16 @@ function TaskForm({ onTaskCreated, onClose }) {
           />
         </FormField>
 
+        {/* Tags - juste après Description */}
+        <FormField label="Tags" emoji="🏷️">
+          <input
+            type="text"
+            value={values.tags}
+            onChange={(e) => handleChange('tags', e.target.value)}
+            className={INPUT_CLASSES}
+            placeholder="travail, urgent, projet (séparés par des virgules)"
+          />
+        </FormField>
 
         {/* Date d'échéance */}
         <FormField label="Date d'échéance" emoji="📅">
@@ -95,7 +99,6 @@ function TaskForm({ onTaskCreated, onClose }) {
             className={INPUT_CLASSES}
           />
         </FormField>
-
 
         {/* Durée estimée et Rappel */}
         <div className={FORM_GRID_2_COLS}>
@@ -109,7 +112,6 @@ function TaskForm({ onTaskCreated, onClose }) {
               min="1"
             />
           </FormField>
-
 
           <FormField label="Rappel (minutes avant)" emoji="🔔">
             <select
@@ -125,7 +127,6 @@ function TaskForm({ onTaskCreated, onClose }) {
           </FormField>
         </div>
 
-
         {/* Priorité et Status */}
         <div className={FORM_GRID_2_COLS}>
           <FormField label="Priorité">
@@ -140,7 +141,6 @@ function TaskForm({ onTaskCreated, onClose }) {
             </select>
           </FormField>
 
-
           <FormField label="Statut">
             <select
               value={values.status}
@@ -153,7 +153,6 @@ function TaskForm({ onTaskCreated, onClose }) {
             </select>
           </FormField>
         </div>
-
 
         {/* Chronométrable (Timer) */}
         <div className={FORM_REACTIVABLE_CONTAINER}>
@@ -174,7 +173,6 @@ function TaskForm({ onTaskCreated, onClose }) {
           </label>
         </div>
 
-
         {/* Réactivable */}
         <div className={FORM_REACTIVABLE_CONTAINER}>
           <input
@@ -194,7 +192,6 @@ function TaskForm({ onTaskCreated, onClose }) {
           </label>
         </div>
 
-
         {/* Bouton submit */}
         <button
           type="submit"
@@ -207,6 +204,5 @@ function TaskForm({ onTaskCreated, onClose }) {
     </form>
   );
 }
-
 
 export default TaskForm;

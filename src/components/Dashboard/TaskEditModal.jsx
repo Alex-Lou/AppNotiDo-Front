@@ -30,13 +30,11 @@ import {
   TASK_EDIT_MODAL_BUTTON_SAVE
 } from '../../constants/styles';
 
-
 const STATUS_OPTIONS = [
   { value: 'TODO', label: '📝 À faire' },
   { value: 'IN_PROGRESS', label: '⏳ En cours' },
   { value: 'DONE', label: '✅ Terminé' }
 ];
-
 
 const PRIORITY_OPTIONS = [
   { value: 'LOW', label: '🟢 Basse' },
@@ -44,14 +42,12 @@ const PRIORITY_OPTIONS = [
   { value: 'HIGH', label: '🔴 Haute' }
 ];
 
-
 const REMINDER_OPTIONS = [
   { value: 5, label: '5 minutes' },
   { value: 15, label: '15 minutes' },
   { value: 30, label: '30 minutes' },
   { value: 60, label: '1 heure' }
 ];
-
 
 // Template pour une nouvelle tâche
 const getEmptyTask = (defaultDate = null) => ({
@@ -67,7 +63,6 @@ const getEmptyTask = (defaultDate = null) => ({
   timerEnabled: false
 });
 
-
 function TaskEditModal({ 
   task, 
   isCreating = false,
@@ -80,7 +75,6 @@ function TaskEditModal({
   const [isSaving, setIsSaving] = useState(false);
   const [tagsInput, setTagsInput] = useState('');
 
-
   // Initialiser le formulaire
   useEffect(() => {
     if (isCreating) {
@@ -89,13 +83,20 @@ function TaskEditModal({
       setTagsInput('');
     } else if (task) {
       setEditedTask({ ...task });
-      setTagsInput(task.tags ? task.tags.join(', ') : '');
+      // Gérer les deux formats de tags : string ou array
+      if (task.tags) {
+        if (Array.isArray(task.tags)) {
+          setTagsInput(task.tags.join(', '));
+        } else {
+          setTagsInput(task.tags);
+        }
+      } else {
+        setTagsInput('');
+      }
     }
   }, [task, isCreating, defaultDate]);
 
-
   if (!editedTask) return null;
-
 
   const handleChange = (field, value) => {
     setEditedTask(prev => ({
@@ -103,7 +104,6 @@ function TaskEditModal({
       [field]: value
     }));
   };
-
 
   const handleDateChange = (e) => {
     const newDate = e.target.value;
@@ -113,47 +113,39 @@ function TaskEditModal({
       return;
     }
 
-
     const selectedDate = new Date(newDate);
     handleChange('dueDate', selectedDate.toISOString());
     handleChange('notified', false);
   };
 
-
   const handleTagsChange = (e) => {
     setTagsInput(e.target.value);
   };
 
+  // Préparer les données - tags en STRING pas en Array
+  const prepareTaskData = () => {
+    // Nettoyer et joindre les tags en String
+    const tagsString = tagsInput
+      .split(',')
+      .map(tag => tag.trim())
+      .filter(tag => tag.length > 0)
+      .join(',');
 
-  // Préparer les données comme le fait prepareTaskData() dans useTaskForm
-const prepareTaskData = () => {
-  const tags = tagsInput
-    .split(',')
-    .map(tag => tag.trim())
-    .filter(tag => tag.length > 0);
+    const data = {
+      title: editedTask.title,
+      description: editedTask.description || '',
+      priority: editedTask.priority,
+      status: editedTask.status,
+      dueDate: editedTask.dueDate || null,
+      estimatedDuration: editedTask.estimatedDuration ? parseInt(editedTask.estimatedDuration) : null,
+      reminderMinutes: parseInt(editedTask.reminderMinutes) || 15,
+      reactivable: editedTask.reactivable || false,
+      timerEnabled: editedTask.timerEnabled !== false,
+      tags: tagsString || null
+    };
 
-
-  const data = {
-    title: editedTask.title,
-    description: editedTask.description || '',
-    priority: editedTask.priority,
-    status: editedTask.status,
-    dueDate: editedTask.dueDate || null,
-    estimatedDuration: editedTask.estimatedDuration ? parseInt(editedTask.estimatedDuration) : null,
-    reminderMinutes: parseInt(editedTask.reminderMinutes) || 15,
-    reactivable: editedTask.reactivable || false,
-    timerEnabled: editedTask.timerEnabled !== false
+    return data;
   };
-
-
-  if (tags.length > 0) {
-    data.tags = tags;
-  }
-
-
-  return data;
-};
-
 
   const handleSave = async () => {
     if (!editedTask.title?.trim()) {
@@ -161,11 +153,9 @@ const prepareTaskData = () => {
       return;
     }
 
-
     setIsSaving(true);
     
     const taskData = prepareTaskData();
-
 
     try {
       if (isCreating) {
@@ -180,7 +170,6 @@ const prepareTaskData = () => {
     }
   };
 
-
   const handleKeyDown = (e) => {
     if (e.key === 'Escape') {
       onClose();
@@ -189,7 +178,6 @@ const prepareTaskData = () => {
       handleSave();
     }
   };
-
 
   // Formater la date pour l'input datetime-local
   const formatDateForInput = (dateString) => {
@@ -200,11 +188,9 @@ const prepareTaskData = () => {
     return localDate.toISOString().slice(0, 16);
   };
 
-
   const modalTitle = isCreating ? '➕ Nouvelle tâche' : '✏️ Modifier la tâche';
   const saveButtonText = isCreating ? 'Créer la tâche' : 'Sauvegarder';
   const savingButtonText = isCreating ? 'Création...' : 'Sauvegarde...';
-
 
   return (
     <div 
@@ -226,7 +212,6 @@ const prepareTaskData = () => {
           </button>
         </div>
 
-
         {/* Content */}
         <div className={TASK_EDIT_MODAL_CONTENT}>
           {/* Titre */}
@@ -244,7 +229,6 @@ const prepareTaskData = () => {
             />
           </div>
 
-
           {/* Description */}
           <div className={TASK_EDIT_MODAL_FIELD}>
             <label className={TASK_EDIT_MODAL_LABEL}>
@@ -259,6 +243,20 @@ const prepareTaskData = () => {
             />
           </div>
 
+          {/* Tags - juste après Description */}
+          <div className={TASK_EDIT_MODAL_FIELD}>
+            <label className={TASK_EDIT_MODAL_LABEL}>
+              <FiTag className="inline mr-1" size={14} />
+              Tags (séparés par des virgules)
+            </label>
+            <input
+              type="text"
+              value={tagsInput}
+              onChange={handleTagsChange}
+              className={TASK_EDIT_MODAL_INPUT}
+              placeholder="travail, urgent, projet"
+            />
+          </div>
 
           {/* Statut et Priorité */}
           <div className={TASK_EDIT_MODAL_ROW}>
@@ -280,7 +278,6 @@ const prepareTaskData = () => {
               </select>
             </div>
 
-
             <div className={TASK_EDIT_MODAL_FIELD}>
               <label className={TASK_EDIT_MODAL_LABEL}>
                 <FiAlertCircle className="inline mr-1" size={14} />
@@ -300,7 +297,6 @@ const prepareTaskData = () => {
             </div>
           </div>
 
-
           {/* Date et Durée */}
           <div className={TASK_EDIT_MODAL_ROW}>
             <div className={TASK_EDIT_MODAL_FIELD}>
@@ -315,7 +311,6 @@ const prepareTaskData = () => {
                 className={TASK_EDIT_MODAL_INPUT}
               />
             </div>
-
 
             <div className={TASK_EDIT_MODAL_FIELD}>
               <label className={TASK_EDIT_MODAL_LABEL}>
@@ -332,7 +327,6 @@ const prepareTaskData = () => {
               />
             </div>
           </div>
-
 
           {/* Rappel */}
           <div className={TASK_EDIT_MODAL_FIELD}>
@@ -352,23 +346,6 @@ const prepareTaskData = () => {
               ))}
             </select>
           </div>
-
-
-          {/* Tags */}
-          <div className={TASK_EDIT_MODAL_FIELD}>
-            <label className={TASK_EDIT_MODAL_LABEL}>
-              <FiTag className="inline mr-1" size={14} />
-              Tags (séparés par des virgules)
-            </label>
-            <input
-              type="text"
-              value={tagsInput}
-              onChange={handleTagsChange}
-              className={TASK_EDIT_MODAL_INPUT}
-              placeholder="travail, urgent, projet"
-            />
-          </div>
-
 
           {/* Chronométrer cette tâche */}
           <div className={TASK_EDIT_MODAL_FIELD}>
@@ -390,7 +367,6 @@ const prepareTaskData = () => {
             </label>
           </div>
 
-
           {/* Réactivable */}
           <div className={TASK_EDIT_MODAL_FIELD}>
             <label className="flex items-start gap-3 cursor-pointer p-3 rounded-xl bg-slate-50 dark:bg-stone-800 border border-slate-200 dark:border-stone-700 hover:bg-slate-100 dark:hover:bg-stone-700 transition-colors">
@@ -411,7 +387,6 @@ const prepareTaskData = () => {
             </label>
           </div>
         </div>
-
 
         {/* Footer */}
         <div className={TASK_EDIT_MODAL_FOOTER}>
@@ -444,6 +419,5 @@ const prepareTaskData = () => {
     </div>
   );
 }
-
 
 export default TaskEditModal;
