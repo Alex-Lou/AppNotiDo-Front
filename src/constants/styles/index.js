@@ -31,25 +31,56 @@ export const DASHBOARD_LAYOUT_MAIN = `
   min-h-screen px-4 py-6 transition-all duration-300
   sm:px-6 sm:py-8
   md:ml-0 md:mr-0 md:px-8
-  xl:ml-72 xl:mr-80 xl:px-10 xl:py-10
+  xl:px-10 xl:py-10
 `;
 
+export const getMainClasses = (isLeftCollapsed, isRightCollapsed) => {
+  let leftMargin = 'xl:ml-64';  // ← Largeur normale sidebar gauche
+  let rightMargin = 'xl:mr-80'; // ← Largeur normale sidebar droite
+  
+  if (isLeftCollapsed) leftMargin = 'xl:ml-16';  // ← Largeur collapsed
+  if (isRightCollapsed) rightMargin = 'xl:mr-16'; // ← Largeur collapsed
+  
+  return `${leftMargin} ${rightMargin}`;
+};
+
 // ==========================================
-// SIDEBARS - RESPONSIVE
+// SIDEBARS - RESPONSIVE & COLLAPSIBLE
 // ==========================================
 
 export const SIDEBAR_CONTAINER = `
-  fixed left-0 top-0 z-[60] flex h-full w-72 flex-col 
+  fixed left-0 top-0 z-[60] flex h-full flex-col 
   border-r-2 border-cyan-300/60 
   bg-gradient-to-b from-cyan-200 via-teal-200 to-orange-200 
   px-5 py-5 
   dark:border-amber-900/60 
   dark:bg-gradient-to-b dark:from-amber-950/80 dark:via-stone-950/90 dark:to-slate-950/80
-  transition-transform duration-300 ease-in-out
+  transition-all duration-300 ease-in-out
+  overflow-y-auto
   sm:px-6 sm:py-6
   xl:px-7 xl:py-7
-  overflow-y-auto
 `;
+
+export const getSidebarWidth = (isCollapsed) => 
+  isCollapsed ? 'w-16' : 'w-64'; // ← Normale: 256px (au lieu de 224px)
+
+export const RIGHT_SIDEBAR_CONTAINER = `
+  fixed right-0 top-0 z-[65] h-full overflow-y-auto 
+  border-l-2 border-cyan-300/60 
+  bg-gradient-to-b from-cyan-100/30 via-teal-100/20 to-orange-100/30 
+  px-4 py-6
+  dark:border-amber-900/60 
+  dark:bg-gradient-to-b dark:from-slate-950/60 dark:via-stone-950/50 dark:to-slate-950/60
+  transition-all duration-300 ease-in-out
+  sm:px-5 sm:py-8
+  xl:px-6 xl:py-10
+`;
+
+// Alias pour compatibilité (ancien nom)
+export const RIGHT_SIDEBAR = RIGHT_SIDEBAR_CONTAINER;
+
+export const getRightSidebarWidth = (isCollapsed) => 
+  isCollapsed ? 'w-16' : 'w-80'; // ← Normale: 320px (comme avant)
 
 export const SIDEBAR_OVERLAY = `
   fixed inset-0 z-[55] bg-black/50 backdrop-blur-sm
@@ -57,26 +88,39 @@ export const SIDEBAR_OVERLAY = `
   xl:hidden
 `;
 
-export const RIGHT_SIDEBAR = `
-  fixed right-0 top-0 z-[65] h-full w-80 overflow-y-auto 
-  border-l-2 border-cyan-300/60 
-  bg-gradient-to-b from-cyan-100/30 via-teal-100/20 to-orange-100/30 
-  px-4 py-6
-  dark:border-amber-900/60 
-  dark:bg-gradient-to-b dark:from-slate-950/60 dark:via-stone-950/50 dark:to-slate-950/60
-  transition-transform duration-300 ease-in-out
-  translate-x-full
-  xl:translate-x-0
-  sm:px-5 sm:py-8
-  xl:px-6 xl:py-10
+
+// ==========================================
+// COLLAPSE BUTTONS
+// ==========================================
+
+export const COLLAPSE_BUTTON = `
+  absolute top-4 flex h-7 w-7 items-center justify-center 
+  rounded-lg bg-white/90 dark:bg-stone-800/90
+  shadow-lg hover:shadow-xl
+  text-slate-600 dark:text-amber-400
+  hover:scale-110 active:scale-95
+  transition-all duration-200
+  z-[70]
+  border-2 border-cyan-400/50 dark:border-amber-600/50
 `;
+
+export const COLLAPSE_BUTTON_LEFT = `
+  ${COLLAPSE_BUTTON}
+  right-1
+`;
+
+export const COLLAPSE_BUTTON_RIGHT = `
+  ${COLLAPSE_BUTTON}
+  left-1
+`;
+
 
 // ==========================================
 // HAMBURGER & TOGGLE BUTTONS
 // ==========================================
 
 export const HAMBURGER_BUTTON = `
-  fixed left-4 top-4 z-[70] flex h-12 w-12 items-center justify-center 
+  fixed left-4 top-4 z-[70] flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center 
   rounded-xl bg-gradient-to-br from-cyan-500 to-teal-500 
   shadow-lg transition-all hover:scale-105 active:scale-95
   dark:from-amber-600 dark:to-orange-600
@@ -84,46 +128,46 @@ export const HAMBURGER_BUTTON = `
 `;
 
 export const TOGGLE_RIGHT_SIDEBAR_BUTTON = `
-  fixed right-4 top-4 z-[70] flex h-12 w-12 items-center justify-center 
+  fixed right-4 top-4 z-[70] flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center 
   rounded-xl bg-gradient-to-br from-orange-500 to-rose-500 
   shadow-lg transition-all hover:scale-105 active:scale-95
   dark:from-rose-600 dark:to-red-600
   xl:hidden
 `;
 
-export const HAMBURGER_ICON = "text-white text-xl";
+export const HAMBURGER_ICON = "text-white w-5 h-5 sm:w-6 sm:h-6";
+
 
 // ==========================================
 // SIDEBAR HEADER - RESPONSIVE
 // ==========================================
 
-export const SIDEBAR_HEADER = "mb-8 sm:mb-10";
-export const SIDEBAR_LOGO_CONTAINER = "flex items-center gap-3 sm:gap-3 lg:gap-3"; // ← Augmente le gap
+export const SIDEBAR_HEADER = "mb-8 sm:mb-10 relative";
+
+export const SIDEBAR_LOGO_CONTAINER = "flex items-center gap-3";
 
 export const SIDEBAR_LOGO = `
   h-8 w-8 rounded-2xl shadow-md shadow-cyan-300/40 
   sm:h-9 sm:w-9
   dark:shadow-amber-700/40 transition-transform duration-200 ease-out 
   hover:scale-105 hover:-rotate-2
-  ml-12 lg:ml-0
 `;
 
 export const SIDEBAR_TITLE = `
   bg-gradient-to-r from-cyan-700 via-teal-700 to-orange-600 
-  bg-clip-text text-xl font-bold tracking-tight text-transparent
-  sm:text-2xl
+  bg-clip-text text-lg font-bold tracking-tight text-transparent
+  sm:text-xl
   dark:from-amber-500 dark:via-orange-500 dark:to-rose-500
 `;
 
-export const SIDEBAR_SUBTITLE = "mt-2 text-base sm:text-xl font-script italic text-slate-800/90 dark:text-amber-200/80";
-
+export const SIDEBAR_SUBTITLE = "mt-1 text-sm sm:text-base font-script italic text-slate-800/90 dark:text-amber-200/80";
 
 // ==========================================
 // DASHBOARD HEADER - RESPONSIVE
 // ==========================================
 
 export const DASHBOARD_HEADER_CONTAINER = `
-  flex items-start justify-between gap-4
+  flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4
   mb-4 sm:mb-6
 `;
 
@@ -140,7 +184,8 @@ export const DASHBOARD_HEADER_SUBTITLE = `
   sm:text-base
 `;
 
-export const DASHBOARD_HEADER_SECTION = "mb-8 sm:mb-10";
+export const DASHBOARD_HEADER_SECTION = "mb-6 sm:mb-8";
+
 
 // ==========================================
 // STATS CARDS - RESPONSIVE COMPACT
@@ -982,11 +1027,12 @@ export const EXPORT_BUTTON = `
   inline-flex items-center justify-center gap-2 rounded-lg border-2 border-emerald-400/70 
   bg-gradient-to-r from-emerald-50 to-teal-50 
   px-3 py-2 sm:px-4 sm:py-2.5 
-  text-xs font-bold text-emerald-800 shadow-md 
+  text-xs sm:text-sm font-bold text-emerald-800 shadow-md 
   transition hover:border-emerald-500 hover:from-emerald-100 hover:to-teal-100 hover:shadow-lg 
   dark:border-emerald-700/70 dark:bg-gradient-to-r dark:from-emerald-900/60 dark:to-teal-900/60 
   dark:text-emerald-200 dark:hover:border-emerald-600 dark:hover:from-emerald-900/80 dark:hover:to-teal-900/80 
   whitespace-nowrap
+  w-full sm:w-auto
 `;
 
 export const EXPORT_DROPDOWN = "absolute right-0 top-full z-[100] mt-2 w-44 sm:w-48 overflow-hidden rounded-xl border-2 border-slate-200/60 bg-white shadow-xl dark:border-stone-700/60 dark:bg-stone-900/95";
