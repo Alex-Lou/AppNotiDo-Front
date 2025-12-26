@@ -26,7 +26,6 @@ import {
 } from '../../constants/styles';
 
 
-// Labels sans emoji (on les ajoute manuellement)
 const STATUS_TEXT = {
   TODO: 'À faire',
   IN_PROGRESS: 'En cours',
@@ -75,6 +74,13 @@ function GridCard({
     isDragging && 'opacity-50 scale-95 transition-all duration-200',
     isDragOver && 'ring-2 ring-cyan-400 dark:ring-amber-500 scale-105 transition-all duration-200'
   ].filter(Boolean).join(' ');
+
+
+  const handleCardClick = () => {
+    if (!isLocked && onEdit) {
+      onEdit(task.id);
+    }
+  };
 
 
   const handleEdit = (e) => {
@@ -136,10 +142,12 @@ function GridCard({
       onDragEnter={(e) => !isLocked && onDragEnter && onDragEnter(e, task.id)}
       onDragEnd={!isLocked && onDragEnd ? onDragEnd : undefined}
       onDragOver={(e) => !isLocked && e.preventDefault()}
+      onClick={handleCardClick}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
       onTouchStart={() => setShowActions(true)}
       onTouchEnd={() => setTimeout(() => setShowActions(false), 3000)}
+      style={{ cursor: isLocked ? 'default' : 'pointer' }}
     >
       {/* Indicateur verrouillé */}
       {isLocked && (

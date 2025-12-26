@@ -82,6 +82,12 @@ function KanbanCard({
     isHighlighted && 'ring-2 ring-cyan-500 dark:ring-amber-500 bg-cyan-50/50 dark:bg-amber-900/30 animate-pulse'
   ].filter(Boolean).join(' ');
 
+  const handleCardClick = () => {
+    if (!isLocked && onEdit) {
+      onEdit(task.id);
+    }
+  };
+
   const handleStartTask = async (e) => {
     e.stopPropagation();
     const updatedTask = { ...task, status: 'IN_PROGRESS' };
@@ -131,6 +137,7 @@ function KanbanCard({
       draggable={!isLocked}
       onDragStart={(e) => !isLocked && onDragStart(e, task.id)}
       onDragEnd={onDragEnd}
+      onClick={handleCardClick}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => {
         setShowActions(false);
@@ -138,6 +145,7 @@ function KanbanCard({
       }}
       onTouchStart={() => setShowActions(true)}
       onTouchEnd={() => setTimeout(() => setShowActions(false), 2000)}
+      style={{ cursor: isLocked ? 'default' : 'pointer' }}
     >
       {isLocked && (
         <div className={KANBAN_CARD_LOCKED_INDICATOR}>
