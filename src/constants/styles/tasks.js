@@ -1,5 +1,3 @@
-// src/constants/styles/tasks.js
-
 // ==========================================
 // TASK CARDS - COMPACT VERSION
 // ==========================================
@@ -15,6 +13,9 @@ export const TASK_CARD_BASE = `
 export const TASK_CARD_GRADIENT = "bg-gradient-to-br from-white via-cyan-50/30 to-orange-50/30 dark:bg-gradient-to-br dark:from-amber-950/30 dark:via-stone-950/40 dark:to-slate-950/30";
 export const TASK_CARD_BORDER = "border-cyan-300/70 dark:border-amber-900/60";
 export const TASK_CARD_HOVER = "hover:shadow-xl hover:border-cyan-400 hover:from-cyan-50/40 hover:to-orange-50/40 hover:-translate-y-0.5 hover:scale-[1.01] dark:hover:border-amber-800/80 dark:hover:from-amber-950/40 dark:hover:to-slate-950/40 dark:hover:shadow-xl";
+
+// Sélection de carte
+export const TASK_CARD_SELECTED = "ring-2 ring-cyan-400 dark:ring-amber-500 bg-cyan-50/50 dark:bg-amber-900/20";
 
 export const TASK_HALO = "pointer-events-none absolute -right-8 -top-8 h-20 w-20 rounded-full bg-gradient-to-br from-cyan-200/40 via-teal-200/40 to-orange-200/40 dark:bg-gradient-to-br dark:from-amber-900/30 dark:via-orange-900/30 dark:to-rose-900/30";
 
@@ -34,9 +35,14 @@ export const TASK_ACTIONS_CONTAINER = `
 
 export const TASK_ACTION_BUTTON = "rounded-full bg-white/90 p-1 sm:p-1.5 shadow-md transition-transform duration-150 hover:scale-110 active:scale-95";
 
+// Boutons de confirmation de suppression
+export const TASK_DELETE_CONFIRM = "bg-emerald-500 text-white hover:bg-emerald-600";
+export const TASK_DELETE_CANCEL = "bg-rose-500 text-white hover:bg-rose-600";
+
 export const TASK_CONTENT = "mt-2 flex flex-col sm:flex-row sm:justify-between gap-2";
 
 export const TASK_TITLE = "text-sm font-bold leading-tight text-slate-900 dark:text-amber-50";
+export const TASK_TITLE_CONTAINER = "flex items-center flex-wrap gap-2";
 
 export const TASK_DESCRIPTION = "mt-1 text-xs font-medium leading-snug text-slate-600 dark:text-amber-200/70 line-clamp-2";
 
@@ -73,37 +79,43 @@ export const TASK_TIME_SPENT_TEXT = "text-[11px] font-semibold text-emerald-700 
 export const TASK_TIME_SPENT_CLOSE = "absolute right-1 top-1 text-emerald-600 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-200 transition-colors";
 
 // ==========================================
-// TASK TIMER - COMPACT
+// SELECTION CHECKBOX STYLES
 // ==========================================
 
-export const TASK_TIMER_CONTAINER = "mt-2 rounded-lg border border-cyan-300/60 bg-white/80 p-2 dark:border-amber-700/60 dark:bg-slate-900/60";
-export const TASK_TIMER_LABEL = "text-[10px] font-semibold text-slate-600 dark:text-amber-300/80 mb-0.5";
-export const TASK_TIMER_TIME = "text-sm font-bold text-cyan-700 dark:text-amber-400";
-export const TASK_TIMER_FLEX_CONTAINER = "flex items-center justify-between gap-2";
-export const TASK_TIMER_INFO = "flex-1";
-export const TASK_TIMER_BUTTONS = "flex gap-1";
-export const TASK_TIMER_START_BUTTON = "inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-500 px-2 py-1 text-[11px] font-bold text-white shadow-sm transition-all hover:scale-105 active:scale-95";
-export const TASK_TIMER_PAUSE_BUTTON = "inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 px-2 py-1 text-[11px] font-bold text-white shadow-sm transition-all hover:scale-105 active:scale-95";
-export const TASK_TIMER_STOP_BUTTON = "inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-rose-500 to-red-500 px-2 py-1 text-[11px] font-bold text-white shadow-sm transition-all hover:scale-105 active:scale-95";
-export const TASK_TIMER_PROGRESS_BAR_CONTAINER = "mt-1.5";
-export const TASK_TIMER_PROGRESS_BAR = "h-1 w-full overflow-hidden rounded-full bg-slate-100 shadow-inner dark:bg-slate-800/60";
-export const TASK_TIMER_PROGRESS_FILL_NORMAL = "h-full rounded-full transition-all duration-500 bg-gradient-to-r from-emerald-500 to-teal-500 dark:from-emerald-600 dark:to-teal-600";
-export const TASK_TIMER_PROGRESS_FILL_OVERTIME = "h-full rounded-full transition-all duration-500 bg-gradient-to-r from-rose-500 to-red-500 dark:from-rose-600 dark:to-red-600";
-export const TASK_TIMER_PROGRESS_TEXT_NORMAL = "text-[10px] font-medium mt-0.5 text-slate-500 dark:text-slate-400";
-export const TASK_TIMER_PROGRESS_TEXT_OVERTIME = "text-[10px] font-medium mt-0.5 text-rose-600 dark:text-rose-400";
+export const TASK_SELECT_BUTTON_BASE = "flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200";
+export const TASK_SELECT_BUTTON_CHECKED = "bg-gradient-to-r from-cyan-500 to-teal-500 border-cyan-500 dark:from-amber-500 dark:to-orange-500 dark:border-amber-500";
+export const TASK_SELECT_BUTTON_UNCHECKED = "border-slate-300 dark:border-stone-600 hover:border-cyan-400 dark:hover:border-amber-500";
+export const TASK_SELECT_CHECK_ICON = "text-white";
 
-export const TASK_TIME_SPENT = "mt-1.5 rounded-lg bg-emerald-50/80 px-2 py-1 text-[11px] dark:bg-emerald-900/20";
+// ==========================================
+// TIMER INDICATORS (à côté du titre)
+// ==========================================
+
+export const TASK_TIMER_INDICATOR_BASE = "inline-flex items-center gap-1 ml-2 px-1.5 py-0.5 rounded-md";
+export const TASK_TIMER_INDICATOR_TEXT = "text-[10px] font-semibold";
+
+export const TASK_TIMER_DONE = "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400";
+export const TASK_TIMER_RUNNING = "bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-400 animate-pulse";
+export const TASK_TIMER_PAUSED = "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400";
+export const TASK_TIMER_READY = "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400";
+
+// ==========================================
+// TIMER COMPACT (boutons play/pause/stop)
+// ==========================================
+
+export const TASK_TIMER_COMPACT_CONTAINER = "mt-2 flex items-center gap-2 p-2 rounded-lg bg-slate-100/80 dark:bg-stone-800/60";
+export const TASK_TIMER_COMPACT_TIME = "text-[11px] font-bold text-slate-700 dark:text-amber-200 tabular-nums";
+export const TASK_TIMER_COMPACT_PLAY = "p-1.5 rounded-full bg-emerald-500 text-white hover:bg-emerald-600 transition-colors shadow-sm";
+export const TASK_TIMER_COMPACT_PAUSE = "p-1.5 rounded-full bg-amber-500 text-white hover:bg-amber-600 transition-colors shadow-sm";
+export const TASK_TIMER_COMPACT_STOP = "p-1.5 rounded-full bg-rose-500 text-white hover:bg-rose-600 transition-colors shadow-sm";
+
+// ==========================================
+// PROGRESS BAR
+// ==========================================
 
 export const TASK_PROGRESS_CONTAINER = "mt-2";
-export const TASK_PROGRESS_BAR = "h-1 w-full overflow-hidden rounded-full bg-slate-100 shadow-inner dark:bg-slate-800/60";
-export const TASK_PROGRESS_FILL = "h-full rounded-full bg-gradient-to-r shadow-sm transition-all duration-500";
-export const TASK_PROGRESS_onTaskUpdateTEXT = "mt-1 text-[10px] font-medium text-slate-600 dark:text-amber-300/70";
-export const TASK_PROGRESS_BAR_THIN = "h-1 w-full overflow-hidden rounded-full bg-slate-100 shadow-inner dark:bg-slate-800/60";
-export const TASK_PROGRESS_FILL_NO_TRANSITION = "h-full rounded-full shadow-sm";
-
-export const TASK_TIMER_COMPACT_CONTAINER = "mt-2 inline-flex items-center gap-2 text-xs text-slate-700 dark:text-amber-200 bg-slate-100 dark:bg-stone-800 px-2 py-1 rounded-lg";
-export const TASK_TIMER_COMPACT_TIME = "tabular-nums font-semibold";
-export const TASK_TIMER_COMPACT_PLAY = "text-slate-600 hover:text-emerald-600 transition-colors dark:text-slate-400 dark:hover:text-emerald-400";
-export const TASK_TIMER_COMPACT_PAUSE = "text-slate-600 hover:text-amber-600 transition-colors dark:text-slate-400 dark:hover:text-amber-400";
-export const TASK_TIMER_COMPACT_STOP = "text-slate-600 hover:text-rose-600 transition-colors dark:text-slate-400 dark:hover:text-rose-400";
+export const TASK_PROGRESS_BAR = "h-1.5 w-full rounded-full bg-slate-200 dark:bg-stone-700 overflow-hidden";
+export const TASK_PROGRESS_BAR_THIN = "h-1 w-full rounded-full bg-slate-200 dark:bg-stone-700 overflow-hidden";
+export const TASK_PROGRESS_FILL = "h-full rounded-full transition-all duration-300";
+export const TASK_PROGRESS_FILL_NO_TRANSITION = "h-full rounded-full";
 export const TASK_PROGRESS_TEXT = "mt-1 text-[10px] font-medium text-slate-600 dark:text-amber-300/70";
