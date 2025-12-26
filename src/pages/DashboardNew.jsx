@@ -9,7 +9,7 @@ import InAppNotifications from '../components/Dashboard/InAppNotifications';
 import EmptyState from '../components/Dashboard/EmptyState';
 import UrgentTasksSection from '../components/Task/UrgentTasksSection';
 import TaskList from '../components/Task/TaskList';
-import GridView from '../components/Dashboard/GridView';
+import GridView from '../components/Grid/GridView';
 import CalendarView from '../components/Dashboard/CalendarView';
 import TaskEditModal from '../components/Task/TaskEditModal';
 import DashboardLayout from '../components/Dashboard/DashboardLayout';
