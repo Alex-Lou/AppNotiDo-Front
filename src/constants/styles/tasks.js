@@ -105,9 +105,9 @@ export const TASK_TIMER_READY = "bg-slate-100 dark:bg-slate-800 text-slate-500 d
 
 export const TASK_TIMER_COMPACT_CONTAINER = "mt-2 flex items-center gap-2 p-2 rounded-lg bg-slate-100/80 dark:bg-stone-800/60";
 export const TASK_TIMER_COMPACT_TIME = "text-[11px] font-bold text-slate-700 dark:text-amber-200 tabular-nums";
-export const TASK_TIMER_COMPACT_PLAY = "p-1.5 rounded-full bg-emerald-500 text-white hover:bg-emerald-600 transition-colors shadow-sm";
-export const TASK_TIMER_COMPACT_PAUSE = "p-1.5 rounded-full bg-amber-500 text-white hover:bg-amber-600 transition-colors shadow-sm";
-export const TASK_TIMER_COMPACT_STOP = "p-1.5 rounded-full bg-rose-500 text-white hover:bg-rose-600 transition-colors shadow-sm";
+export const TASK_TIMER_COMPACT_PLAY = "p-1 text-emerald-500 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 transition-colors";
+export const TASK_TIMER_COMPACT_PAUSE = "p-1 text-amber-500 dark:text-amber-400 hover:text-amber-600 dark:hover:text-amber-300 transition-colors";
+export const TASK_TIMER_COMPACT_STOP = "p-1 text-rose-500 dark:text-rose-400 hover:text-rose-600 dark:hover:text-rose-300 transition-colors";
 
 // ==========================================
 // PROGRESS BAR

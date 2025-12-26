@@ -42,9 +42,14 @@ function TaskList({
   };
 
   const handleDeleteSelected = async () => {
-    for (const taskId of selectedTasks) {
-      await onTaskDelete(taskId);
+    const taskIds = Array.from(selectedTasks);
+    
+    for (const taskId of taskIds) {
+      await onTaskDelete(taskId, true);
+      // Petit délai entre chaque requête
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
+    
     setSelectedTasks(new Set());
     setSelectionMode(false);
     setShowDeleteConfirm(false);

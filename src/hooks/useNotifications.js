@@ -1,148 +1,127 @@
 // src/hooks/useNotifications.js
-import { useState, useEffect, useRef } from 'react';
-import { toast } from 'sonner';
+import { useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
-import { 
-  requestNotificationPermission, 
-  sendBrowserNotification, 
-  checkTasksForNotifications 
-} from '../services/notificationService';
 
-export const useNotifications = (tasks, fetchTasks) => {
-  const [notificationPermission, setNotificationPermission] = useState(
-    typeof Notification !== 'undefined' ? Notification.permission : 'default'
-  );
-  const [notificationsEnabled, setNotificationsEnabled] = useState(
-    localStorage.getItem('notificationsEnabled') !== 'false'
-  );
-  const [inAppNotifications, setInAppNotifications] = useState([]);
-  const notifiedTaskIdsRef = useRef(new Set());
+export function useNotifications() {
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // Update permission state
-  useEffect(() => {
-    if (typeof Notification !== 'undefined') {
-      setNotificationPermission(Notification.permission);
+  // Récupérer toutes les notifications
+  const fetchNotifications = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await api.get('/notifications');
+      setNotifications(response.data);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching notifications:', err);
+      setError('Erreur lors du chargement des notifications');
+    } finally {
+      setLoading(false);
     }
   }, []);
 
-  // Check for notifications
-  useEffect(() => {
-    if (tasks.length === 0 || !notificationsEnabled) return;
+  // Récupérer le nombre de non-lues
+  const fetchUnreadCount = useCallback(async () => {
+    try {
+      const response = await api.get('/notifications/unread/count');
+      setUnreadCount(response.data.count);
+    } catch (err) {
+      console.error('Error fetching unread count:', err);
+    }
+  }, []);
 
-    const checkNotifications = async () => {
-      const tasksToNotify = checkTasksForNotifications(tasks);
-      
-      for (const task of tasksToNotify) {
-        if (notifiedTaskIdsRef.current.has(task.notificationKey || task.id)) continue;
+  // Marquer une notification comme lue
+  const markAsRead = useCallback(async (notificationId) => {
+    try {
+      await api.post(`/notifications/${notificationId}/read`);
+      setNotifications(prev => 
+        prev.map(n => 
+          n.id === notificationId 
+            ? { ...n, isRead: true, readAt: new Date().toISOString() } 
+            : n
+        )
+      );
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    } catch (err) {
+      console.error('Error marking notification as read:', err);
+    }
+  }, []);
 
-        let notificationText;
-        let notificationTitle;
-        
-        if (task.isStartReminder) {
-          notificationTitle = '⏰ Temps de commencer';
-          notificationText = `${task.title} (durée : ${task.estimatedDuration} min)`;
-        } else if (task.isUrgent) {
-          notificationTitle = '🚨 Échéance imminente';
-          notificationText = `${task.title} - C'est maintenant !`;
-        } else {
-          // Utiliser actualThreshold pour afficher le bon temps
-          const timeRemaining = task.actualThreshold ?? task.minutesRemaining;
-          notificationTitle = '🔔 Rappel de tâche';
-          notificationText = `${task.title} - Échéance dans ${timeRemaining} min`;
-        }
+  // Marquer toutes comme lues
+  const markAllAsRead = useCallback(async () => {
+    try {
+      await api.post('/notifications/read-all');
+      setNotifications(prev => 
+        prev.map(n => ({ ...n, isRead: true, readAt: new Date().toISOString() }))
+      );
+      setUnreadCount(0);
+    } catch (err) {
+      console.error('Error marking all as read:', err);
+    }
+  }, []);
 
-        // Notification in-app (toast)
-        addInAppNotification({
-          id: `notif-${(task.notificationKey || task.id)}-${Date.now()}`,
-          taskId: task.id,
-          title: notificationTitle,
-          message: notificationText,
-          type: task.isStartReminder ? 'start' : task.isUrgent ? 'urgent' : 'reminder',
-        });
-
-        // Notification navigateur
-        if (notificationPermission === 'granted') {
-          sendBrowserNotification(notificationTitle, notificationText);
-        }
-
-        // Marquer comme notifié
-        notifiedTaskIdsRef.current.add(task.notificationKey || task.id);
-
-        // Mettre à jour le backend si c'est une notification d'échéance
-        // ⚠️ On fait JUSTE l'appel API sans rafraîchir toutes les tâches
-        if (task.minutesRemaining === 0 || task.isUrgent || task.notified === true) {
-          try {
-            await api.put(`/tasks/${task.id}`, { ...task, notified: true });
-            // ❌ SUPPRIMÉ : fetchTasks() qui causait la boucle infinie
-          } catch (error) {
-            console.error('Erreur lors de la mise à jour de la notification:', error);
-          }
-        }
+  // Supprimer une notification
+  const deleteNotification = useCallback(async (notificationId) => {
+    try {
+      await api.delete(`/notifications/${notificationId}`);
+      const notification = notifications.find(n => n.id === notificationId);
+      setNotifications(prev => prev.filter(n => n.id !== notificationId));
+      if (notification && !notification.isRead) {
+        setUnreadCount(prev => Math.max(0, prev - 1));
       }
-    };
+    } catch (err) {
+      console.error('Error deleting notification:', err);
+    }
+  }, [notifications]);
 
-    checkNotifications();
+  // Charger au montage et polling toutes les 30 secondes
+  useEffect(() => {
+    fetchNotifications();
+    fetchUnreadCount();
+
     const interval = setInterval(() => {
-      checkNotifications();
-    }, 30000); // Vérifier toutes les 30 secondes
+      fetchNotifications();
+      fetchUnreadCount();
+    }, 30000);
 
     return () => clearInterval(interval);
-  }, [tasks, notificationPermission, notificationsEnabled]); // ✅ Retiré fetchTasks des deps
+  }, [fetchNotifications, fetchUnreadCount]);
 
-  const handleRequestNotificationPermission = async () => {
-    const permission = await requestNotificationPermission();
-    setNotificationPermission(permission);
-  };
+  // Écouter les événements de mise à jour des notifications
+  useEffect(() => {
+    const handleUpdate = () => {
+      fetchNotifications();
+      fetchUnreadCount();
+    };
 
-  const toggleNotifications = () => {
-    const newState = !notificationsEnabled;
-    setNotificationsEnabled(newState);
-    localStorage.setItem('notificationsEnabled', newState);
-    
-    if (newState) {
-      toast.success('🔔 Notifications activées');
-    } else {
-      toast.info('🔕 Notifications désactivées');
-    }
-  };
+    window.addEventListener('notifications-update', handleUpdate);
+    return () => window.removeEventListener('notifications-update', handleUpdate);
+  }, [fetchNotifications, fetchUnreadCount]);
 
-  const addInAppNotification = (notification) => {
-    setInAppNotifications(prev => [...prev, notification]);
-    
-    // Afficher un toast selon le type
-    if (notification.type === 'urgent') {
-      toast.error(notification.message, {
-        duration: 8000,
-        icon: '🚨',
-      });
-    } else if (notification.type === 'start') {
-      toast.info(notification.message, {
-        duration: 8000,
-        icon: '⏰',
-      });
-    } else {
-      toast.warning(notification.message, {
-        duration: 8000,
-        icon: '🔔',
-      });
-    }
-    
-    // Auto-remove après 8 secondes
-    setTimeout(() => {
-      removeInAppNotification(notification.id);
-    }, 8000);
-  };
-
-  const removeInAppNotification = (notificationId) => {
-    setInAppNotifications(prev => prev.filter(n => n.id !== notificationId));
-  };
+  // Supprimer toutes les notifications
+const deleteAllNotifications = useCallback(async () => {
+  try {
+    await api.delete('/notifications/all');
+    setNotifications([]);
+    setUnreadCount(0);
+  } catch (err) {
+    console.error('Error deleting all notifications:', err);
+  }
+}, []);
 
   return {
-    notificationPermission,
-    notificationsEnabled,
-    inAppNotifications,
-    handleRequestNotificationPermission,
-    toggleNotifications,
-    removeInAppNotification,
+    notifications,
+    unreadCount,
+    loading,
+    error,
+    fetchNotifications,
+    fetchUnreadCount,
+    markAsRead,
+    markAllAsRead,
+    deleteNotification,
+    deleteAllNotifications 
   };
-};
+}

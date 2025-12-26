@@ -1,5 +1,5 @@
 // src/hooks/useTasks.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import api from '../services/api';
@@ -21,6 +21,14 @@ export const useTasks = (setUsername) => {
     hasActiveSearch,
     resultCount,
   } = useSearch(tasks);
+
+  // Fonction pour notifier les changements aux notifications
+  const notifyChange = () => {
+    // Petit délai pour laisser le backend créer la notification
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('notifications-update'));
+    }, 500);
+  };
 
   // Fetch tasks
   const fetchTasks = async () => {
@@ -49,14 +57,12 @@ export const useTasks = (setUsername) => {
 
   // Task operations
   const handleTaskCreated = async (taskData) => {
-    console.log('=== API POST /tasks ===');
-    console.log('Sending:', JSON.stringify(taskData, null, 2));
     
     try {
       const response = await api.post('/tasks', taskData);
-      console.log('SUCCESS Response:', response);
       toast.success('✅ Tâche créée avec succès !');
       await fetchTasks();
+      notifyChange(); // Notifier les notifications
     } catch (error) {
       console.error('=== API ERROR ===');
       console.error('Full error:', error);
@@ -71,9 +77,9 @@ export const useTasks = (setUsername) => {
     }
   };
 
-  const handleTaskUpdate = async (taskId, taskData) => {
-    try {
-      const response = await api.put(`/tasks/${taskId}`, taskData);
+const handleTaskUpdate = async (taskId, taskData) => {
+  try {
+    const response = await api.put(`/tasks/${taskId}`, taskData);
       
       // Fusionner la réponse du serveur avec les données envoyées
       // pour s'assurer que timerEnabled et reactivable sont préservés
@@ -90,8 +96,7 @@ export const useTasks = (setUsername) => {
         )
       );
 
-      // Ne pas refetch immédiatement pour éviter d'écraser les valeurs
-      // Le refetch se fera au prochain chargement de page
+      notifyChange(); // Notifier les notifications
       
     } catch (error) {
       console.error('Error updating task:', error);
@@ -100,13 +105,21 @@ export const useTasks = (setUsername) => {
     }
   };
 
-  const handleTaskDelete = async (taskId) => {
-    if (!window.confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?')) return;
+  const handleTaskDelete = async (taskId, skipConfirm = false) => {
+    if (!skipConfirm && !window.confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?')) return;
     
     try {
       await api.delete(`/tasks/${taskId}`);
-      toast.success('🗑️ Tâche supprimée');
-      fetchTasks();
+      
+      if (skipConfirm) {
+        setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+      } else {
+        toast.success('🗑️ Tâche supprimée');
+        fetchTasks();
+      }
+      
+      notifyChange(); // Notifier les notifications
+      
     } catch (error) {
       console.error('Erreur suppression:', error);
       toast.error('❌ Erreur lors de la suppression');
@@ -158,6 +171,16 @@ export const useTasks = (setUsername) => {
       return minutesRemaining > 5;
     });
   };
+
+  const deleteAllNotifications = useCallback(async () => {
+  try {
+      await api.delete('/notifications/all');
+      setNotifications([]);
+      setUnreadCount(0);
+    } catch (err) {
+      console.error('Error deleting all notifications:', err);
+    }
+  }, []);
 
   return {
     tasks,

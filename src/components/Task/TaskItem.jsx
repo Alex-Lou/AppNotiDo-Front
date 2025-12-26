@@ -72,6 +72,7 @@ function TaskItem({
   const [editedTask, setEditedTask] = useState({ ...task });
   const [showTimeSpent, setShowTimeSpent] = useState(true);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [, forceUpdate] = useState(0);
 
   const isTimerEnabled = task.timerEnabled !== false;
 
@@ -109,6 +110,18 @@ function TaskItem({
       return () => clearTimeout(timer);
     }
   }, [showDeleteConfirm]);
+
+  // Forcer le re-rendu toutes les 30 secondes pour mettre à jour le statut "Échue"
+  useEffect(() => {
+    // Ne pas activer si pas de date d'échéance ou si terminée
+    if (!task.dueDate || task.status === 'DONE') return;
+
+    const interval = setInterval(() => {
+      forceUpdate(n => n + 1);
+    }, 30000); // 30 secondes
+
+    return () => clearInterval(interval);
+  }, [task.dueDate, task.status]);
 
   const handleDateChange = (e) => {
     const newDate = e.target.value;
@@ -187,7 +200,7 @@ function TaskItem({
   const handleConfirmDelete = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    onDelete(task.id);
+    onDelete(task.id, true);
     setShowDeleteConfirm(false);
   };
 

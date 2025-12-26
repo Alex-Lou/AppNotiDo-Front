@@ -194,8 +194,6 @@ export const useDashboard = (setUsername) => {
 
   // Créer depuis le modal de création
   const handleCreateModalSave = async (taskData) => {
-    console.log('=== DEBUG CREATE TASK ===');
-    console.log('Task data:', JSON.stringify(taskData, null, 2));
     
     try {
       await handleTaskCreated(taskData);

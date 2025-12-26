@@ -1,14 +1,13 @@
-import { FiDownload } from 'react-icons/fi';
+// src/components/Dashboard/DashboardHeader.jsx
 import { DASHBOARD_HEADER_CONTAINER, DASHBOARD_HEADER_TITLE, DASHBOARD_HEADER_SUBTITLE } from '../../constants/styles';
 import { getContextualGreeting, getContextualSubtitle, getCurrentHour } from '../../utils/greetingMessages';
 import ExportButton from './ExportButton';
-
+import NotificationBell from "./NotificationBell";
 
 function DashboardHeader({ username, completedCount, totalCount, onExportCSV, onExportPDF }) {
   const currentHour = getCurrentHour();
   const greeting = getContextualGreeting(currentHour, completedCount, totalCount, username);
   const subtitle = getContextualSubtitle(completedCount, totalCount);
-
 
   return (
     <div className={DASHBOARD_HEADER_CONTAINER}>
@@ -21,8 +20,9 @@ function DashboardHeader({ username, completedCount, totalCount, onExportCSV, on
         </p>
       </div>
       
-      {/* Bouton Export à droite */}
-      <div className="flex-shrink-0">
+      {/* Actions à droite : Notifications + Export */}
+      <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+        <NotificationBell />
         <ExportButton 
           onExportCSV={onExportCSV}
           onExportPDF={onExportPDF}
@@ -31,6 +31,5 @@ function DashboardHeader({ username, completedCount, totalCount, onExportCSV, on
     </div>
   );
 }
-
 
 export default DashboardHeader;

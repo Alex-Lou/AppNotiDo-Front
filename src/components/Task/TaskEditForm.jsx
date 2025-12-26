@@ -7,6 +7,12 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
   // Vérifier si la tâche est terminée avec du temps enregistré
   const isCompletedWithTime = editedTask.status === 'DONE' && editedTask.timeSpent > 0;
 
+  // Vérifier si la tâche est échue et non réactivable
+  const isOverdueAndNotReactivable = editedTask.dueDate && 
+    new Date(editedTask.dueDate) < new Date() && 
+    !editedTask.reactivable &&
+    editedTask.status !== 'DONE';
+
   return (
     <div className={EDIT_FORM_CONTAINER}>
       <div className={DECORATIVE_HALO} />
@@ -135,8 +141,8 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
         </div>
 
 
-        {/* Chronométrer cette tâche - Caché si DONE avec temps enregistré */}
-        {!isCompletedWithTime && (
+        {/* Chronométrer cette tâche - Caché si DONE avec temps OU échue non réactivable */}
+        {!isCompletedWithTime && !isOverdueAndNotReactivable && (
           <div>
             <label className="flex items-start gap-3 cursor-pointer p-3 rounded-xl bg-slate-50 dark:bg-stone-800 border border-slate-200 dark:border-stone-700 hover:bg-slate-100 dark:hover:bg-stone-700 transition-colors">
               <input
@@ -170,25 +176,27 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
         )}
 
 
-        {/* Réactivable */}
-        <div>
-          <label className="flex items-start gap-3 cursor-pointer p-3 rounded-xl bg-slate-50 dark:bg-stone-800 border border-slate-200 dark:border-stone-700 hover:bg-slate-100 dark:hover:bg-stone-700 transition-colors">
-            <input
-              type="checkbox"
-              checked={editedTask.reactivable || false}
-              onChange={(e) => setEditedTask({ ...editedTask, reactivable: e.target.checked })}
-              className="w-5 h-5 mt-0.5 rounded border-slate-300 text-cyan-500 focus:ring-cyan-500 dark:border-stone-600 dark:bg-stone-800"
-            />
-            <div>
-              <span className="text-sm font-medium text-slate-700 dark:text-amber-100 block">
-                🔄 Tâche réactivable
-              </span>
-              <span className="text-xs text-slate-500 dark:text-amber-300/70">
-                Si échue, proposer de la déplacer vers aujourd'hui
-              </span>
-            </div>
-          </label>
-        </div>
+        {/* Réactivable - Caché si échue et non réactivable */}
+        {!isOverdueAndNotReactivable && (
+          <div>
+            <label className="flex items-start gap-3 cursor-pointer p-3 rounded-xl bg-slate-50 dark:bg-stone-800 border border-slate-200 dark:border-stone-700 hover:bg-slate-100 dark:hover:bg-stone-700 transition-colors">
+              <input
+                type="checkbox"
+                checked={editedTask.reactivable || false}
+                onChange={(e) => setEditedTask({ ...editedTask, reactivable: e.target.checked })}
+                className="w-5 h-5 mt-0.5 rounded border-slate-300 text-cyan-500 focus:ring-cyan-500 dark:border-stone-600 dark:bg-stone-800"
+              />
+              <div>
+                <span className="text-sm font-medium text-slate-700 dark:text-amber-100 block">
+                  🔄 Tâche réactivable
+                </span>
+                <span className="text-xs text-slate-500 dark:text-amber-300/70">
+                  Si échue, proposer de la déplacer vers aujourd'hui
+                </span>
+              </div>
+            </label>
+          </div>
+        )}
 
 
         {/* Boutons */}

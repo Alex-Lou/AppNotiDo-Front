@@ -31,6 +31,161 @@ export const DASHBOARD_HEADER_SUBTITLE = `
 export const DASHBOARD_HEADER_SECTION = "mb-6 sm:mb-8";
 
 // ==========================================
+// NOTIFICATION BELL & PANEL STYLES
+// ==========================================
+
+// Bouton cloche
+export const NOTIF_BELL_BUTTON = `
+  relative p-2 rounded-xl
+  bg-white/80 dark:bg-stone-800/80
+  border border-slate-200 dark:border-stone-700
+  text-slate-600 dark:text-amber-300
+  hover:bg-cyan-50 dark:hover:bg-amber-900/30
+  hover:border-cyan-300 dark:hover:border-amber-600
+  hover:text-cyan-600 dark:hover:text-amber-400
+  transition-all duration-200
+  shadow-sm hover:shadow-md
+`;
+
+export const NOTIF_BELL_ICON = "w-5 h-5";
+
+// Badge rouge
+export const NOTIF_BADGE = `
+  absolute -top-1 -right-1
+  min-w-[18px] h-[18px]
+  flex items-center justify-center
+  px-1 rounded-full
+  bg-gradient-to-r from-rose-500 to-red-500
+  text-white text-[10px] font-bold
+  shadow-lg shadow-rose-500/30
+  animate-pulse
+`;
+
+// Panneau dropdown
+export const NOTIF_PANEL = `
+  absolute right-0 top-full mt-2
+  w-80 sm:w-96
+  max-h-[70vh]
+  bg-white dark:bg-stone-900
+  border border-slate-200 dark:border-stone-700
+  rounded-xl shadow-2xl
+  overflow-hidden
+  z-50
+  animate-in fade-in slide-in-from-top-2 duration-200
+`;
+
+export const NOTIF_PANEL_HEADER = `
+  flex items-center justify-between
+  px-4 py-3
+  bg-gradient-to-r from-slate-50 to-cyan-50/50
+  dark:from-stone-800 dark:to-amber-900/20
+  border-b border-slate-200 dark:border-stone-700
+`;
+
+export const NOTIF_PANEL_TITLE = `
+  text-sm font-bold text-slate-800 dark:text-amber-100
+`;
+
+export const NOTIF_PANEL_ACTIONS = `
+  flex items-center gap-2
+`;
+
+export const NOTIF_MARK_ALL_BUTTON = `
+  flex items-center gap-1
+  px-2 py-1 rounded-lg
+  text-xs font-medium
+  text-cyan-600 dark:text-amber-400
+  hover:bg-cyan-100 dark:hover:bg-amber-900/40
+  transition-colors
+`;
+
+export const NOTIF_CLOSE_BUTTON = `
+  p-1 rounded-lg
+  text-slate-400 dark:text-stone-500
+  hover:bg-slate-100 dark:hover:bg-stone-800
+  hover:text-slate-600 dark:hover:text-stone-300
+  transition-colors
+`;
+
+// Liste des notifications
+export const NOTIF_LIST = `
+  max-h-[50vh] overflow-y-auto
+  divide-y divide-slate-100 dark:divide-stone-800
+`;
+
+// Item de notification
+export const NOTIF_ITEM = `
+  group flex items-start gap-3
+  px-4 py-3
+  cursor-pointer
+  hover:bg-slate-50 dark:hover:bg-stone-800/50
+  transition-colors
+`;
+
+export const NOTIF_ITEM_UNREAD = `
+  bg-cyan-50/50 dark:bg-amber-900/20
+  border-l-2 border-cyan-500 dark:border-amber-500
+`;
+
+export const NOTIF_ITEM_ICON = `
+  flex-shrink-0 mt-0.5
+`;
+
+export const NOTIF_ITEM_CONTENT = `
+  flex-1 min-w-0
+`;
+
+export const NOTIF_ITEM_TITLE = `
+  text-sm font-semibold text-slate-800 dark:text-amber-100
+  truncate
+`;
+
+export const NOTIF_ITEM_MESSAGE = `
+  text-xs text-slate-600 dark:text-amber-200/70
+  line-clamp-2 mt-0.5
+`;
+
+export const NOTIF_ITEM_TIME = `
+  text-[10px] text-slate-400 dark:text-stone-500
+  mt-1 block
+`;
+
+export const NOTIF_ITEM_ACTIONS = `
+  flex-shrink-0 flex gap-1
+  opacity-0 group-hover:opacity-100
+  transition-opacity
+`;
+
+export const NOTIF_ITEM_ACTION_BUTTON = `
+  p-1 rounded
+  text-slate-400 dark:text-stone-500
+  hover:bg-slate-100 dark:hover:bg-stone-700
+  transition-colors
+`;
+
+export const NOTIF_DELETE_ALL_BUTTON = `
+  flex items-center gap-1
+  px-2 py-1 rounded-lg
+  text-xs font-medium
+  text-rose-600 dark:text-rose-400
+  hover:bg-rose-100 dark:hover:bg-rose-900/40
+  transition-colors
+`;
+
+// États vides et chargement
+export const NOTIF_EMPTY = `
+  flex flex-col items-center justify-center
+  py-8 px-4
+  text-sm text-slate-400 dark:text-stone-500
+`;
+
+export const NOTIF_LOADING = `
+  flex flex-col items-center justify-center gap-2
+  py-8 px-4
+  text-sm text-slate-400 dark:text-stone-500
+`;
+
+// ==========================================
 // STATS CARDS - RESPONSIVE OPTIMIZED
 // ==========================================
 
