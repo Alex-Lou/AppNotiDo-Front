@@ -22,6 +22,7 @@ import {
   TASK_CONTENT,
   TASK_ITEM_CONTENT_FLEX,
   TASK_TITLE,
+  TASK_TITLE_CONTAINER,
   TASK_DESCRIPTION,
   TASK_METADATA_CONTAINER,
   TASK_DATE_INFO,
@@ -30,7 +31,20 @@ import {
   TASK_BADGES_CONTAINER,
   TASK_TIME_SPENT_CONTAINER,
   TASK_TIME_SPENT_CLOSE,
-  TASK_TIME_SPENT_TEXT
+  TASK_TIME_SPENT_TEXT,
+  TASK_CARD_SELECTED,
+  TASK_DELETE_CONFIRM,
+  TASK_DELETE_CANCEL,
+  TASK_SELECT_BUTTON_BASE,
+  TASK_SELECT_BUTTON_CHECKED,
+  TASK_SELECT_BUTTON_UNCHECKED,
+  TASK_SELECT_CHECK_ICON,
+  TASK_TIMER_INDICATOR_BASE,
+  TASK_TIMER_INDICATOR_TEXT,
+  TASK_TIMER_DONE,
+  TASK_TIMER_RUNNING,
+  TASK_TIMER_PAUSED,
+  TASK_TIMER_READY
 } from '../../constants/styles';
 import { getTaskCardClasses } from '../../utils/getTaskCardClasses';
 import TaskEditForm from './TaskEditForm';
@@ -49,11 +63,15 @@ function TaskItem({
   isDragging, 
   isDragOver,
   editingTaskId,
-  onStartEditing
+  onStartEditing,
+  isSelected,
+  onToggleSelect,
+  selectionMode
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTask, setEditedTask] = useState({ ...task });
   const [showTimeSpent, setShowTimeSpent] = useState(true);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const isTimerEnabled = task.timerEnabled !== false;
 
@@ -82,6 +100,15 @@ function TaskItem({
       setShowTimeSpent(true);
     }
   }, [task.id]);
+
+  useEffect(() => {
+    if (showDeleteConfirm) {
+      const timer = setTimeout(() => {
+        setShowDeleteConfirm(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showDeleteConfirm]);
 
   const handleDateChange = (e) => {
     const newDate = e.target.value;
@@ -151,10 +178,40 @@ function TaskItem({
     setShowTimeSpent(false);
   };
 
+  const handleDeleteClick = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setShowDeleteConfirm(true);
+  };
+
+  const handleConfirmDelete = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    onDelete(task.id);
+    setShowDeleteConfirm(false);
+  };
+
+  const handleCancelDelete = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setShowDeleteConfirm(false);
+  };
+
   const handleCardClick = () => {
+    if (selectionMode && onToggleSelect) {
+      onToggleSelect(task.id);
+      return;
+    }
     const isLocked = task.locked || false;
     if (!isLocked && !isEditing) {
       onStartEditing(task.id);
+    }
+  };
+
+  const handleCheckboxClick = (e) => {
+    e.stopPropagation();
+    if (onToggleSelect) {
+      onToggleSelect(task.id);
     }
   };
 
@@ -164,9 +221,9 @@ function TaskItem({
     
     if (isDone && hasTimeSpent) {
       return (
-        <span className="inline-flex items-center gap-1 ml-2 px-1.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400" title="Temps enregistré">
+        <span className={`${TASK_TIMER_INDICATOR_BASE} ${TASK_TIMER_DONE}`} title="Temps enregistré">
           <FiCheckCircle size={12} />
-          <span className="text-[10px] font-semibold">{formatTimeSpent(task.timeSpent)}</span>
+          <span className={TASK_TIMER_INDICATOR_TEXT}>{formatTimeSpent(task.timeSpent)}</span>
         </span>
       );
     }
@@ -177,24 +234,24 @@ function TaskItem({
     
     if (isRunning) {
       return (
-        <span className="inline-flex items-center gap-1 ml-2 px-1.5 py-0.5 rounded-md bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-400 animate-pulse" title="Timer en cours">
+        <span className={`${TASK_TIMER_INDICATOR_BASE} ${TASK_TIMER_RUNNING}`} title="Timer en cours">
           <FiClock size={12} />
-          <span className="text-[10px] font-semibold">En cours</span>
+          <span className={TASK_TIMER_INDICATOR_TEXT}>En cours</span>
         </span>
       );
     }
     
     if (hasTimeSpent && !isDone) {
       return (
-        <span className="inline-flex items-center gap-1 ml-2 px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400" title="Timer en pause">
+        <span className={`${TASK_TIMER_INDICATOR_BASE} ${TASK_TIMER_PAUSED}`} title="Timer en pause">
           <FiPauseCircle size={12} />
-          <span className="text-[10px] font-semibold">{formatTimeSpent(task.timeSpent)}</span>
+          <span className={TASK_TIMER_INDICATOR_TEXT}>{formatTimeSpent(task.timeSpent)}</span>
         </span>
       );
     }
     
     return (
-      <span className="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400" title="Timer disponible">
+      <span className={`${TASK_TIMER_INDICATOR_BASE} ${TASK_TIMER_READY}`} title="Timer disponible">
         <FiClock size={12} />
       </span>
     );
@@ -217,19 +274,21 @@ function TaskItem({
   const isDone = task.status === 'DONE';
   const progressInfo = calculateProgress(task);
 
+  const cardClasses = `${getTaskCardClasses(isLocked, isDragging, isDragOver, isDone)} ${isSelected ? TASK_CARD_SELECTED : ''}`;
+
   return (
     <div
-      className={getTaskCardClasses(isLocked, isDragging, isDragOver, isDone)}
-      draggable={!isLocked}
-      onDragStart={(e) => !isLocked && onDragStart(e, task.id)}
-      onDragEnter={(e) => !isLocked && onDragEnter(e, task.id)}
-      onDragEnd={!isLocked ? onDragEnd : undefined}
+      className={cardClasses}
+      draggable={!isLocked && !selectionMode}
+      onDragStart={(e) => !isLocked && !selectionMode && onDragStart(e, task.id)}
+      onDragEnter={(e) => !isLocked && !selectionMode && onDragEnter(e, task.id)}
+      onDragEnd={!isLocked && !selectionMode ? onDragEnd : undefined}
       onClick={handleCardClick}
-      style={{ cursor: isLocked ? 'default' : 'pointer' }}
+      style={{ cursor: selectionMode ? 'pointer' : (isLocked ? 'default' : 'pointer') }}
     >
       <div className={TASK_HALO} />
 
-      {!isLocked && (
+      {!isLocked && !selectionMode && (
         <div className={TASK_DRAG_HANDLE}>
           <div className={TASK_DRAG_BAR} />
         </div>
@@ -261,22 +320,46 @@ function TaskItem({
           </button>
         )}
         
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onDelete(task.id);
-          }}
-          className={`${TASK_ACTION_BUTTON} ${TASK_ACTION_DELETE}`}
-          title="Supprimer"
-        >
-          <FaTrash size={16} />
-        </button>
+        {!showDeleteConfirm ? (
+          <button
+            onClick={handleDeleteClick}
+            className={`${TASK_ACTION_BUTTON} ${TASK_ACTION_DELETE}`}
+            title="Supprimer"
+          >
+            <FaTrash size={16} />
+          </button>
+        ) : (
+          <div className="flex gap-1">
+            <button
+              onClick={handleConfirmDelete}
+              className={`${TASK_ACTION_BUTTON} ${TASK_DELETE_CONFIRM}`}
+              title="Confirmer la suppression"
+            >
+              <FiCheck size={16} />
+            </button>
+            <button
+              onClick={handleCancelDelete}
+              className={`${TASK_ACTION_BUTTON} ${TASK_DELETE_CANCEL}`}
+              title="Annuler"
+            >
+              <FiX size={16} />
+            </button>
+          </div>
+        )}
       </div>
 
       <div className={TASK_CONTENT}>
         <div className={TASK_ITEM_CONTENT_FLEX}>
-          <div className="flex items-center flex-wrap">
+          <div className={TASK_TITLE_CONTAINER}>
+            {selectionMode && (
+              <button
+                onClick={handleCheckboxClick}
+                className={`${TASK_SELECT_BUTTON_BASE} ${isSelected ? TASK_SELECT_BUTTON_CHECKED : TASK_SELECT_BUTTON_UNCHECKED}`}
+                title={isSelected ? 'Désélectionner' : 'Sélectionner'}
+              >
+                {isSelected && <FiCheck size={12} className={TASK_SELECT_CHECK_ICON} />}
+              </button>
+            )}
             <h3 className={TASK_TITLE}>
               {task.title}
             </h3>
