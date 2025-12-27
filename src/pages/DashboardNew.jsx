@@ -305,6 +305,7 @@ function DashboardNew({ setUsername }) {
           onCreate={dashboard.handleCreateModalSave}
           onClose={dashboard.closeEditModal}
           projects={projects}
+          activeProject={activeProject}
         />
       )}
 

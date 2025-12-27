@@ -24,6 +24,8 @@ function ProjectList({
 }) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [menuOpenId, setMenuOpenId] = useState(null);
+  console.log('First project details:', JSON.stringify(projects[0], null, 2));
+
 
   const handleProjectClick = (project) => {
     // Si on clique sur le projet actif, on désélectionne (affiche toutes les tâches)

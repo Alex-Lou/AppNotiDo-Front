@@ -10,7 +10,8 @@ import {
   FiCheckCircle,
   FiLoader,
   FiPlus,
-  FiBell
+  FiBell,
+  FiFolder
 } from 'react-icons/fi';
 import {
   TASK_EDIT_MODAL_OVERLAY,
@@ -50,7 +51,7 @@ const REMINDER_OPTIONS = [
 ];
 
 // Template pour une nouvelle tâche
-const getEmptyTask = (defaultDate = null) => ({
+const getEmptyTask = (defaultDate = null, defaultProjectId = null) => ({
   title: '',
   description: '',
   status: 'TODO',
@@ -60,7 +61,8 @@ const getEmptyTask = (defaultDate = null) => ({
   reminderMinutes: 15,
   tags: [],
   reactivable: false,
-  timerEnabled: false
+  timerEnabled: false,
+  projectId: defaultProjectId
 });
 
 function TaskEditModal({ 
@@ -69,7 +71,9 @@ function TaskEditModal({
   defaultDate = null,
   onSave, 
   onCreate,
-  onClose 
+  onClose,
+  projects = [],
+  activeProject = null
 }) {
   const [editedTask, setEditedTask] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -78,7 +82,8 @@ function TaskEditModal({
   // Initialiser le formulaire
   useEffect(() => {
     if (isCreating) {
-      const newTask = getEmptyTask(defaultDate);
+      const defaultProjectId = activeProject?.id || null;
+      const newTask = getEmptyTask(defaultDate, defaultProjectId);
       setEditedTask(newTask);
       setTagsInput('');
     } else if (task) {
@@ -94,7 +99,7 @@ function TaskEditModal({
         setTagsInput('');
       }
     }
-  }, [task, isCreating, defaultDate]);
+  }, [task, isCreating, defaultDate, activeProject]);
 
   if (!editedTask) return null;
 
@@ -122,6 +127,11 @@ function TaskEditModal({
     setTagsInput(e.target.value);
   };
 
+  const handleProjectChange = (e) => {
+    const value = e.target.value;
+    handleChange('projectId', value ? Number(value) : null);
+  };
+
   // Préparer les données - tags en STRING pas en Array
   const prepareTaskData = () => {
     // Nettoyer et joindre les tags en String
@@ -141,7 +151,8 @@ function TaskEditModal({
       reminderMinutes: parseInt(editedTask.reminderMinutes) || 15,
       reactivable: editedTask.reactivable || false,
       timerEnabled: editedTask.timerEnabled !== false,
-      tags: tagsString || null
+      tags: tagsString || null,
+      projectId: editedTask.projectId || null
     };
 
     return data;
@@ -191,6 +202,9 @@ function TaskEditModal({
   const modalTitle = isCreating ? '➕ Nouvelle tâche' : '✏️ Modifier la tâche';
   const saveButtonText = isCreating ? 'Créer la tâche' : 'Sauvegarder';
   const savingButtonText = isCreating ? 'Création...' : 'Sauvegarde...';
+
+  // Trouver le projet actuel pour afficher sa couleur
+  const currentProject = projects.find(p => p.id === editedTask.projectId);
 
   return (
     <div 
@@ -243,7 +257,37 @@ function TaskEditModal({
             />
           </div>
 
-          {/* Tags - juste après Description */}
+          {/* Projet */}
+          {projects.length > 0 && (
+            <div className={TASK_EDIT_MODAL_FIELD}>
+              <label className={TASK_EDIT_MODAL_LABEL}>
+                <FiFolder className="inline mr-1" size={14} />
+                Projet
+              </label>
+              <div className="relative">
+                <select
+                  value={editedTask.projectId || ''}
+                  onChange={handleProjectChange}
+                  className={TASK_EDIT_MODAL_SELECT}
+                >
+                  <option value="">Aucun projet</option>
+                  {projects.map((project) => (
+                    <option key={project.id} value={project.id}>
+                      {project.name}
+                    </option>
+                  ))}
+                </select>
+                {currentProject && (
+                  <div 
+                    className="absolute right-10 top-1/2 -translate-y-1/2 w-3 h-3 rounded"
+                    style={{ backgroundColor: currentProject.color || '#3B82F6' }}
+                  />
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Tags - juste après Projet */}
           <div className={TASK_EDIT_MODAL_FIELD}>
             <label className={TASK_EDIT_MODAL_LABEL}>
               <FiTag className="inline mr-1" size={14} />
