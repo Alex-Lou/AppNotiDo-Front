@@ -1,4 +1,5 @@
 // src/pages/DashboardNew.jsx
+import { useMemo } from 'react';
 import TaskForm from '../components/Task/TaskForm';
 import Sidebar from '../components/Sidebar/Sidebar';
 import RightSidebar from '../components/Sidebar/RightSidebar';
@@ -16,6 +17,7 @@ import DashboardLayout from '../components/Dashboard/DashboardLayout';
 import ProfileModal from '../components/Skeleton/ProfileModal';
 import DashboardSkeleton from '../components/Skeleton/DashboardSkeleton';
 import { useDashboard } from '../hooks/useDashboard';
+import { useProjects } from '../hooks/useProjects';
 import TaskSuggestionsModal from '../components/Task/TaskSuggestionsModal';
 import { useTaskSuggestions } from '../hooks/useTaskSuggestions';
 import { KanbanBoard } from '../components/Kanban';
@@ -28,6 +30,37 @@ import {
 function DashboardNew({ setUsername }) {
   const dashboard = useDashboard(setUsername);
   const taskSuggestions = useTaskSuggestions();
+  
+  // Hook pour les projets
+  const {
+    projects,
+    activeProject,
+    loading: projectsLoading,
+    createProject,
+    updateProject,
+    archiveProject,
+    deleteProject,
+    selectProject
+  } = useProjects();
+
+  // Filtrer les tâches par projet actif
+  const filteredByProject = useMemo(() => {
+    if (!activeProject) {
+      // Aucun projet sélectionné → afficher toutes les tâches
+      return {
+        allTasksToDisplay: dashboard.allTasksToDisplay,
+        normalToDisplay: dashboard.normalToDisplay,
+        urgentToDisplay: dashboard.urgentToDisplay
+      };
+    }
+
+    // Filtrer par projectId
+    return {
+      allTasksToDisplay: dashboard.allTasksToDisplay.filter(t => t.projectId === activeProject.id),
+      normalToDisplay: dashboard.normalToDisplay.filter(t => t.projectId === activeProject.id),
+      urgentToDisplay: dashboard.urgentToDisplay.filter(t => t.projectId === activeProject.id)
+    };
+  }, [activeProject, dashboard.allTasksToDisplay, dashboard.normalToDisplay, dashboard.urgentToDisplay]);
 
   if (dashboard.loading || !dashboard.displayName) {
     return <DashboardSkeleton />;
@@ -45,13 +78,13 @@ function DashboardNew({ setUsername }) {
 
   // Rendu de la section des tâches selon le viewMode
   const renderTasksSection = () => {
-    const isEmpty = dashboard.normalToDisplay.length === 0 && dashboard.urgentToDisplay.length === 0;
+    const isEmpty = filteredByProject.normalToDisplay.length === 0 && filteredByProject.urgentToDisplay.length === 0;
 
     // Le calendrier s'affiche même s'il n'y a pas de tâches
     if (dashboard.viewMode === 'calendar') {
       return (
         <CalendarView
-          tasks={dashboard.allTasksToDisplay}
+          tasks={filteredByProject.allTasksToDisplay}
           onTaskUpdate={dashboard.handleTaskUpdate}
           onTaskDelete={dashboard.handleTaskDelete}
           onStartEditing={dashboard.openEditModal}
@@ -63,8 +96,9 @@ function DashboardNew({ setUsername }) {
     if (isEmpty) {
       return (
         <EmptyState 
-          hasFilters={dashboard.hasFilters} 
+          hasFilters={dashboard.hasFilters || activeProject !== null} 
           onNewTask={handleNewTask}
+          customMessage={activeProject ? `Aucune tâche dans le projet "${activeProject.name}"` : null}
         />
       );
     }
@@ -73,10 +107,11 @@ function DashboardNew({ setUsername }) {
       case 'kanban':
         return (
           <KanbanBoard
-            tasks={dashboard.allTasksToDisplay}
+            tasks={filteredByProject.allTasksToDisplay}
             onTaskUpdate={dashboard.handleTaskUpdate}
             onTaskDelete={dashboard.handleTaskDelete}
             onStartEditing={dashboard.openEditModal}
+            projects={projects}
           />
         );
 
@@ -84,7 +119,7 @@ function DashboardNew({ setUsername }) {
         return (
           <GridView
             tasks={dashboard.tasks}
-            filteredTasks={dashboard.allTasksToDisplay}
+            filteredTasks={filteredByProject.allTasksToDisplay}
             onTaskUpdate={dashboard.handleTaskUpdate}
             onTaskDelete={dashboard.handleTaskDelete}
             onStartEditing={dashboard.openEditModal}
@@ -94,6 +129,7 @@ function DashboardNew({ setUsername }) {
             onDragEnter={dashboard.handleDragEnter}
             onDragEnd={dashboard.handleDragEnd}
             setTasks={dashboard.setTasks}
+            projects={projects}
           />
         );
 
@@ -102,7 +138,7 @@ function DashboardNew({ setUsername }) {
         return (
           <>
             <UrgentTasksSection
-              urgentTasks={dashboard.urgentToDisplay}
+              urgentTasks={filteredByProject.urgentToDisplay}
               draggedTaskId={dashboard.draggedTaskId}
               dragOverTaskId={dashboard.dragOverTaskId}
               editingTaskId={dashboard.editingTaskId}
@@ -114,10 +150,11 @@ function DashboardNew({ setUsername }) {
               onStartEditing={dashboard.setEditingTaskId}
               setTasks={dashboard.setTasks}
               fetchTasks={dashboard.fetchTasks}
+              projects={projects}
             />
 
             <TaskList
-              tasks={dashboard.normalToDisplay}
+              tasks={filteredByProject.normalToDisplay}
               draggedTaskId={dashboard.draggedTaskId}
               dragOverTaskId={dashboard.dragOverTaskId}
               editingTaskId={dashboard.editingTaskId}
@@ -127,6 +164,7 @@ function DashboardNew({ setUsername }) {
               onDragEnter={dashboard.handleDragEnter}
               onDragEnd={dashboard.handleDragEnd}
               onStartEditing={dashboard.setEditingTaskId}
+              projects={projects}
             />
           </>
         );
@@ -158,6 +196,15 @@ function DashboardNew({ setUsername }) {
           onQuickViewClick={dashboard.handleQuickViewClick}
           activeQuickView={dashboard.activeQuickView}
           onOpenProfileModal={() => dashboard.setIsProfileModalOpen(true)}
+          // Props pour les projets
+          projects={projects}
+          activeProject={activeProject}
+          onSelectProject={selectProject}
+          onCreateProject={createProject}
+          onUpdateProject={updateProject}
+          onArchiveProject={archiveProject}
+          onDeleteProject={deleteProject}
+          projectsLoading={projectsLoading}
         />
       }
       rightSidebar={
@@ -208,6 +255,8 @@ function DashboardNew({ setUsername }) {
           <TaskForm 
             onTaskCreated={handleTaskCreation}
             onClose={() => dashboard.setShowTaskForm(false)}
+            projects={projects}
+            activeProject={activeProject}
           />
         </div>
       )}
@@ -225,6 +274,7 @@ function DashboardNew({ setUsername }) {
           onSave={dashboard.handleEditModalSave}
           onCreate={dashboard.handleCreateModalSave}
           onClose={dashboard.closeEditModal}
+          projects={projects}
         />
       )}
 

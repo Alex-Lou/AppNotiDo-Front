@@ -1,5 +1,5 @@
 // src/components/Task/TaskForm.jsx
-import { FiX } from 'react-icons/fi';
+import { FiX, FiFolder } from 'react-icons/fi';
 import { useTaskForm } from '../../hooks/useTaskForm';
 import FormField from '../FormField';
 import { 
@@ -19,8 +19,8 @@ import {
   BUTTON_SUBMIT 
 } from '../../constants/styles';
 
-function TaskForm({ onTaskCreated, onClose }) {
-  const { values, handleChange, reset, isSubmitting, setIsSubmitting, prepareTaskData } = useTaskForm();
+function TaskForm({ onTaskCreated, onClose, projects = [], activeProject = null }) {
+  const { values, handleChange, reset, isSubmitting, setIsSubmitting, prepareTaskData } = useTaskForm(activeProject?.id || null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -78,6 +78,32 @@ function TaskForm({ onTaskCreated, onClose }) {
             rows="3"
           />
         </FormField>
+
+        {/* Projet - Sélecteur */}
+        {projects.length > 0 && (
+          <FormField label="Projet" emoji="📁">
+            <div className="relative">
+              <select
+                value={values.projectId || ''}
+                onChange={(e) => handleChange('projectId', e.target.value ? Number(e.target.value) : null)}
+                className={INPUT_CLASSES}
+              >
+                <option value="">Aucun projet</option>
+                {projects.map((project) => (
+                  <option key={project.id} value={project.id}>
+                    {project.name}
+                  </option>
+                ))}
+              </select>
+              {values.projectId && (
+                <div 
+                  className="absolute right-10 top-1/2 -translate-y-1/2 w-3 h-3 rounded"
+                  style={{ backgroundColor: projects.find(p => p.id === values.projectId)?.color || '#3B82F6' }}
+                />
+              )}
+            </div>
+          </FormField>
+        )}
 
         {/* Tags - juste après Description */}
         <FormField label="Tags" emoji="🏷️">

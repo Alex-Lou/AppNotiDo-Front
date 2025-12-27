@@ -1,7 +1,7 @@
-// src/components/Dashboard/UrgentTasksSection.jsx
+// src/components/Task/UrgentTasksSection.jsx
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
-import TaskItem from '../Task/TaskItem';
+import TaskItem from './TaskItem';
 import api from '../../services/api';
 import { 
   URGENT_HEADER_BUTTON, 
@@ -26,7 +26,8 @@ function UrgentTasksSection({
   onDragEnd,
   onStartEditing,
   setTasks,
-  fetchTasks
+  fetchTasks,
+  projects = []
 }) {
   const [isOpen, setIsOpen] = useState(() => {
     const saved = localStorage.getItem('urgentSectionOpen');
@@ -139,6 +140,7 @@ function UrgentTasksSection({
                 isDragOver={dragOverTaskId === task.id}
                 editingTaskId={editingTaskId}
                 onStartEditing={onStartEditing}
+                projects={projects}
               />
             </div>
           ))}

@@ -1,9 +1,10 @@
 // src/components/Task/TaskEditForm.jsx
 import { FaSave, FaTimes } from 'react-icons/fa';
+import { FiFolder } from 'react-icons/fi';
 import { INPUT_CLASSES, LABEL_CLASSES, BUTTON_PRIMARY, BUTTON_SECONDARY, EDIT_FORM_CONTAINER, DECORATIVE_HALO } from '../../constants/styles';
 
 
-function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, handleDateChange }) {
+function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, handleDateChange, projects = [] }) {
   // Vérifier si la tâche est terminée avec du temps enregistré
   const isCompletedWithTime = editedTask.status === 'DONE' && editedTask.timeSpent > 0;
 
@@ -12,6 +13,9 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
     new Date(editedTask.dueDate) < new Date() && 
     !editedTask.reactivable &&
     editedTask.status !== 'DONE';
+
+  // Trouver le projet actuel
+  const currentProject = projects.find(p => p.id === editedTask.projectId);
 
   return (
     <div className={EDIT_FORM_CONTAINER}>
@@ -36,6 +40,37 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
           rows="3"
         />
 
+        {/* Projet */}
+        {projects.length > 0 && (
+          <div>
+            <label className={LABEL_CLASSES}>
+              📁 Projet
+            </label>
+            <div className="relative">
+              <select
+                value={editedTask.projectId || ''}
+                onChange={(e) => setEditedTask({ 
+                  ...editedTask, 
+                  projectId: e.target.value ? Number(e.target.value) : null 
+                })}
+                className={INPUT_CLASSES}
+              >
+                <option value="">Aucun projet</option>
+                {projects.map((project) => (
+                  <option key={project.id} value={project.id}>
+                    {project.name}
+                  </option>
+                ))}
+              </select>
+              {currentProject && (
+                <div 
+                  className="absolute right-10 top-1/2 -translate-y-1/2 w-3 h-3 rounded"
+                  style={{ backgroundColor: currentProject.color || '#3B82F6' }}
+                />
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Tags */}
         <div>

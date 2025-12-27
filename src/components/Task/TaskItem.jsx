@@ -1,7 +1,7 @@
 // src/components/Task/TaskItem.jsx
 import { useState, useEffect } from 'react';
 import { FaTrash, FaLock, FaLockOpen, FaClock } from 'react-icons/fa';
-import { FiX, FiCheck, FiClock, FiPauseCircle, FiCheckCircle } from 'react-icons/fi';
+import { FiX, FiCheck, FiClock, FiPauseCircle, FiCheckCircle, FiFolder } from 'react-icons/fi';
 import { useTimer } from '../../hooks/useTimer';
 import { formatDate, formatDuration, formatTimeSpent, calculateProgress } from '../../utils/taskUtils';
 import { PRIORITY_COLORS, STATUS_COLORS, STATUS_LABELS, PRIORITY_LABELS } from '../../constants/taskConstants';
@@ -66,7 +66,8 @@ function TaskItem({
   onStartEditing,
   isSelected,
   onToggleSelect,
-  selectionMode
+  selectionMode,
+  projects = []
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTask, setEditedTask] = useState({ ...task });
@@ -270,6 +271,9 @@ function TaskItem({
     );
   };
 
+  // Trouver le projet de la tâche
+  const taskProject = task.projectId ? projects.find(p => p.id === task.projectId) : null;
+
   if (isEditing) {
     return (
       <TaskEditForm
@@ -278,6 +282,7 @@ function TaskItem({
         handleSave={handleSave}
         handleCancel={handleCancel}
         handleDateChange={handleDateChange}
+        projects={projects}
       />
     );
   }
@@ -430,6 +435,15 @@ function TaskItem({
           <div className={TASK_BADGES_CONTAINER}>
             <TaskBadge type="status" value={task.status} colors={STATUS_COLORS} labels={STATUS_LABELS} />
             <TaskBadge type="priority" value={task.priority} colors={PRIORITY_COLORS} labels={PRIORITY_LABELS} />
+            {taskProject && (
+              <span 
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold text-white shadow-sm"
+                style={{ backgroundColor: taskProject.color || '#3B82F6' }}
+              >
+                <FiFolder size={10} />
+                {taskProject.name}
+              </span>
+            )}
             <TaskTags tags={task.tags} />
           </div>
 

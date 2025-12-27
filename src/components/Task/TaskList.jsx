@@ -1,7 +1,7 @@
-// src/components/Dashboard/TaskList.jsx
+// src/components/Task/TaskList.jsx
 import { useState } from 'react';
 import { FiTrash2, FiX, FiCheckSquare } from 'react-icons/fi';
-import TaskItem from '../Task/TaskItem';
+import TaskItem from './TaskItem';
 
 function TaskList({
   tasks,
@@ -13,7 +13,8 @@ function TaskList({
   onDragStart,
   onDragEnter,
   onDragEnd,
-  onStartEditing
+  onStartEditing,
+  projects = []
 }) {
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedTasks, setSelectedTasks] = useState(new Set());
@@ -150,6 +151,7 @@ function TaskList({
             selectionMode={selectionMode}
             isSelected={selectedTasks.has(task.id)}
             onToggleSelect={handleToggleSelect}
+            projects={projects}
           />
         </div>
       ))}

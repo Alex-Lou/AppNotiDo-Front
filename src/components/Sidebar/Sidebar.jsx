@@ -1,20 +1,19 @@
 // src/components/Sidebar/Sidebar.jsx
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import UserProfile from './UserProfile';
 import NotificationPermission from './NotificationPermission';
 import UrgentTasks from './UrgentTasks';
 import QuickViews from './QuickViews';
-import DailyQuote from './DailyQuote';
 import SidebarActions from './SidebarActions';
+import ProjectList from '../Projects/ProjectList';
+import ProjectFormModal from '../Projects/ProjectFormModal';
 import logonote from '../../assets/logonote.png';
 import {
   SIDEBAR_CONTAINER,
   SIDEBAR_HEADER,
   SIDEBAR_LOGO_CONTAINER,
   SIDEBAR_LOGO,
-  SIDEBAR_TITLE,
-  SIDEBAR_SUBTITLE,
-  SHOW_QUOTE_BUTTON
+  SIDEBAR_TITLE
 } from '../../constants/styles';
 
 function Sidebar({
@@ -29,35 +28,42 @@ function Sidebar({
   onQuickViewClick,
   activeQuickView,
   onOpenProfileModal,
+  // Props pour les projets
+  projects = [],
+  activeProject,
+  onSelectProject,
+  onCreateProject,
+  onUpdateProject,
+  onArchiveProject,
+  onDeleteProject,
+  projectsLoading = false
 }) {
-  const [showQuote, setShowQuote] = useState(() => {
-    const saved = localStorage.getItem('showDailyQuote');
-    return saved === null ? true : saved === 'true';
-  });
+  // État pour le modal de projet
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState(null);
 
-  const [isQuotePinned, setIsQuotePinned] = useState(() => {
-    const saved = localStorage.getItem('dailyQuotePinned');
-    return saved === 'true';
-  });
-
-  useEffect(() => {
-    localStorage.setItem('showDailyQuote', showQuote);
-  }, [showQuote]);
-
-  useEffect(() => {
-    localStorage.setItem('dailyQuotePinned', isQuotePinned);
-  }, [isQuotePinned]);
-
-  const handleTogglePin = () => {
-    setIsQuotePinned(!isQuotePinned);
+  // Handlers pour les projets
+  const handleOpenCreateProject = () => {
+    setEditingProject(null);
+    setIsProjectModalOpen(true);
   };
 
-  const handleHideQuote = () => {
-    setShowQuote(false);
+  const handleOpenEditProject = (project) => {
+    setEditingProject(project);
+    setIsProjectModalOpen(true);
   };
 
-  const handleShowQuote = () => {
-    setShowQuote(true);
+  const handleCloseProjectModal = () => {
+    setIsProjectModalOpen(false);
+    setEditingProject(null);
+  };
+
+  const handleSubmitProject = async (projectData) => {
+    if (editingProject) {
+      await onUpdateProject(projectData.id, projectData);
+    } else {
+      await onCreateProject(projectData);
+    }
   };
 
   return (
@@ -73,16 +79,7 @@ function Sidebar({
             AppNotiDo
           </h1>
         </div>
-
-        {/* Slogan avec la police NovaQuinta
-        <p className={`${SIDEBAR_SUBTITLE} font-nova-quinta`}>
-          Organisez votre journée
-        </p>
-        <p className={`${SIDEBAR_SUBTITLE} ml-[115px] font-nova-quinta`}>
-          avec le rythme!
-        </p> */}
       </div>
-
 
       <UserProfile
         username={username}
@@ -96,47 +93,38 @@ function Sidebar({
 
       <UrgentTasks urgentTasks={urgentTasks} />
 
-      {showQuote && isQuotePinned && (
-        <DailyQuote
-          isPinned={isQuotePinned}
-          onTogglePin={handleTogglePin}
-          onHide={handleHideQuote}
-        />
-      )}
-
       <QuickViews
         onViewClick={onQuickViewClick}
         activeView={activeQuickView}
       />
 
-      {showQuote && !isQuotePinned && (
-        <div className="mt-auto">
-          <DailyQuote
-            isPinned={isQuotePinned}
-            onTogglePin={handleTogglePin}
-            onHide={handleHideQuote}
-          />
-        </div>
-      )}
+      {/* Section Projets */}
+      <ProjectList
+        projects={projects}
+        activeProject={activeProject}
+        onSelectProject={onSelectProject}
+        onCreateProject={handleOpenCreateProject}
+        onEditProject={handleOpenEditProject}
+        onArchiveProject={onArchiveProject}
+        onDeleteProject={onDeleteProject}
+        loading={projectsLoading}
+      />
 
-      {!showQuote && (
-        <div className="mt-auto">
-          <button
-            onClick={handleShowQuote}
-            className={SHOW_QUOTE_BUTTON}
-          >
-            💡 Afficher la citation
-          </button>
-        </div>
-      )}
-
-      <div className="mt-4">
+      <div className="mt-auto">
         <SidebarActions
           notificationsEnabled={notificationsEnabled}
           onToggleNotifications={onToggleNotifications}
           onLogout={onLogout}
         />
       </div>
+
+      {/* Modal création/édition projet */}
+      <ProjectFormModal
+        isOpen={isProjectModalOpen}
+        onClose={handleCloseProjectModal}
+        onSubmit={handleSubmitProject}
+        project={editingProject}
+      />
     </aside>
   );
 }

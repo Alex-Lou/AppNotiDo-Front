@@ -1,7 +1,7 @@
 // hooks/useTaskForm.js
 import { useState } from 'react';
 
-export function useTaskForm() {
+export function useTaskForm(defaultProjectId = null) {
   const initialValues = {
     title: '',
     description: '',
@@ -12,7 +12,8 @@ export function useTaskForm() {
     reminderMinutes: 15,
     reactivable: false,
     timerEnabled: false,
-    tags: ''
+    tags: '',
+    projectId: defaultProjectId
   };
 
   const [values, setValues] = useState(initialValues);
@@ -23,7 +24,7 @@ export function useTaskForm() {
   };
 
   const reset = () => {
-    setValues(initialValues);
+    setValues({ ...initialValues, projectId: defaultProjectId });
   };
 
   const prepareTaskData = () => {
@@ -42,7 +43,8 @@ export function useTaskForm() {
       reminderMinutes: parseInt(values.reminderMinutes),
       reactivable: values.reactivable,
       timerEnabled: values.timerEnabled,
-      tags: tagsString
+      tags: tagsString,
+      projectId: values.projectId
     };
   };
 
