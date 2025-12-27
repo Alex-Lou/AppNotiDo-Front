@@ -9,7 +9,6 @@ import ProjectList from '../Projects/ProjectList';
 import ProjectFormModal from '../Projects/ProjectFormModal';
 import logonote from '../../assets/logonote.png';
 import {
-  SIDEBAR_CONTAINER,
   SIDEBAR_HEADER,
   SIDEBAR_LOGO_CONTAINER,
   SIDEBAR_LOGO,
@@ -67,7 +66,7 @@ function Sidebar({
   };
 
   return (
-    <aside className={SIDEBAR_CONTAINER}>
+    <div className="flex flex-col h-full">
       <div className={SIDEBAR_HEADER}>
         <div className={SIDEBAR_LOGO_CONTAINER}>
           <img
@@ -125,7 +124,7 @@ function Sidebar({
         onSubmit={handleSubmitProject}
         project={editingProject}
       />
-    </aside>
+    </div>
   );
 }
 

@@ -9,7 +9,7 @@ import {
   FiEdit2,
   FiArchive,
   FiTrash2,
-  FiInbox
+  FiLayers
 } from 'react-icons/fi';
 
 function ProjectList({ 
@@ -83,25 +83,25 @@ function ProjectList({
       </div>
 
       {isExpanded && (
-        <div className="space-y-1">
+        <div className="space-y-1 pr-1">
           {/* Option "Tous" */}
           <div
             onClick={() => onSelectProject(null)}
             className={`
-              w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer
+              flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer
               ${activeProject === null
-                ? 'bg-gradient-to-r from-cyan-100 to-teal-100 text-cyan-800 dark:from-amber-900/50 dark:to-orange-900/50 dark:text-amber-200'
-                : 'text-slate-600 hover:bg-slate-100 dark:text-amber-200/70 dark:hover:bg-stone-800'
+                ? 'bg-cyan-100/80 text-cyan-800 dark:bg-amber-900/40 dark:text-amber-200'
+                : 'text-slate-600 hover:bg-slate-100/70 dark:text-amber-200/70 dark:hover:bg-stone-800/50'
               }
             `}
           >
-            <FiInbox size={16} className="flex-shrink-0" />
+            <FiLayers size={16} className="flex-shrink-0" />
             <span className="flex-1 text-left">Tous les projets</span>
           </div>
 
           {/* Séparateur visuel */}
           {projects.length > 0 && (
-            <div className="h-px bg-slate-200 dark:bg-stone-700 my-2" />
+            <div className="h-px bg-slate-300/50 dark:bg-stone-700/50 mx-2 my-2" />
           )}
 
           {/* Liste des projets */}
@@ -119,10 +119,10 @@ function ProjectList({
                 <div
                   onClick={() => handleProjectClick(project)}
                   className={`
-                    w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all group cursor-pointer
+                    flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all group cursor-pointer
                     ${activeProject?.id === project.id
-                      ? 'bg-gradient-to-r from-cyan-100 to-teal-100 text-cyan-800 dark:from-amber-900/50 dark:to-orange-900/50 dark:text-amber-200'
-                      : 'text-slate-600 hover:bg-slate-100 dark:text-amber-200/70 dark:hover:bg-stone-800'
+                      ? 'bg-cyan-100/80 text-cyan-800 dark:bg-amber-900/40 dark:text-amber-200'
+                      : 'text-slate-600 hover:bg-slate-100/70 dark:text-amber-200/70 dark:hover:bg-stone-800/50'
                     }
                   `}
                 >
@@ -139,7 +139,7 @@ function ProjectList({
                   
                   {/* Compteur de tâches */}
                   {project.pendingTaskCount > 0 && (
-                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-slate-200 text-slate-600 dark:bg-stone-700 dark:text-amber-300">
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-slate-200/80 text-slate-600 dark:bg-stone-700/80 dark:text-amber-300">
                       {project.pendingTaskCount}
                     </span>
                   )}

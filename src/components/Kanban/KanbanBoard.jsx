@@ -1,13 +1,11 @@
 // src/components/Kanban/KanbanBoard.jsx
 import { useState, useRef, useCallback, useMemo } from 'react';
-import { FiPlus } from 'react-icons/fi';
 import { useKanbanConfig } from '../../hooks/useKanbanConfig';
 import KanbanToolbar from './KanbanToolbar';
 import KanbanColumn from './KanbanColumn';
 import AddColumnModal from './AddColumnModal';
 import {
   KANBAN_BOARD_CONTAINER,
-  KANBAN_ADD_COLUMN_PLACEHOLDER,
   KANBAN_LOADING_CONTAINER,
   KANBAN_LOADING_INNER,
   KANBAN_LOADING_SPINNER
@@ -117,7 +115,6 @@ function KanbanBoard({
       return;
     }
 
-    // Si c'est une colonne STATUS → changer le statut
     if (columnType === 'status') {
       if (task.status === columnId) {
         handleDragEnd();
@@ -128,13 +125,11 @@ function KanbanBoard({
       await onTaskUpdate(task.id, updatedTask);
     }
 
-    // Si c'est une colonne TAG → ajouter le tag
     if (columnType === 'tag' && tagValue) {
       const currentTags = task.tags 
         ? (Array.isArray(task.tags) ? task.tags : task.tags.split(',').map(t => t.trim()).filter(Boolean))
         : [];
 
-      // Ne rien faire si le tag est déjà présent
       if (currentTags.includes(tagValue)) {
         handleDragEnd();
         return;
@@ -198,15 +193,6 @@ function KanbanBoard({
             onNavigateToColumn={handleNavigateToColumn}
           />
         ))}
-
-        {/* Placeholder pour ajouter une colonne */}
-        <button
-          onClick={() => setShowAddColumnModal(true)}
-          className={KANBAN_ADD_COLUMN_PLACEHOLDER}
-        >
-          <FiPlus size={24} />
-          <span className="mt-2 text-xs sm:text-sm font-medium">Ajouter colonne</span>
-        </button>
       </div>
 
       {/* Modal ajout colonne */}

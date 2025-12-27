@@ -66,14 +66,6 @@ function KanbanToolbar({
           </div>
         )}
 
-        {/* Bouton reset */}
-        <button
-          onClick={onResetConfig}
-          className={`${KANBAN_TOOLBAR_BUTTON} ${KANBAN_TOOLBAR_BUTTON_GHOST}`}
-          title="Réinitialiser les colonnes"
-        >
-          <FiRefreshCw size={14} />
-        </button>
       </div>
 
       {/* Bouton ajouter colonne */}

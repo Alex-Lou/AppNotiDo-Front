@@ -8,13 +8,13 @@
 
 export const SIDEBAR_CONTAINER = `
   fixed left-0 top-0 z-[60] flex h-full flex-col 
-  border-r-2 border-cyan-300/60 
+  border-r border-cyan-400/50
   bg-gradient-to-b from-cyan-200 via-teal-200 to-orange-200 
   pl-3 pr-3 py-4
-  dark:border-amber-900/60 
+  dark:border-amber-800/50
   dark:bg-gradient-to-b dark:from-amber-950/80 dark:via-stone-950/90 dark:to-slate-950/80
   transition-all duration-300 ease-in-out
-  overflow-hidden
+  overflow-y-auto scrollbar-none
   sm:pl-1 sm:pr-1 sm:py-5
   xl:pl-1 xl:pr-1 xl:py-5
 `;
@@ -116,7 +116,7 @@ export const COLLAPSE_BUTTON = `
 
 export const COLLAPSE_BUTTON_LEFT = `
   ${COLLAPSE_BUTTON}
-  right-3
+  right-1
 `;
 
 
@@ -234,7 +234,7 @@ export const NOTIFICATION_TOGGLE_BUTTON = `
 `;
 
 export const QUICK_VIEWS_NAV =
-  "mt-2.5 sm:mt-3.5 space-y-1.5";
+  "mt-2.5 sm:mt-3.5 mb-4 sm:mb-5 space-y-1.5";
 export const QUICK_VIEWS_TITLE =
   "mb-1.5 sm:mb-2 px-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-amber-300/70";
 export const QUICK_VIEW_BUTTON_BASE =
