@@ -61,7 +61,8 @@ function TaskFilters({
   searchResultCount,
   totalCount,
   viewMode,
-  setViewMode
+  setViewMode,
+  onAddKanbanColumn
 }) {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const hasSearch = searchQuery.trim().length > 0;
@@ -158,7 +159,7 @@ function TaskFilters({
         </div>
       </div>
 
-      {/* LIGNE 2 : Filtres seulement */}
+      {/* LIGNE 2 : Filtres + Bouton Ajouter colonne (Kanban only) */}
       <div className={FILTERS_ROW_BOTTOM}>
         {/* Filtres */}
         <div className={FILTERS_GROUP}>
@@ -175,6 +176,23 @@ function TaskFilters({
             onChange={(e) => setPriorityFilter(e.target.value)}
             options={priorityOptions}
           />
+
+          {/* Bouton Ajouter colonne - visible uniquement en mode Kanban */}
+          {viewMode === 'kanban' && onAddKanbanColumn && (
+            <button
+              onClick={onAddKanbanColumn}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold
+                bg-gradient-to-r from-amber-400 to-orange-400 text-white
+                hover:from-amber-500 hover:to-orange-500
+                shadow-md hover:shadow-lg
+                transition-all duration-200 ease-out
+                dark:from-amber-500 dark:to-orange-500
+                dark:hover:from-amber-400 dark:hover:to-orange-400"
+            >
+              <FiPlus size={14} />
+              <span>Ajouter colonne</span>
+            </button>
+          )}
         </div>
       </div>
 

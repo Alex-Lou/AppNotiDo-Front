@@ -15,11 +15,12 @@ function KanbanBoard({
   tasks,
   onTaskUpdate,
   onTaskDelete,
-  onStartEditing
+  onStartEditing,
+  showAddColumnModal = false,
+  onCloseAddColumnModal
 }) {
   const [draggedTaskId, setDraggedTaskId] = useState(null);
   const [dragOverColumn, setDragOverColumn] = useState(null);
-  const [showAddColumnModal, setShowAddColumnModal] = useState(false);
   const [highlightedTaskId, setHighlightedTaskId] = useState(null);
   
   const boardContainerRef = useRef(null);
@@ -115,6 +116,7 @@ function KanbanBoard({
       return;
     }
 
+    // Si c'est une colonne STATUS → changer le statut
     if (columnType === 'status') {
       if (task.status === columnId) {
         handleDragEnd();
@@ -125,11 +127,13 @@ function KanbanBoard({
       await onTaskUpdate(task.id, updatedTask);
     }
 
+    // Si c'est une colonne TAG → ajouter le tag
     if (columnType === 'tag' && tagValue) {
       const currentTags = task.tags 
         ? (Array.isArray(task.tags) ? task.tags : task.tags.split(',').map(t => t.trim()).filter(Boolean))
         : [];
 
+      // Ne rien faire si le tag est déjà présent
       if (currentTags.includes(tagValue)) {
         handleDragEnd();
         return;
@@ -144,6 +148,14 @@ function KanbanBoard({
     }
 
     handleDragEnd();
+  };
+
+  // Handler pour ajouter une colonne tag
+  const handleAddTagColumn = (tag) => {
+    addTagColumn(tag);
+    if (onCloseAddColumnModal) {
+      onCloseAddColumnModal();
+    }
   };
 
   // ==========================================
@@ -162,12 +174,10 @@ function KanbanBoard({
 
   return (
     <div className="flex flex-col gap-3 sm:gap-4">
-      {/* Toolbar */}
+      {/* Toolbar - visible seulement si colonnes masquées */}
       <KanbanToolbar
         hiddenStatusColumns={hiddenStatusColumns}
         onToggleStatusColumn={toggleStatusColumn}
-        onResetConfig={resetConfig}
-        onAddColumnClick={() => setShowAddColumnModal(true)}
       />
 
       {/* Colonnes */}
@@ -195,12 +205,12 @@ function KanbanBoard({
         ))}
       </div>
 
-      {/* Modal ajout colonne */}
+      {/* Modal ajout colonne - contrôlé par le parent */}
       {showAddColumnModal && (
         <AddColumnModal
           availableTags={availableTags}
-          onAddTag={addTagColumn}
-          onClose={() => setShowAddColumnModal(false)}
+          onAddTag={handleAddTagColumn}
+          onClose={onCloseAddColumnModal}
         />
       )}
     </div>
