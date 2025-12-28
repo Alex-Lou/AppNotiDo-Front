@@ -150,6 +150,9 @@ function TaskItem({
   };
 
   const handleSave = async () => {
+    console.log("=== TaskItem handleSave ===");
+    console.log("task.id:", task.id);
+    console.log("editedTask:", editedTask);
     await onUpdate(task.id, editedTask);
     setIsEditing(false);
     onStartEditing(null);
@@ -445,6 +448,24 @@ function TaskItem({
           <div className={TASK_BADGES_CONTAINER}>
             <TaskBadge type="status" value={task.status} colors={STATUS_COLORS} labels={STATUS_LABELS} />
             <TaskBadge type="priority" value={task.priority} colors={PRIORITY_COLORS} labels={PRIORITY_LABELS} />
+            {/* Indicateur de récurrence */}
+            {task.recurrenceType && task.recurrenceType !== 'NONE' && (
+              <span 
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 shadow-sm"
+                title={`Tâche récurrente : ${
+                  task.recurrenceType === 'DAILY' ? 'Quotidienne' :
+                  task.recurrenceType === 'WEEKLY' ? 'Hebdomadaire' :
+                  task.recurrenceType === 'MONTHLY' ? 'Mensuelle' :
+                  task.recurrenceType === 'YEARLY' ? 'Annuelle' : ''
+                }`}
+              >
+                🔄
+                {task.recurrenceType === 'DAILY' && 'Quotidien'}
+                {task.recurrenceType === 'WEEKLY' && 'Hebdo'}
+                {task.recurrenceType === 'MONTHLY' && 'Mensuel'}
+                {task.recurrenceType === 'YEARLY' && 'Annuel'}
+              </span>
+            )}
             {/* Indicateur de sous-tâches */}
             {task.subtaskCount > 0 && (
               <span 

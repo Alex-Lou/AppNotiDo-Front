@@ -1,7 +1,8 @@
 // src/components/Task/TaskEditForm.jsx
 import { FaSave, FaTimes } from 'react-icons/fa';
 import { FiFolder } from 'react-icons/fi';
-import SubtaskList from "./SubtaskList.jsx";
+import SubtaskList from './SubtaskList';
+import RecurrenceSelector from './RecurrenceSelector';
 import { INPUT_CLASSES, LABEL_CLASSES, BUTTON_PRIMARY, BUTTON_SECONDARY, EDIT_FORM_CONTAINER, DECORATIVE_HALO } from '../../constants/styles';
 
 
@@ -17,6 +18,14 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
 
   // Trouver le projet actuel
   const currentProject = projects.find(p => p.id === editedTask.projectId);
+
+  // Handler pour la récurrence
+  const handleRecurrenceChange = (recurrenceData) => {
+    setEditedTask({
+      ...editedTask,
+      ...recurrenceData
+    });
+  };
 
   return (
     <div className={EDIT_FORM_CONTAINER}>
@@ -108,6 +117,16 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
             className={INPUT_CLASSES}
           />
         </div>
+
+        {/* Récurrence */}
+        <RecurrenceSelector
+          recurrenceType={editedTask.recurrenceType || 'NONE'}
+          recurrenceInterval={editedTask.recurrenceInterval || 1}
+          recurrenceDays={editedTask.recurrenceDays || ''}
+          recurrenceDayOfMonth={editedTask.recurrenceDayOfMonth || 1}
+          recurrenceEndDate={editedTask.recurrenceEndDate || null}
+          onChange={handleRecurrenceChange}
+        />
 
 
         {/* Durée et Rappel */}

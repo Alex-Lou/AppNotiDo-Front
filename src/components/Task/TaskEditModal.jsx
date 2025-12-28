@@ -1,4 +1,4 @@
-// src/components/Dashboard/TaskEditModal.jsx
+// src/components/Task/TaskEditModal.jsx
 import { useState, useEffect } from 'react';
 import { 
   FiX, 
@@ -13,7 +13,8 @@ import {
   FiBell,
   FiFolder
 } from 'react-icons/fi';
-import SubtaskList from "./SubtaskList.jsx";
+import SubTaskList from './SubTaskList';
+import RecurrenceSelector from './RecurrenceSelector';
 import {
   TASK_EDIT_MODAL_OVERLAY,
   TASK_EDIT_MODAL,
@@ -64,7 +65,12 @@ const getEmptyTask = (defaultDate = null, defaultProjectId = null) => ({
   reactivable: false,
   timerEnabled: false,
   projectId: defaultProjectId,
-  subtasks: []
+  subtasks: [],
+  recurrenceType: 'NONE',
+  recurrenceInterval: 1,
+  recurrenceDays: '',
+  recurrenceDayOfMonth: 1,
+  recurrenceEndDate: null
 });
 
 function TaskEditModal({ 
@@ -134,6 +140,13 @@ function TaskEditModal({
     handleChange('projectId', value ? Number(value) : null);
   };
 
+  const handleRecurrenceChange = (recurrenceData) => {
+    setEditedTask(prev => ({
+      ...prev,
+      ...recurrenceData
+    }));
+  };
+
   // Préparer les données - tags en STRING pas en Array
   const prepareTaskData = () => {
     // Nettoyer et joindre les tags en String
@@ -154,13 +167,26 @@ function TaskEditModal({
       reactivable: editedTask.reactivable || false,
       timerEnabled: editedTask.timerEnabled !== false,
       tags: tagsString || null,
-      projectId: editedTask.projectId || null
+      projectId: editedTask.projectId || null,
+      // Récurrence
+      recurrenceType: editedTask.recurrenceType || 'NONE',
+      recurrenceInterval: editedTask.recurrenceInterval || 1,
+      recurrenceDays: editedTask.recurrenceDays || '',
+      recurrenceDayOfMonth: editedTask.recurrenceDayOfMonth || 1,
+      recurrenceEndDate: editedTask.recurrenceEndDate || null
     };
 
     return data;
   };
 
   const handleSave = async () => {
+    console.log("=== handleSave CALLED ===");
+    console.log("isCreating:", isCreating);
+    console.log("task:", task);
+    console.log("task.id:", task?.id);
+    console.log("typeof onSave:", typeof onSave);
+    console.log("typeof onCreate:", typeof onCreate);
+    
     if (!editedTask.title?.trim()) {
       alert('⚠️ Le titre est requis.');
       return;
@@ -169,13 +195,17 @@ function TaskEditModal({
     setIsSaving(true);
     
     const taskData = prepareTaskData();
+    console.log("taskData prepared:", taskData);
 
     try {
       if (isCreating) {
+        console.log("Calling onCreate...");
         await onCreate(taskData);
       } else {
+        console.log("Calling onSave with id:", task.id);
         await onSave(task.id, taskData);
       }
+      console.log("Save successful, closing modal");
       onClose();
     } catch (error) {
       console.error('Erreur lors de la sauvegarde:', error);
@@ -261,7 +291,7 @@ function TaskEditModal({
 
           {/* Sous-tâches - seulement en mode édition (pas création) */}
           {!isCreating && task?.id && (
-            <SubtaskList
+            <SubTaskList
               taskId={task.id}
               initialSubtasks={task.subtasks || []}
             />
@@ -382,6 +412,16 @@ function TaskEditModal({
             </div>
           </div>
 
+          {/* Récurrence */}
+          <RecurrenceSelector
+            recurrenceType={editedTask.recurrenceType || 'NONE'}
+            recurrenceInterval={editedTask.recurrenceInterval || 1}
+            recurrenceDays={editedTask.recurrenceDays || ''}
+            recurrenceDayOfMonth={editedTask.recurrenceDayOfMonth || 1}
+            recurrenceEndDate={editedTask.recurrenceEndDate || null}
+            onChange={handleRecurrenceChange}
+          />
+
           {/* Rappel */}
           <div className={TASK_EDIT_MODAL_FIELD}>
             <label className={TASK_EDIT_MODAL_LABEL}>
@@ -452,7 +492,10 @@ function TaskEditModal({
             Annuler
           </button>
           <button 
-            onClick={handleSave} 
+            onClick={() => {
+              console.log("========== BOUTON CLIQUÉ ! ==========");
+              handleSave();
+            }} 
             className={TASK_EDIT_MODAL_BUTTON_SAVE}
             disabled={isSaving || !editedTask.title?.trim()}
           >
