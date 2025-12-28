@@ -227,24 +227,6 @@ function DashboardNew({ setUsername }) {
         />
       }
     >
-      {/* Indicateur de projet actif */}
-      {activeProject && (
-        <div className="mb-4 flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-50 to-teal-50 dark:from-amber-900/30 dark:to-orange-900/30 border border-cyan-200 dark:border-amber-700">
-          <div 
-            className="w-4 h-4 rounded"
-            style={{ backgroundColor: activeProject.color || '#3B82F6' }}
-          />
-          <span className="text-sm font-medium text-cyan-800 dark:text-amber-200">
-            Projet : {activeProject.name}
-          </span>
-          <button
-            onClick={() => selectProject(null)}
-            className="ml-auto text-xs text-cyan-600 dark:text-amber-400 hover:underline"
-          >
-            Voir toutes les tâches
-          </button>
-        </div>
-      )}
 
       <div className={DASHBOARD_HEADER_SECTION}>
         <DashboardHeader 

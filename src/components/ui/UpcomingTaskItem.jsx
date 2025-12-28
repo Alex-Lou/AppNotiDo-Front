@@ -1,5 +1,6 @@
 // src/components/ui/UpcomingTaskItem.jsx
-import { FiAlertCircle, FiTrash2 } from 'react-icons/fi';
+import { useState, useEffect } from 'react';
+import { FiAlertCircle, FiTrash2, FiCheck, FiX } from 'react-icons/fi';
 import { 
   UPCOMING_TASK_ITEM, 
   UPCOMING_TASK_TITLE, 
@@ -15,11 +16,32 @@ const priorityEmojis = {
 };
 
 function UpcomingTaskItem({ task, timeInfo, onTaskClick, onDelete }) {
-  const handleDelete = async (e) => {
-    e.stopPropagation();
-    if (window.confirm('Supprimer définitivement cette tâche échue ?')) {
-      await onDelete(task.id);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  // Auto-fermer la confirmation après 3 secondes
+  useEffect(() => {
+    if (showDeleteConfirm) {
+      const timer = setTimeout(() => {
+        setShowDeleteConfirm(false);
+      }, 3000);
+      return () => clearTimeout(timer);
     }
+  }, [showDeleteConfirm]);
+
+  const handleDeleteClick = (e) => {
+    e.stopPropagation();
+    setShowDeleteConfirm(true);
+  };
+
+  const handleConfirmDelete = async (e) => {
+    e.stopPropagation();
+    await onDelete(task.id);
+    setShowDeleteConfirm(false);
+  };
+
+  const handleCancelDelete = (e) => {
+    e.stopPropagation();
+    setShowDeleteConfirm(false);
   };
 
   return (
@@ -46,14 +68,36 @@ function UpcomingTaskItem({ task, timeInfo, onTaskClick, onDelete }) {
         {/* Bouton poubelle pour les tâches échues */}
         {timeInfo.isOverdue && (
           <div className="mt-2 flex justify-end">
-            <button
-              onClick={handleDelete}
-              className={UPCOMING_DELETE_BUTTON}
-              title="Supprimer la tâche échue"
-            >
-              <FiTrash2 size={12} />
-              <span>Supprimer</span>
-            </button>
+            {!showDeleteConfirm ? (
+              <button
+                onClick={handleDeleteClick}
+                className={UPCOMING_DELETE_BUTTON}
+                title="Supprimer la tâche échue"
+              >
+                <FiTrash2 size={12} />
+                <span>Supprimer</span>
+              </button>
+            ) : (
+              <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-rose-100 dark:bg-rose-900/40">
+                <span className="text-[10px] font-medium text-rose-700 dark:text-rose-300">
+                  Confirmer ?
+                </span>
+                <button
+                  onClick={handleConfirmDelete}
+                  className="p-1 rounded bg-emerald-500 text-white hover:bg-emerald-600 transition-colors"
+                  title="Confirmer la suppression"
+                >
+                  <FiCheck size={12} />
+                </button>
+                <button
+                  onClick={handleCancelDelete}
+                  className="p-1 rounded bg-slate-400 text-white hover:bg-slate-500 transition-colors"
+                  title="Annuler"
+                >
+                  <FiX size={12} />
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -62,4 +106,3 @@ function UpcomingTaskItem({ task, timeInfo, onTaskClick, onDelete }) {
 }
 
 export default UpcomingTaskItem;
-    

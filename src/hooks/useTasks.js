@@ -1,5 +1,5 @@
 // src/hooks/useTasks.js
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import api from '../services/api';
@@ -24,10 +24,7 @@ export const useTasks = (setUsername) => {
 
   // Fonction pour notifier les changements aux notifications
   const notifyChange = () => {
-    // Petit délai pour laisser le backend créer la notification
-    setTimeout(() => {
-      window.dispatchEvent(new CustomEvent('notifications-update'));
-    }, 500);
+    window.dispatchEvent(new CustomEvent('notifications-update'));
   };
 
   // Fetch tasks
@@ -57,9 +54,12 @@ export const useTasks = (setUsername) => {
 
   // Task operations
   const handleTaskCreated = async (taskData) => {
+    console.log('=== API POST /tasks ===');
+    console.log('Sending:', JSON.stringify(taskData, null, 2));
     
     try {
       const response = await api.post('/tasks', taskData);
+      console.log('SUCCESS Response:', response);
       toast.success('✅ Tâche créée avec succès !');
       await fetchTasks();
       notifyChange(); // Notifier les notifications
@@ -77,9 +77,9 @@ export const useTasks = (setUsername) => {
     }
   };
 
-const handleTaskUpdate = async (taskId, taskData) => {
-  try {
-    const response = await api.put(`/tasks/${taskId}`, taskData);
+  const handleTaskUpdate = async (taskId, taskData) => {
+    try {
+      const response = await api.put(`/tasks/${taskId}`, taskData);
       
       // Fusionner la réponse du serveur avec les données envoyées
       // pour s'assurer que timerEnabled et reactivable sont préservés
@@ -106,8 +106,6 @@ const handleTaskUpdate = async (taskId, taskData) => {
   };
 
   const handleTaskDelete = async (taskId, skipConfirm = false) => {
-    if (!skipConfirm && !window.confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?')) return;
-    
     try {
       await api.delete(`/tasks/${taskId}`);
       
@@ -171,16 +169,6 @@ const handleTaskUpdate = async (taskId, taskData) => {
       return minutesRemaining > 5;
     });
   };
-
-  const deleteAllNotifications = useCallback(async () => {
-  try {
-      await api.delete('/notifications/all');
-      setNotifications([]);
-      setUnreadCount(0);
-    } catch (err) {
-      console.error('Error deleting all notifications:', err);
-    }
-  }, []);
 
   return {
     tasks,
