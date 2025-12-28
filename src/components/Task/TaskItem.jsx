@@ -391,6 +391,16 @@ function TaskItem({
           )}
 
           <div className={TASK_METADATA_CONTAINER}>
+            {/* Badge du projet */}
+            {taskProject && (
+              <span 
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold text-white"
+                style={{ backgroundColor: taskProject.color || '#3B82F6' }}
+              >
+                <FiFolder size={10} />
+                {taskProject.name}
+              </span>
+            )}
             {dateInfo && (
               <p className={`${TASK_DATE_INFO} ${dateInfo.color}`}>
                 <span className="text-base">{dateInfo.emoji}</span> {dateInfo.text}
@@ -435,13 +445,25 @@ function TaskItem({
           <div className={TASK_BADGES_CONTAINER}>
             <TaskBadge type="status" value={task.status} colors={STATUS_COLORS} labels={STATUS_LABELS} />
             <TaskBadge type="priority" value={task.priority} colors={PRIORITY_COLORS} labels={PRIORITY_LABELS} />
-            {taskProject && (
+            {/* Indicateur de sous-tâches */}
+            {task.subtaskCount > 0 && (
               <span 
-                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold text-white shadow-sm"
-                style={{ backgroundColor: taskProject.color || '#3B82F6' }}
+                className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold shadow-sm ${
+                  task.completedSubtaskCount === task.subtaskCount
+                    ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300'
+                    : 'bg-slate-100 text-slate-600 dark:bg-stone-700 dark:text-amber-200'
+                }`}
+                title={`${task.completedSubtaskCount} sur ${task.subtaskCount} sous-tâches complétées`}
               >
-                <FiFolder size={10} />
-                {taskProject.name}
+                <FiCheckCircle size={10} />
+                <span>{task.completedSubtaskCount}/{task.subtaskCount}</span>
+                {/* Mini barre de progression */}
+                <span className="w-8 h-1.5 rounded-full bg-slate-200 dark:bg-stone-600 overflow-hidden">
+                  <span 
+                    className="block h-full rounded-full bg-emerald-500 dark:bg-emerald-400 transition-all duration-300"
+                    style={{ width: `${task.subtaskProgress || 0}%` }}
+                  />
+                </span>
               </span>
             )}
             <TaskTags tags={task.tags} />

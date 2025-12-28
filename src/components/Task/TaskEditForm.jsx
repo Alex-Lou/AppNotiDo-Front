@@ -1,6 +1,7 @@
 // src/components/Task/TaskEditForm.jsx
 import { FaSave, FaTimes } from 'react-icons/fa';
 import { FiFolder } from 'react-icons/fi';
+import SubtaskList from "./SubtaskList.jsx";
 import { INPUT_CLASSES, LABEL_CLASSES, BUTTON_PRIMARY, BUTTON_SECONDARY, EDIT_FORM_CONTAINER, DECORATIVE_HALO } from '../../constants/styles';
 
 
@@ -39,6 +40,14 @@ function TaskEditForm({ editedTask, setEditedTask, handleSave, handleCancel, han
           placeholder="Description"
           rows="3"
         />
+
+        {/* Sous-tâches - seulement si la tâche existe déjà */}
+        {editedTask.id && (
+          <SubtaskList
+            taskId={editedTask.id}
+            initialSubtasks={editedTask.subtasks || []}
+          />
+        )}
 
         {/* Projet */}
         {projects.length > 0 && (

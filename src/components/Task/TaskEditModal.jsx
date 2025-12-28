@@ -13,6 +13,7 @@ import {
   FiBell,
   FiFolder
 } from 'react-icons/fi';
+import SubtaskList from "./SubtaskList.jsx";
 import {
   TASK_EDIT_MODAL_OVERLAY,
   TASK_EDIT_MODAL,
@@ -62,7 +63,8 @@ const getEmptyTask = (defaultDate = null, defaultProjectId = null) => ({
   tags: [],
   reactivable: false,
   timerEnabled: false,
-  projectId: defaultProjectId
+  projectId: defaultProjectId,
+  subtasks: []
 });
 
 function TaskEditModal({ 
@@ -256,6 +258,14 @@ function TaskEditModal({
               rows={3}
             />
           </div>
+
+          {/* Sous-tâches - seulement en mode édition (pas création) */}
+          {!isCreating && task?.id && (
+            <SubtaskList
+              taskId={task.id}
+              initialSubtasks={task.subtasks || []}
+            />
+          )}
 
           {/* Projet */}
           {projects.length > 0 && (
