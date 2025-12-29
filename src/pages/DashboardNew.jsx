@@ -43,7 +43,8 @@ function DashboardNew({ setUsername }) {
     updateProject,
     archiveProject,
     deleteProject,
-    selectProject
+    selectProject,
+    fetchProjects,
   } = useProjects();
 
   // Filtrer les tâches par projet actif
@@ -235,6 +236,7 @@ function DashboardNew({ setUsername }) {
           totalCount={dashboard.stats.total}
           onExportCSV={dashboard.exportToCSV}
           onExportPDF={dashboard.exportToPDF}
+          onInvitationAccepted={fetchProjects}
         />
 
         <StatsCards

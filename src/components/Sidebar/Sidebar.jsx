@@ -1,5 +1,7 @@
 // src/components/Sidebar/Sidebar.jsx
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Shield } from 'lucide-react';
 import UserProfile from './UserProfile';
 import NotificationPermission from './NotificationPermission';
 import UrgentTasks from './UrgentTasks';
@@ -7,6 +9,7 @@ import QuickViews from './QuickViews';
 import SidebarActions from './SidebarActions';
 import ProjectList from '../Projects/ProjectList';
 import ProjectFormModal from '../Projects/ProjectFormModal';
+import { useAdmin } from '../../hooks/useAdmin';
 import logonote from '../../assets/logonote.png';
 import {
   SIDEBAR_HEADER,
@@ -37,6 +40,9 @@ function Sidebar({
   onDeleteProject,
   projectsLoading = false
 }) {
+  const navigate = useNavigate();
+  const { isSuperAdmin } = useAdmin();
+  
   // État pour le modal de projet
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
@@ -110,6 +116,26 @@ function Sidebar({
       />
 
       <div className="mt-auto">
+        {/* ✅ NOUVEAU : Bouton Admin (visible seulement pour SUPER_ADMIN) */}
+        {isSuperAdmin && (
+          <div className="px-3 mb-2">
+            <button
+              onClick={() => navigate('/admin')}
+              className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold
+                       bg-gradient-to-r from-red-500/10 to-rose-500/10 
+                       text-red-600 hover:from-red-500/20 hover:to-rose-500/20
+                       border border-red-200/50 hover:border-red-300/50
+                       transition-all duration-200
+                       dark:from-red-900/30 dark:to-rose-900/30 
+                       dark:text-red-400 dark:border-red-800/50
+                       dark:hover:from-red-900/50 dark:hover:to-rose-900/50"
+            >
+              <Shield size={16} />
+              Administration
+            </button>
+          </div>
+        )}
+        
         <SidebarActions
           notificationsEnabled={notificationsEnabled}
           onToggleNotifications={onToggleNotifications}

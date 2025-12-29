@@ -1,8 +1,10 @@
+// src/App.jsx
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Toaster } from 'sonner';
 import Auth from './pages/Auth';
 import DashboardNew from './pages/DashboardNew';
+import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -32,7 +34,7 @@ function App() {
     <>
       {/* Toaster de Sonner - Affiche les toasts dans toute l'app */}
       <Toaster 
-        position="top-right"  // ← Vérifie que c'est bien "top-right"
+        position="top-right"
         expand={true}
         richColors
         closeButton
@@ -49,10 +51,13 @@ function App() {
 
       <BrowserRouter>
         <Routes>
+          {/* Auth */}
           <Route
             path="/auth"
             element={username ? <Navigate to="/dashboard" replace /> : <Auth setUsername={setUsername} />}
           />
+
+          {/* Dashboard principal */}
           <Route
             path="/dashboard"
             element={
@@ -61,6 +66,18 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* ✅ NOUVEAU : Administration (SUPER_ADMIN) */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Redirection par défaut */}
           <Route
             path="/"
             element={<Navigate to={username ? '/dashboard' : '/auth'} replace />}

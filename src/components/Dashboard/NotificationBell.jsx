@@ -1,4 +1,4 @@
-// src/components/Notifications/NotificationBell.jsx
+// src/components/Dashboard/NotificationBell.jsx
 import { useState, useRef, useEffect } from 'react';
 import { 
   FiBell, 
@@ -44,7 +44,6 @@ import {
   NOTIF_LOADING
 } from '../../constants/styles';
 
-// Icônes selon le type de notification
 const TYPE_ICONS = {
   REMINDER: { icon: FiClock, color: 'text-cyan-500 dark:text-cyan-400' },
   DEADLINE: { icon: FiAlertCircle, color: 'text-amber-500 dark:text-amber-400' },
@@ -58,11 +57,9 @@ const TYPE_ICONS = {
   TIMER_PAUSED: { icon: FiPause, color: 'text-amber-500 dark:text-amber-400' },
   TIMER_STOPPED: { icon: FiSquare, color: 'text-rose-500 dark:text-rose-400' },
   STATUS_CHANGED: { icon: FiTrendingUp, color: 'text-blue-500 dark:text-blue-400' },
-  PRIORITY_CHANGED: { icon: FiFlag, color: 'text-amber-500 dark:text-amber-400' },
-  SYSTEM: { icon: FiBell, color: 'text-slate-500 dark:text-slate-400' }
+  PRIORITY_CHANGED: { icon: FiFlag, color: 'text-amber-500 dark:text-amber-400' }
 };
 
-// Formater la date relative
 function formatRelativeTime(dateString) {
   const date = new Date(dateString);
   const now = new Date();
@@ -85,7 +82,6 @@ function NotificationBell() {
 
   const {
     notifications,
-    unreadCount,
     loading,
     fetchNotifications,
     markAsRead,
@@ -94,7 +90,10 @@ function NotificationBell() {
     deleteAllNotifications
   } = useNotifications();
 
-  // Fermer le panneau si clic à l'extérieur
+  // ✅ Filtrer pour n'afficher QUE les notifications de tâches (pas SYSTEM)
+  const taskNotifications = notifications.filter(n => n.type !== 'SYSTEM');
+  const taskUnreadCount = taskNotifications.filter(n => !n.isRead).length;
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -115,7 +114,7 @@ function NotificationBell() {
 
   const handleToggle = () => {
     if (!isOpen) {
-      fetchNotifications(); // Rafraîchir à l'ouverture
+      fetchNotifications();
     }
     setIsOpen(!isOpen);
   };
@@ -139,7 +138,6 @@ function NotificationBell() {
 
   return (
     <div className="relative">
-      {/* Bouton cloche */}
       <button
         ref={buttonRef}
         onClick={handleToggle}
@@ -147,28 +145,26 @@ function NotificationBell() {
         title="Notifications"
       >
         <FiBell className={NOTIF_BELL_ICON} />
-        {unreadCount > 0 && (
+        {taskUnreadCount > 0 && (
           <span className={NOTIF_BADGE}>
-            {unreadCount > 9 ? '9+' : unreadCount}
+            {taskUnreadCount > 9 ? '9+' : taskUnreadCount}
           </span>
         )}
       </button>
 
-      {/* Panneau des notifications */}
       {isOpen && (
         <div ref={panelRef} className={NOTIF_PANEL}>
-          {/* Header */}
           <div className={NOTIF_PANEL_HEADER}>
             <h3 className={NOTIF_PANEL_TITLE}>
               Notifications
-              {unreadCount > 0 && (
+              {taskUnreadCount > 0 && (
                 <span className="ml-2 text-xs font-normal text-slate-500 dark:text-amber-400/70">
-                  ({unreadCount} non lue{unreadCount > 1 ? 's' : ''})
+                  ({taskUnreadCount} non lue{taskUnreadCount > 1 ? 's' : ''})
                 </span>
               )}
             </h3>
             <div className={NOTIF_PANEL_ACTIONS}>
-              {unreadCount > 0 && (
+              {taskUnreadCount > 0 && (
                 <button
                   onClick={markAllAsRead}
                   className={NOTIF_MARK_ALL_BUTTON}
@@ -178,7 +174,7 @@ function NotificationBell() {
                   <span className="hidden sm:inline">Tout lu</span>
                 </button>
               )}
-              {notifications.length > 0 && (
+              {taskNotifications.length > 0 && (
                 <button
                   onClick={handleDeleteAll}
                   className={NOTIF_DELETE_ALL_BUTTON}
@@ -198,21 +194,21 @@ function NotificationBell() {
             </div>
           </div>
 
-          {/* Liste des notifications */}
           <div className={NOTIF_LIST}>
             {loading ? (
               <div className={NOTIF_LOADING}>
                 <div className="animate-spin rounded-full h-6 w-6 border-2 border-cyan-500 border-t-transparent dark:border-amber-500" />
                 <span>Chargement...</span>
               </div>
-            ) : notifications.length === 0 ? (
+            ) : taskNotifications.length === 0 ? (
               <div className={NOTIF_EMPTY}>
                 <FiBell size={32} className="text-slate-300 dark:text-stone-600 mb-2" />
                 <p>Aucune notification</p>
               </div>
             ) : (
-              notifications.map((notification) => {
-                const typeConfig = TYPE_ICONS[notification.type] || TYPE_ICONS.SYSTEM;
+              taskNotifications.map((notification) => {
+                const typeConfig = TYPE_ICONS[notification.type];
+                if (!typeConfig) return null; // Sécurité supplémentaire
                 const IconComponent = typeConfig.icon;
 
                 return (
@@ -221,12 +217,10 @@ function NotificationBell() {
                     onClick={() => handleNotificationClick(notification)}
                     className={`${NOTIF_ITEM} ${!notification.isRead ? NOTIF_ITEM_UNREAD : ''}`}
                   >
-                    {/* Icône du type */}
                     <div className={`${NOTIF_ITEM_ICON} ${typeConfig.color}`}>
                       <IconComponent size={18} />
                     </div>
 
-                    {/* Contenu */}
                     <div className={NOTIF_ITEM_CONTENT}>
                       <p className={NOTIF_ITEM_TITLE}>{notification.title}</p>
                       <p className={NOTIF_ITEM_MESSAGE}>{notification.message}</p>
@@ -240,7 +234,6 @@ function NotificationBell() {
                       </span>
                     </div>
 
-                    {/* Actions */}
                     <div className={NOTIF_ITEM_ACTIONS}>
                       {!notification.isRead && (
                         <button

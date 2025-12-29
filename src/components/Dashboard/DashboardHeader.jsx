@@ -3,8 +3,9 @@ import { DASHBOARD_HEADER_CONTAINER, DASHBOARD_HEADER_TITLE, DASHBOARD_HEADER_SU
 import { getContextualGreeting, getContextualSubtitle, getCurrentHour } from '../../utils/greetingMessages';
 import ExportButton from './ExportButton';
 import NotificationBell from "./NotificationBell";
+import InvitationBell from "./InvitationBell";
 
-function DashboardHeader({ username, completedCount, totalCount, onExportCSV, onExportPDF }) {
+function DashboardHeader({ username, completedCount, totalCount, onExportCSV, onExportPDF, onInvitationAccepted }) {
   const currentHour = getCurrentHour();
   const greeting = getContextualGreeting(currentHour, completedCount, totalCount, username);
   const subtitle = getContextualSubtitle(completedCount, totalCount);
@@ -20,8 +21,9 @@ function DashboardHeader({ username, completedCount, totalCount, onExportCSV, on
         </p>
       </div>
       
-      {/* Actions à droite : Notifications + Export */}
+      {/* Actions à droite : Invitations + Notifications + Export */}
       <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+        <InvitationBell onInvitationAccepted={onInvitationAccepted} />
         <NotificationBell />
         <ExportButton 
           onExportCSV={onExportCSV}

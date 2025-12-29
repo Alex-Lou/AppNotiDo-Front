@@ -11,6 +11,8 @@ import {
   FiTrash2,
   FiLayers
 } from 'react-icons/fi';
+import { Users } from 'lucide-react';
+import ProjectMembers from '../Projects/ProjectMembers';
 
 function ProjectList({ 
   projects, 
@@ -24,11 +26,9 @@ function ProjectList({
 }) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [menuOpenId, setMenuOpenId] = useState(null);
-  console.log('First project details:', JSON.stringify(projects[0], null, 2));
-
+  const [managingMembersProject, setManagingMembersProject] = useState(null);
 
   const handleProjectClick = (project) => {
-    // Si on clique sur le projet actif, on désélectionne (affiche toutes les tâches)
     if (activeProject?.id === project.id) {
       onSelectProject(null);
     } else {
@@ -40,6 +40,12 @@ function ProjectList({
   const handleMenuToggle = (e, projectId) => {
     e.stopPropagation();
     setMenuOpenId(menuOpenId === projectId ? null : projectId);
+  };
+
+  const handleManageMembers = (e, project) => {
+    e.stopPropagation();
+    setManagingMembersProject(project);
+    setMenuOpenId(null);
   };
 
   const handleEdit = (e, project) => {
@@ -157,7 +163,14 @@ function ProjectList({
 
                 {/* Dropdown menu */}
                 {menuOpenId === project.id && (
-                  <div className="absolute right-2 top-full mt-1 z-50 w-36 bg-white dark:bg-stone-800 rounded-lg shadow-xl border border-slate-200 dark:border-stone-700 py-1">
+                  <div className="absolute right-2 top-full mt-1 z-50 w-40 bg-white dark:bg-stone-800 rounded-lg shadow-xl border border-slate-200 dark:border-stone-700 py-1">
+                    <button
+                      onClick={(e) => handleManageMembers(e, project)}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 dark:text-amber-200 hover:bg-slate-100 dark:hover:bg-stone-700"
+                    >
+                      <Users size={14} />
+                      Membres
+                    </button>
                     <button
                       onClick={(e) => handleEdit(e, project)}
                       className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 dark:text-amber-200 hover:bg-slate-100 dark:hover:bg-stone-700"
@@ -185,6 +198,15 @@ function ProjectList({
             ))
           )}
         </div>
+      )}
+
+      {/* Modal de gestion des membres */}
+      {managingMembersProject && (
+        <ProjectMembers
+          projectId={managingMembersProject.id}
+          currentUserRole={managingMembersProject.userRole || 'MEMBER'}
+          onClose={() => setManagingMembersProject(null)}
+        />
       )}
     </div>
   );
